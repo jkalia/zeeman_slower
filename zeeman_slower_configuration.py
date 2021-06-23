@@ -162,20 +162,15 @@ def get_configurations(x_long, num_coils, fixed_densities, densities,
     return solenoid_field, coil_winding, current_for_coils, total_field, label
 
 
-# folder_location, directory
-# We will also need the location to save each file to 
-def save_data(fixed_densities, densities, fixed_lengths, fixed_overlap,
-              guess, final, file_path):
-    data = (fixed_densities, densities, fixed_lengths, fixed_overlap,
-            guess, final)
-    file = open(file_path + "/data.pickle", "wb")
+def save_data(data, file_path):
+    file = open(file_path, "wb")
     pickle.dump(data, file)
     file.close()
     return 
 
 
-def retrieve_data(file_path):
-    retrieved_data = pickle.load(open(file_path + "/data.pickle", "rb"))
+def retrieve_run_data(file_path):
+    retrieved_data = pickle.load(open(file_path, "rb"))
 
     fixed_densities = retrieved_data[0]
     densities = retrieved_data[1]
@@ -246,8 +241,13 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
                         total_field_final, fixed_overlap, B_field_range, 
                         title, file_path)
 
-    save_data(fixed_densities, densities, fixed_lengths, fixed_overlap,
-              guess, final, file_path)
+    data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
+            final)
+
+    file_name = "data.pickle"
+    f = os.path.join(file_path, file_name)
+
+    save_data(data, f)
 
     return rmse, li_deviation
 
@@ -282,10 +282,6 @@ rmse, li_deviation = run_optimization(fixed_densities, densities,
                                       fixed_lengths, fixed_overlap, 
                                       z, y_data, guess, iterations, 
                                       folder_location)
-
-
-
-
 
 
 # # Iterate fixed_lengths from 4 to 10 
@@ -327,6 +323,10 @@ rmse, li_deviation = run_optimization(fixed_densities, densities,
 
 # print("rmse_array: ", rmse_array)
 # print("deviation_array: ", deviation_array)
+
+
+# data = (rmse_array, deviation_array)
+# save_data(data, "heatmap.pickle")
 
 
 
