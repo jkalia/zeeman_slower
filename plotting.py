@@ -10,7 +10,6 @@
 import numpy as np 
 import matplotlib
 import matplotlib.pyplot as plt 
-import os
 
 import ideal_field as ideal
 import parameters
@@ -195,7 +194,7 @@ def make_plots(x, x_long, y, discretization, ideal_field,
                current_for_coils_initial, total_field_initial, 
                solenoid_field_final, coil_winding_final, 
                current_for_coils_final, total_field_final, fixed_overlap, 
-               B_field_range, title, folder_location, directory):
+               B_field_range, title, file_path):
 
 
     fig1, ax1 = plt.subplots()
@@ -222,10 +221,6 @@ def make_plots(x, x_long, y, discretization, ideal_field,
     fig3.set_size_inches(12, 8)
     fig4.suptitle(t=title)
     fig4.set_size_inches(12, 8)
-
-    file_path = os.path.join(folder_location, directory)
-    if not os.path.exists(file_path):
-        os.mkdir(file_path)
 
     fig1.savefig(file_path + "/initial.png", bbox_inches="tight")
     fig2.savefig(file_path + "/lines.png", bbox_inches="tight")

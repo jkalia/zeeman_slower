@@ -16,6 +16,8 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt 
 from scipy import optimize
+import pickle 
+import os
 
 import ideal_field as ideal
 import coil_configuration as coil 
@@ -91,6 +93,7 @@ def optimizer(residuals, guess, x, y, iterations, num_coils, fixed_densities,
                                    args=(y, x, num_coils, fixed_densities, 
                                          densities, fixed_lengths), 
                                    maxfev=iterations)
+    print("optimizing complete")
     return final, flag
 
 
@@ -159,8 +162,35 @@ def get_configurations(x_long, num_coils, fixed_densities, densities,
     return solenoid_field, coil_winding, current_for_coils, total_field, label
 
 
+# folder_location, directory
+# We will also need the location to save each file to 
+def save_data(fixed_densities, densities, fixed_lengths, fixed_overlap,
+              guess, final, file_path):
+    data = (fixed_densities, densities, fixed_lengths, fixed_overlap,
+            guess, final)
+    file = open(file_path + "/data.pickle", "wb")
+    pickle.dump(data, file)
+    file.close()
+    return 
+
+
+def retrieve_data(file_path):
+    retrieved_data = pickle.load(open(file_path + "/data.pickle", "rb"))
+
+    fixed_densities = retrieved_data[0]
+    densities = retrieved_data[1]
+    fixed_lengths = retrieved_data[2]
+    fixed_overlap = retrieved_data[3]
+    guess = retrieved_data[4]
+    final = retrieved_data[5]
+
+    return (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
+            final)
+
+
+# Wrapper
 def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, iterations):
+                     z, y, guess, iterations, folder_location):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -177,12 +207,15 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
         current_for_coils_init, total_field_init) = \
         get_configurations(z_long, num_coils, fixed_densities, densities, 
                            fixed_lengths, guess[0:-2], guess[-2], guess[-1], 
-                           discretized_slower_adjusted)[0:3]
+                           discretized_slower_adjusted, ideal_B_field_adjusted,
+                           B_field_range)[0:4]
+
     (solenoid_field_final, coil_winding_final, 
         current_for_coils_final, total_field_final, rmse_label) = \
         get_configurations(z_long, num_coils, fixed_densities, densities, 
                            fixed_lengths, final[0:-2], final[-2], final[-1], 
-                           discretized_slower_adjusted)
+                           discretized_slower_adjusted, ideal_B_field_adjusted,
+                           B_field_range)
 
     # Measures of goodness
     rmse = calculate_RMSE(ideal_B_field_adjusted[0:B_field_range], 
@@ -196,12 +229,14 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
         "optimizer flag = {}".format(final[-2], final[-1], fixed_overlap, 
         rmse, rmse_label, li_deviation, flag))
 
-    # Location to save data
-    folder_location = \
-        "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
+    # Name folder 
     directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap".format(
         len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
         fixed_overlap)
+
+    file_path = os.path.join(folder_location, directory)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
 
     plotting.make_plots(z, z_long, y, discretized_slower_adjusted, 
                         ideal_B_field_adjusted, solenoid_field_init, 
@@ -209,34 +244,48 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
                         total_field_init, solenoid_field_final, 
                         coil_winding_final, current_for_coils_final, 
                         total_field_final, fixed_overlap, B_field_range, 
-                        title, folder_location, directory)
+                        title, file_path)
+
+    save_data(fixed_densities, densities, fixed_lengths, fixed_overlap,
+              guess, final, file_path)
 
     return rmse, li_deviation
 
 
+
+
+
+
 ################################################################################
+
+# Location to save data
+folder_location = \
+    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
 
 # Iterations for optimizer
 iterations = 20000
 
 # Arrays which defines the solenoid configuration for the low current section. 
-# densities = [8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0.25, 0]
 densities = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
 fixed_densities = [2]
 fixed_lengths = [6]
-fixed_overlap = 2
+fixed_overlap = 1
 
 z = np.linspace(0, ideal.slower_length_val, 100000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-# guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
 guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
 
 
 rmse, li_deviation = run_optimization(fixed_densities, densities, 
                                       fixed_lengths, fixed_overlap, 
-                                      z, y_data, guess, iterations)
+                                      z, y_data, guess, iterations, 
+                                      folder_location)
+
+
+
+
 
 
 # # Iterate fixed_lengths from 4 to 10 
@@ -282,9 +331,6 @@ rmse, li_deviation = run_optimization(fixed_densities, densities,
 
 
 
-
-# TODO wrap making figure into one function and then I think you can just write 
-# a for loop to iterate over high current length and fixed overlap 
 
 
 
