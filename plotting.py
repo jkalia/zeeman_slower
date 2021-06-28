@@ -123,7 +123,7 @@ def plot_slower_bottom(axis, discretization, coil_winding_final,
     denote_regions(axis, discretization, coil_winding_final, write=False)
     axis.set_xlabel("Position (m)")
     axis.set_ylabel("Coil winding")
-    axis.set_yticks(np.arange(0, 6, step=0.5))
+    axis.set_yticks(np.arange(0, 7.5, step=0.5))
     axis.grid(b=True, axis="y")
     return 
 
