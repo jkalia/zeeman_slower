@@ -225,9 +225,9 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
         rmse, rmse_label, li_deviation, flag))
 
     # Name folder 
-    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap_{}iter".format(
+    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap".format(
         len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
-        fixed_overlap, iterations)
+        fixed_overlap)
 
     file_path = os.path.join(folder_location, directory)
     if not os.path.exists(file_path):
@@ -259,154 +259,34 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 ################################################################################
 
 # Location to save data
-folder_location = os.path.join("C:\\", "Users","Erbium", "Documents", 
-                               "zeeman_slower", "plots")
+folder_location = \
+    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
 
 # Iterations for optimizer
 iterations = 20000
 
 # Arrays which defines the solenoid configuration for the low current section. 
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 0.5, 0.25, 0]
+densities = [6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
 fixed_densities = [2]
 fixed_lengths = [6]
-fixed_overlap = 0
+fixed_overlap = 1
 
 z = np.linspace(0, ideal.slower_length_val, 100000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-
-# guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
-# guess = [-1.22848295e+01, -5.56605954e-01, -1.93838462e-03, -1.90970423e-03,
-#   7.87433384e-01,  1.11064433e+01,  7.11841739e+00,  7.47536482e+00,
-#   9.13278318e+00,  9.56472679e+00, -1.06887254e+01, -9.69369624e+00,
-#  -3.23463576e+00, -1.00759270e+01,  1.56311151e+02, -3.25184583e+01,
-#   10, 2,  1.10000000e+02,  2.5e+01,
-#   1.4e+02]
-# guess = [-1.26392922e+01, -3.50419352e-01,  4.14461231e-05,  5.69787469e-07,
-#  -6.03636938e-07,  1.19320974e+01,  6.83031446e+00,  7.67709145e+00,
-#   9.04427602e+00,  9.58602667e+00, -1.06788100e+01, -9.68927127e+00,
-#  -3.23396337e+00, 1, 1,  1, 1, 1, 12, 2.6e+01,
-#   1.4e+02]
-# guess = [-7.44649506e+00,  2.17686255e-04,  2.89963625e-04,  5.69787469e-07,
-#  -6.03636938e-07,  7.39882542e+00,  7.99586292e+00,  7.66019569e+00,
-#   9.46768959e+00,  1.04478657e+01, -1.18695287e+01, -1.03297987e+01,
-#  -5.29031708e+00,  8.77704977e+00, -2.44430421e+00,  2.50143956e+00,
-#   9.06183171e+00, -7.09477639e+00,  1.20000000e+01,  2.95916806e+01,
-#   1.29141887e+02]
+guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
 
 
+rmse, li_deviation = run_optimization(fixed_densities, densities, 
+                                      fixed_lengths, fixed_overlap, 
+                                      z, y_data, guess, iterations, 
+                                      folder_location)
 
 
-
-
-# Wrapper
-def wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, iterations, folder_location):
-    
-    discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
-
-    # Data used for calculations of measures of goodness 
-    B_field_range = (len(discretized_slower_adjusted) 
-                     - (np.sum(fixed_lengths) - fixed_overlap) + 1)
-
-    (solenoid_field_init, coil_winding_init, 
-        current_for_coils_init, total_field_init) = \
-        get_configurations(z_long, num_coils, fixed_densities, densities, 
-                           fixed_lengths, guess[0:-2], guess[-2], guess[-1], 
-                           discretized_slower_adjusted, ideal_B_field_adjusted,
-                           B_field_range)[0:4]
-
-    (solenoid_field_final, coil_winding_final, 
-        current_for_coils_final, total_field_final, rmse_label) = \
-        get_configurations(z_long, num_coils, fixed_densities, densities, 
-                           fixed_lengths, final[0:-2], final[-2], final[-1], 
-                           discretized_slower_adjusted, ideal_B_field_adjusted,
-                           B_field_range)
-
-    # Measures of goodness
-    rmse = calculate_RMSE(ideal_B_field_adjusted[0:B_field_range], 
-                          total_field_final[0:B_field_range])
-    li_deviation = max_deviation(total_field_final, ideal_B_field_adjusted, 
-                              B_field_range)
-
-    # Plot title 
-    title = ("lc = {}, hc = {}, \n "
-        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}".format(
-        final[-2], final[-1], fixed_overlap, 
-        rmse, rmse_label, li_deviation))
-
-    # Name folder 
-    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap_{}iter_post".format(
-        len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
-        fixed_overlap, iterations)
-
-    file_path = os.path.join(folder_location, directory)
-    if not os.path.exists(file_path):
-        os.mkdir(file_path)
-
-    plotting.make_plots(z, z_long, y, discretized_slower_adjusted, 
-                        ideal_B_field_adjusted, solenoid_field_init, 
-                        coil_winding_init, current_for_coils_init, 
-                        total_field_init, solenoid_field_final, 
-                        coil_winding_final, current_for_coils_final, 
-                        total_field_final, fixed_overlap, B_field_range, 
-                        title, file_path)
-
-    # data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
-    #         final)
-
-    # file_name = "data.pickle"
-    # f = os.path.join(file_path, file_name)
-
-    # save_data(data, f)
-
-    return rmse, li_deviation
-
-
-# guess = [7, 1, 1, 1, 1, 6, 8, 7, 9, 10, 11, 10, 5, 8, 2, 2, 9, 7, 12, 30, 130]
-guess = [-7.44649506, 0.000217686255, 0.000289963625, 5.69787469e-07, 
-         -6.03636938e-07, 7.39882542, 7.99586292, 7.66019569, 9.46768959, 
-         10.4478657, -11.8695287, -10.3297987, -5.29031708, 8.77704977, 
-         -2.44430421, 2.50143956, 9.06183171, -7.09477639, 12.0, 29.5916806, 
-         129.141887]
-final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
- -6.03636938e-07,  6.99444598e+00,  8.14020624e+00,  7.59039476e+00,
-  9.51184227e+00,  1.04877096e+01, -1.19425779e+01, -1.03911870e+01,
- -5.35495084e+00,  8.84634912e+00, -2.46417535e+00,  2.51996538e+00,
-  9.14485245e+00, -7.18603523e+00,  1.20000000e+01,  2.98967317e+01,
-  1.28602604e+02]
-wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y_data, guess, iterations, folder_location)
-
-
-
-# rmse, li_deviation = run_optimization(fixed_densities, densities, 
-#                                       fixed_lengths, fixed_overlap, 
-#                                       z, y_data, guess, iterations, 
-#                                       folder_location) 
-
-# Unpickle
-# file = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                                "zeeman_slower", "plots", 
-#                                "19sections_6hclength_2hcmaxdensity_0overlap_20000iter_run3",
-#                                "data.pickle")
-# (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
-#             final) = retrieve_run_data(file)
-# print(final)
-# print(guess)
-
-
-
-
-# Iterate fixed_lengths from 4 to 10 
+# # Iterate fixed_lengths from 4 to 10 
 # min_length = 4
 # max_length = 10
-
-# Set maximum overlap
-# max_overlap = 1
-
 
 # # Initialize array for storing data
 # rmse_array = np.zeros(((max_length - min_length + 1), 
@@ -414,9 +294,12 @@ wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # deviation_array = np.zeros(((max_length - min_length + 1), 
 #                            np.ceil(max_length / 2).astype(int) + 1))
 
-# Iterate over fixed lengths
+# # Iterate over fixed lengths
 # for i in range(min_length, (max_length + 1), 1):
 #   fixed_lengths[0] = i 
+
+#   # Set max overlap
+#   max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
 
 #   for j in range(max_overlap + 1):
 #       fixed_overlap = j
@@ -424,8 +307,7 @@ wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap,
 #       # Run optimization and collect data
 #       rmse, li_deviation = run_optimization(fixed_densities, densities, 
 #                                             fixed_lengths, fixed_overlap, 
-#                                             z, y_data, guess, iterations,
-#                                             folder_location)
+#                                             z, y_data, guess, iterations)
 #       print("rmse: ", rmse)
 #       print("li_deviation: ", li_deviation)
 
@@ -437,7 +319,9 @@ wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap,
 #       print("deviation_array: ", deviation_array)
 
 
-# print("rmse_array: ", rmse_array)  
+
+
+# print("rmse_array: ", rmse_array)
 # print("deviation_array: ", deviation_array)
 
 
