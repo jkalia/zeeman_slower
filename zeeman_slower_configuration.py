@@ -24,7 +24,7 @@ import coil_configuration as coil
 import solenoid_configuration as solenoid 
 import parameters
 import plotting
-import simulate
+# import simulate
 
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -256,9 +256,47 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
     return rmse, li_deviation
 
 
-# Manipulate output
-def wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, final, folder_location):
+# Give the optimized field with the correct discretization
+def get_B_field_data(fixed_densities, densities, fixed_lengths, fixed_overlap, 
+                     discretization, final):
+    
+    discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        discretize(fixed_lengths, fixed_overlap)
+
+    # Data used for calculations of measures of goodness 
+    B_field_range = (len(discretized_slower_adjusted) 
+                     - (np.sum(fixed_lengths) - fixed_overlap) + 1)
+
+    total_field_final, rmse_label = \
+      get_configurations(z_long, num_coils, fixed_densities, 
+                                           densities, fixed_lengths, 
+                                           final[0:-2], final[-2], final[-1], 
+                                           discretization, 
+                                           ideal_B_field_adjusted, 
+                                           B_field_range)[3:5]
+    print("rmse_label: ", rmse_label) ##### TODO: this is returning ceil instead of round because of 
+                                      ##### the fact that B field range is wrong  
+                                      ##### works fine if you don't bullshit B_field       
+
+    return total_field_final
+
+
+# Wrapper for atom propagation
+def propagation(fixed_densities, densities, fixed_lengths, fixed_overlap, 
+                discretization, final):
+
+    total_field = get_B_field_data(fixed_densities, densities, fixed_lengths,
+                                   fixed_overlap, discretization, final)
+
+
+
+    pass
+
+
+
+# Wrapper for plotting and generating values post-optimization
+def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
+                      z, y, guess, final, folder_location):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -283,6 +321,8 @@ def wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
     print("coil_winding: ", coil_winding_final)
     print("current_for_coils: ", current_for_coils_final)
+    print("number of coils: ", len(coil_winding_final))
+    print("number of coils: ", num_coils)
 
     # Measures of goodness
     rmse = calculate_RMSE(ideal_B_field_adjusted[0:B_field_range], 
@@ -292,12 +332,12 @@ def wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
     # Plot title 
     title = ("lc = {}, hc = {}, \n "
-        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}".format(
-        final[-2], final[-1], fixed_overlap, 
+        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}, \n "
+        "o".format(final[-2], final[-1], fixed_overlap, 
         rmse, rmse_label, li_deviation))
 
     # Name folder 
-    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap_post".format(
+    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap_post3".format(
         len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
         fixed_overlap)
 
@@ -313,55 +353,21 @@ def wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap,
                         total_field_final, fixed_overlap, B_field_range, 
                         title, file_path)
 
-    return total_field_final
-
-
-
-
-# def get_B_field_data(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-#                      discretization, final):
-    
-#     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-#         discretize(fixed_lengths, fixed_overlap)
-
-#     # Data used for calculations of measures of goodness 
-#     B_field_range = (len(discretized_slower_adjusted) 
-#                      - (np.sum(fixed_lengths) - fixed_overlap) + 1)
-
-#     total_field_final = get_configurations(z_long, num_coils, fixed_densities, 
-#                                            densities, fixed_lengths, 
-#                                            final[0:-2], final[-2], final[-1], 
-#                                            discretization, 
-#                                            ideal_B_field_adjusted, 
-#                                            B_field_range)[3]
-
-#     return total_field_final
-
-
-# Wrapper for atom propagation
-# def propagation(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-#                 discretization, final):
-
-#     total_field = get_B_field_data(fixed_densities, densities, fixed_lengths,
-#                                    fixed_overlap, discretization, final)
-
-
-#     pass
-
+    return rmse, li_deviation
 
 ################################################################################
 
 
 # Location to save data
 folder_location = \
-    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots_2/"
+    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/post/"
 
-# Iterations for optimizer
-iterations = 20000
+# # Iterations for optimizer
+# iterations = 20000
 
 # Arrays which defines the solenoid configuration for the low current section. 
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 0.5, 0.25, 0]
-
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+             0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
 fixed_densities = [2]
@@ -371,6 +377,11 @@ fixed_overlap = 0
 z = np.linspace(0, ideal.slower_length_val, 100000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 # guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
+
+# rmse, li_deviation = run_optimization(fixed_densities, densities, 
+#                                       fixed_lengths, fixed_overlap, 
+#                                       z, y_data, guess, iterations, 
+#                                       folder_location)
 
 
 guess = [-7.44649506, 0.000217686255, 0.000289963625, 5.69787469e-07,
@@ -385,21 +396,81 @@ final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
           9.14485245e+00, -7.18603523e+00,  1.20000000e+01,  2.98967317e+01,
           1.28602604e+02]
 
-total_field = wrapper(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                      z, y_data, guess, final, folder_location)
-
-fig, ax = plt.subplots()
-ax.plot(z, y_data, label="ideal")
 
 
+# rmse, li_deviation = post_optimization(fixed_densities, densities, 
+#                                        fixed_lengths, fixed_overlap, 
+#                                        z, y_data, guess, final, 
+#                                        folder_location)
 
-# rmse, li_deviation = run_optimization(fixed_densities, densities, 
-#                                       fixed_lengths, fixed_overlap, 
-#                                       z, y_data, guess, iterations, 
-#                                       folder_location)
+
+
+discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        discretize(fixed_lengths, fixed_overlap)
+
+z_result = np.linspace(0, ideal.slower_length_val, 10000)
+y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
+
+coil_winding, current_for_coils = \
+  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
+                                     fixed_lengths, np.round(final[0:-2]), 
+                                     final[-2], final[-1])
+total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
+                                          z_result)
+
+# fig, ax = plt.subplots()
+
+# ax.plot(z_result, y_result)
+
+# plt.show()
+
+
+# t, z, v, a = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, coil_winding, 
+#                          current_for_coils)
+# print("final velocity: ", v[-1])
+
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, optimized=False)
+
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 1000, optimized=False)
+
+# fig, ax = plt.subplots()
+# ax.plot(z, v, label="propagation through optimized B field")
+# ax.plot(z_ideal, v_ideal, 'k--', label='propagation through ideal B field')
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.plot(v_ideal, t_ideal)
+# ax.set_xlim(0, ideal.slower_length_val)
+# ax.set_title("Motion of Li atom in the Slower")
+# ax.legend()
+
+# plt.show()
+
+
+
+
+# fig1, ax1 = plt.subplots()
+# ax1.plot(z_result, y_result)
+# ax1.plot(z_result, total_field)
+
+# fig2, ax2, = plt.subplots()
+# ax2.plot(z_result, (total_field - y_result) * 10**(-4) 
+#               * ideal.mu0_li / ideal.hbar / ideal.linewidth_li, label="Li")
+# ax2.axvline(x=ideal.slower_length_val, color="m")
+
+# plt.show()
+
+
+
+
+
 
 
 # Unpickle
+# folder_location = \
+#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
 # file = os.path.join(folder_location, "run1", "data.pickle")
 # (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
 #             final) = retrieve_run_data(file)
@@ -460,23 +531,6 @@ ax.plot(z, y_data, label="ideal")
 
 
 
-# manipulate_results(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-#                    z, y_data, , folder_location)
-
-# z_result = np.linspace(0, ideal.slower_length_val, 10000)
-# y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
-
-
-# manipulate_results(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-#                    z, y_data, guess, final, folder_location)
-
-
-
-# total_field = get_B_field_data(fixed_densities, densities, fixed_lengths, 
-#                                fixed_overlap, z_result, final)
-
-# print(len(total_field))
-# print(total_field)
 
 
 
