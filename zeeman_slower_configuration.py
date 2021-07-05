@@ -401,38 +401,42 @@ coil_winding, current_for_coils = \
                                      final[-2], final[-1])
 
 
+# Plot simulations
+fig, ax = plt.subplots()
+
 # Simulation of atom in ideal B field
 t_ideal, z_ideal, v_ideal, a_ideal = \
   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
                          optimized=False)
-
-# Simulation of atoms through calculated B field for different starting velocities
-ti, zi, vi, ai = \
-  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
-                         coil_winding, current_for_coils)
-
-ti9, zi9, vi9, ai9 = \
-  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
-                         ideal.initial_velocity_li * .9, 
-                         coil_winding, current_for_coils)
-
-
-
-fig, ax = plt.subplots()
-
 ax.plot(z_ideal, v_ideal, "k--", 
-        label="propagation through ideal B field (v_initial = {})".format(
+        label="ideal B field (v_initial = {:.0f})".format(
           ideal.initial_velocity_li)
         )
-ax.plot(zi, vi, label="v_initial = {}".format(initial_velocity_li))
-ax.plot(zi9, vi9, label="v_initial = {}".format(initial_velocity_li * .9))
+
+# Simulation of atoms through calculated B field for different initial 
+# velocities
+# for x in range(11, 9, -1):
+#     t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
+#                                         ideal.initial_velocity_li * (x/10), 
+#                                         coil_winding, current_for_coils)
+#     ax.plot(z, v, 
+#             label="v_initial = {:.0f}".format(
+#                 ideal.initial_velocity_li * (x/10)))
+
+t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
+                                        ideal.initial_velocity_li * 1.01, 
+                                        coil_winding, current_for_coils)
+ax.plot(z, v, label="v_initial = {:.0f}".format(
+                ideal.initial_velocity_li * 1.01))
 
 ax.set_xlabel("Position [m]")
 ax.set_ylabel("Velocity [m/s]")
 ax.set_title("Motion of Li atom in the Slower")
 ax.legend()
 
-plt.show()
+file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+                         "zeeman_slower", "figs", "simulation.png")
+fig.savefig(file_path, bbox_inches="tight")
 
 
 
