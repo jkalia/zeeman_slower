@@ -11,6 +11,6 @@ slower_diameter = 0.0127 * 2                # [m]
 wire_width = 0.0035                         # [m]
 wire_height = 0.0035                        # [m]
 n = 1 / wire_width                          # [turns per m]
-length_to_MOT = 3.5 / 39.37                 # [m]
+length_to_MOT_from_ZS = 3.5 / 39.37         # [m]
 
 

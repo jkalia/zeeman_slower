@@ -16,6 +16,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt 
 from scipy import optimize
+from scipy import misc
 import pickle 
 import os
 
@@ -344,8 +345,8 @@ fixed_densities = [2]
 fixed_lengths = [6]
 fixed_overlap = 0
 
-z = np.linspace(0, ideal.slower_length_val, 100000)
-y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+# z = np.linspace(0, ideal.slower_length_val, 100000)
+# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 # guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
 
 # rmse, li_deviation = run_optimization(fixed_densities, densities, 
@@ -400,46 +401,89 @@ coil_winding, current_for_coils = \
                                      fixed_lengths, np.round(final[0:-2]), 
                                      final[-2], final[-1])
 
+print(coil_winding)
+# print(len(coil_winding))
+# print(np.count_nonzero(coil_winding))
+
 
 # Plot simulations
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
 
 # Simulation of atom in ideal B field
-t_ideal, z_ideal, v_ideal, a_ideal = \
-  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
-                         optimized=False)
-ax.plot(z_ideal, v_ideal, "k--", 
-        label="ideal B field (v_initial = {:.0f})".format(
-          ideal.initial_velocity_li)
-        )
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
+#                          optimized=False)
+# ax.plot(z_ideal, v_ideal, "k--", 
+#         label="ideal B field (v_initial = {:.0f})".format(
+#           ideal.initial_velocity_li)
+#         )
 
 # Simulation of atoms through calculated B field for different initial 
 # velocities
-for x in range(11, 9, -1):
-    t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
-                                        ideal.initial_velocity_li * (x/10), 
-                                        coil_winding, current_for_coils)
-    ax.plot(z, v, 
-            label="v_initial = {:.0f}".format(
-                ideal.initial_velocity_li * (x/10)))
+# for x in range(11, 9, -1):
+#     t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
+#                                         ideal.initial_velocity_li * (x/10), 
+#                                         coil_winding, current_for_coils)
+#     ax.plot(z, v, 
+#             label="v_initial = {:.0f}".format(
+#                 ideal.initial_velocity_li * (x/10)))
 
-ax.set_xlabel("Position [m]")
-ax.set_ylabel("Velocity [m/s]")
-ax.set_title("Motion of Li atom in the Slower")
-ax.legend()
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Li atom in the Slower")
+# ax.legend()
 
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
 #                          "zeeman_slower", "figs", "simulation.pdf")
-fig.savefig(file_path, bbox_inches="tight")
+# fig.savefig(file_path, bbox_inches="tight")
+
+
+# coils_used = np.count_nonzero(coil_winding)
+
+MOT_distance = (len(coil_winding) * parameters.wire_width 
+                + parameters.length_to_MOT_from_ZS)
+
+z = np.linspace(0, MOT_distance + .1, 10000)
+y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+
+total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, z)
+zprime = np.gradient(total_field)
+
+
+fig, ax = plt.subplots()
+fig1, ax1 = plt.subplots()
+
+
+ax.plot(z, total_field, label="calculated B field")
+ax.plot(z, y, label="ideal B field")
+ax.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
+ax.legend()
 
 
 
 
+ax1.set_xlabel("Position (m)")
+ax1.set_ylabel("B field (Gauss)", color="tab:red")
+ax1.plot(z, total_field, color="tab:red")
+ax1.plot(z, y, linestyle="--", color="tab:red")
+ax1.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
+ax1.set_xlim(MOT_distance-0.05, MOT_distance+0.05)
+ax1.set_ylim(-10, 50)
+ax1.tick_params(axis="y", labelcolor="tab:red")
 
 
+ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+ax2.set_ylabel("Gradient (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
+ax2.plot(z, zprime*100, color="tab:blue")
+ax2.set_ylim(-20, 5)
+ax2.tick_params(axis="y", labelcolor="tab:blue")
 
+ax1.legend()
+fig1.tight_layout()  # otherwise the right y-label is slightly clipped
 
+fig1.savefig("/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/figs/gradient.pdf")
 
+plt.show()
 
 
 
