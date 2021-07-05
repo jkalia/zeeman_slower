@@ -294,12 +294,12 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
     # Plot title 
     title = ("lc = {}, hc = {}, \n "
-        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}, \n "
-        "o".format(final[-2], final[-1], fixed_overlap, 
+        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}".format(
+        final[-2], final[-1], fixed_overlap, 
         rmse, rmse_label, li_deviation))
 
     # Name folder 
-    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap_post3".format(
+    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap".format(
         len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
         fixed_overlap)
 
@@ -315,6 +315,14 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
                         total_field_final, fixed_overlap, B_field_range, 
                         title, file_path)
 
+    data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
+            final)
+
+    file_name = "data.pickle"
+    f = os.path.join(file_path, file_name)
+
+    save_data(data, f)
+
     return rmse, li_deviation
 
 ################################################################################
@@ -322,7 +330,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 # Location to save data
 folder_location = \
-    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/post/"
+    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
 
 # # Iterations for optimizer
 # iterations = 20000
@@ -348,7 +356,7 @@ y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 # Unpickle data
 # folder_location = \
-#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
+#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
 # file = os.path.join(folder_location, "run1", "data.pickle")
 # (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
 #             final) = retrieve_run_data(file)
@@ -374,10 +382,10 @@ final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
 
 
 
-# rmse, li_deviation = post_optimization(fixed_densities, densities, 
-#                                        fixed_lengths, fixed_overlap, 
-#                                        z, y_data, guess, final, 
-#                                        folder_location)
+rmse, li_deviation = post_optimization(fixed_densities, densities, 
+                                       fixed_lengths, fixed_overlap, 
+                                       z, y_data, guess, final, 
+                                       folder_location)
 
 
 
@@ -394,21 +402,21 @@ coil_winding, current_for_coils = \
 
 
 
-t_ideal, z_ideal, v_ideal, a_ideal = \
-  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, optimized=False)
-t, z, v, a = \
-  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, coil_winding, 
-                         current_for_coils)
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, optimized=False)
+# t, z, v, a = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, coil_winding, 
+#                          current_for_coils)
 
-fig, ax = plt.subplots()
-ax.plot(z, v, label="propagation through optimized B field")
-ax.plot(z_ideal, v_ideal, 'k--', label='propagation through ideal B field')
-ax.set_xlabel("Position [m]")
-ax.set_ylabel("Velocity [m/s]")
-ax.set_title("Motion of Li atom in the Slower")
-ax.legend()
+# fig, ax = plt.subplots()
+# ax.plot(z, v, label="propagation through optimized B field")
+# ax.plot(z_ideal, v_ideal, 'k--', label='propagation through ideal B field')
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Li atom in the Slower")
+# ax.legend()
 
-plt.show()
+# plt.show()
 
 
 
