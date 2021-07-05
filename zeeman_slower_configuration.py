@@ -415,27 +415,21 @@ ax.plot(z_ideal, v_ideal, "k--",
 
 # Simulation of atoms through calculated B field for different initial 
 # velocities
-# for x in range(11, 9, -1):
-#     t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
-#                                         ideal.initial_velocity_li * (x/10), 
-#                                         coil_winding, current_for_coils)
-#     ax.plot(z, v, 
-#             label="v_initial = {:.0f}".format(
-#                 ideal.initial_velocity_li * (x/10)))
-
-t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
-                                        ideal.initial_velocity_li * 1.01, 
+for x in range(11, 9, -1):
+    t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
+                                        ideal.initial_velocity_li * (x/10), 
                                         coil_winding, current_for_coils)
-ax.plot(z, v, label="v_initial = {:.0f}".format(
-                ideal.initial_velocity_li * 1.01))
+    ax.plot(z, v, 
+            label="v_initial = {:.0f}".format(
+                ideal.initial_velocity_li * (x/10)))
 
 ax.set_xlabel("Position [m]")
 ax.set_ylabel("Velocity [m/s]")
 ax.set_title("Motion of Li atom in the Slower")
 ax.legend()
 
-file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-                         "zeeman_slower", "figs", "simulation.png")
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "simulation.pdf")
 fig.savefig(file_path, bbox_inches="tight")
 
 

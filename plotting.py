@@ -222,10 +222,10 @@ def make_plots(x, x_long, y, discretization, ideal_field,
     fig4.suptitle(t=title)
     fig4.set_size_inches(12, 8)
 
-    fig1.savefig(file_path + "/initial.png", bbox_inches="tight")
-    fig2.savefig(file_path + "/lines.png", bbox_inches="tight")
-    fig3.savefig(file_path + "/slower.png", bbox_inches="tight")
-    fig4.savefig(file_path + "/diff.png", bbox_inches="tight")
+    fig1.savefig(file_path + "/initial.pdf", bbox_inches="tight")
+    fig2.savefig(file_path + "/lines.pdf", bbox_inches="tight")
+    fig3.savefig(file_path + "/slower.pdf", bbox_inches="tight")
+    fig4.savefig(file_path + "/diff.pdf", bbox_inches="tight")
 
     return 
 
