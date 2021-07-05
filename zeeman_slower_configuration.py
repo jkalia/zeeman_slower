@@ -24,7 +24,7 @@ import coil_configuration as coil
 import solenoid_configuration as solenoid 
 import parameters
 import plotting
-# import simulate
+import simulate
 
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -256,44 +256,6 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
     return rmse, li_deviation
 
 
-# Give the optimized field with the correct discretization
-def get_B_field_data(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     discretization, final):
-    
-    discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
-
-    # Data used for calculations of measures of goodness 
-    B_field_range = (len(discretized_slower_adjusted) 
-                     - (np.sum(fixed_lengths) - fixed_overlap) + 1)
-
-    total_field_final, rmse_label = \
-      get_configurations(z_long, num_coils, fixed_densities, 
-                                           densities, fixed_lengths, 
-                                           final[0:-2], final[-2], final[-1], 
-                                           discretization, 
-                                           ideal_B_field_adjusted, 
-                                           B_field_range)[3:5]
-    print("rmse_label: ", rmse_label) ##### TODO: this is returning ceil instead of round because of 
-                                      ##### the fact that B field range is wrong  
-                                      ##### works fine if you don't bullshit B_field       
-
-    return total_field_final
-
-
-# Wrapper for atom propagation
-def propagation(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                discretization, final):
-
-    total_field = get_B_field_data(fixed_densities, densities, fixed_lengths,
-                                   fixed_overlap, discretization, final)
-
-
-
-    pass
-
-
-
 # Wrapper for plotting and generating values post-optimization
 def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
                       z, y, guess, final, folder_location):
@@ -384,6 +346,20 @@ y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 #                                       folder_location)
 
 
+# Unpickle data
+# folder_location = \
+#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
+# file = os.path.join(folder_location, "run1", "data.pickle")
+# (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
+#             final) = retrieve_run_data(file)
+# print("fixed_densities: ", fixed_densities)
+# print("densities: ", densities)
+# print("fixed_lengths: ", fixed_lengths)
+# print("fixed_overlap: ", fixed_overlap)
+# print("guess: ", guess)
+# print("final: ", final)
+
+
 guess = [-7.44649506, 0.000217686255, 0.000289963625, 5.69787469e-07,
          -6.03636938e-07, 7.39882542, 7.99586292, 7.66019569, 9.46768959,
          10.4478657, -11.8695287, -10.3297987, -5.29031708, 8.77704977,
@@ -415,115 +391,28 @@ coil_winding, current_for_coils = \
   coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
                                      fixed_lengths, np.round(final[0:-2]), 
                                      final[-2], final[-1])
-total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
-                                          z_result)
-
-# fig, ax = plt.subplots()
-
-# ax.plot(z_result, y_result)
-
-# plt.show()
 
 
-# t, z, v, a = \
-#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, coil_winding, 
-#                          current_for_coils)
-# print("final velocity: ", v[-1])
 
-# t_ideal, z_ideal, v_ideal, a_ideal = \
-#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, optimized=False)
+t_ideal, z_ideal, v_ideal, a_ideal = \
+  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, optimized=False)
+t, z, v, a = \
+  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, coil_winding, 
+                         current_for_coils)
 
-# t_ideal, z_ideal, v_ideal, a_ideal = \
-#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 1000, optimized=False)
+fig, ax = plt.subplots()
+ax.plot(z, v, label="propagation through optimized B field")
+ax.plot(z_ideal, v_ideal, 'k--', label='propagation through ideal B field')
+ax.set_xlabel("Position [m]")
+ax.set_ylabel("Velocity [m/s]")
+ax.set_title("Motion of Li atom in the Slower")
+ax.legend()
 
-# fig, ax = plt.subplots()
-# ax.plot(z, v, label="propagation through optimized B field")
-# ax.plot(z_ideal, v_ideal, 'k--', label='propagation through ideal B field')
-# ax.set_xlabel("Position [m]")
-# ax.set_ylabel("Velocity [m/s]")
-# ax.plot(v_ideal, t_ideal)
-# ax.set_xlim(0, ideal.slower_length_val)
-# ax.set_title("Motion of Li atom in the Slower")
-# ax.legend()
-
-# plt.show()
+plt.show()
 
 
 
 
-# fig1, ax1 = plt.subplots()
-# ax1.plot(z_result, y_result)
-# ax1.plot(z_result, total_field)
-
-# fig2, ax2, = plt.subplots()
-# ax2.plot(z_result, (total_field - y_result) * 10**(-4) 
-#               * ideal.mu0_li / ideal.hbar / ideal.linewidth_li, label="Li")
-# ax2.axvline(x=ideal.slower_length_val, color="m")
-
-# plt.show()
-
-
-
-
-
-
-
-# Unpickle
-# folder_location = \
-#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/plots/"
-# file = os.path.join(folder_location, "run1", "data.pickle")
-# (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
-#             final) = retrieve_run_data(file)
-# print("fixed_densities: ", fixed_densities)
-# print("densities: ", densities)
-# print("fixed_lengths: ", fixed_lengths)
-# print("fixed_overlap: ", fixed_overlap)
-# print("guess: ", guess)
-# print("final: ", final)
-
-
-
-# # Iterate fixed_lengths from 4 to 10 
-# min_length = 4
-# max_length = 10
-
-# # Initialize array for storing data
-# rmse_array = np.zeros(((max_length - min_length + 1), 
-#                       np.ceil(max_length / 2).astype(int) + 1))
-# deviation_array = np.zeros(((max_length - min_length + 1), 
-#                            np.ceil(max_length / 2).astype(int) + 1))
-
-# # Iterate over fixed lengths
-# for i in range(min_length, (max_length + 1), 1):
-#   fixed_lengths[0] = i 
-
-#   # Set max overlap
-#   max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
-
-#   for j in range(max_overlap + 1):
-#       fixed_overlap = j
-
-#       # Run optimization and collect data
-#       rmse, li_deviation = run_optimization(fixed_densities, densities, 
-#                                             fixed_lengths, fixed_overlap, 
-#                                             z, y_data, guess, iterations)
-#       print("rmse: ", rmse)
-#       print("li_deviation: ", li_deviation)
-
-#       rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
-#       deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
-#           li_deviation
-
-#       print("rmse_array: ", rmse_array)
-#       print("deviation_array: ", deviation_array)
-
-
-# print("rmse_array: ", rmse_array)
-# print("deviation_array: ", deviation_array)
-
-
-# data = (rmse_array, deviation_array)
-# save_data(data, "heatmap.pickle")
 
 
 

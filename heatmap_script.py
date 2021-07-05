@@ -79,6 +79,50 @@ plt.show()
 
 
 
+################################################################################
+
+# # Iterate fixed_lengths from 4 to 10 
+# min_length = 4
+# max_length = 10
+
+# # Initialize array for storing data
+# rmse_array = np.zeros(((max_length - min_length + 1), 
+#                       np.ceil(max_length / 2).astype(int) + 1))
+# deviation_array = np.zeros(((max_length - min_length + 1), 
+#                            np.ceil(max_length / 2).astype(int) + 1))
+
+# # Iterate over fixed lengths
+# for i in range(min_length, (max_length + 1), 1):
+#   fixed_lengths[0] = i 
+
+#   # Set max overlap
+#   max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
+
+#   for j in range(max_overlap + 1):
+#       fixed_overlap = j
+
+#       # Run optimization and collect data
+#       rmse, li_deviation = run_optimization(fixed_densities, densities, 
+#                                             fixed_lengths, fixed_overlap, 
+#                                             z, y_data, guess, iterations)
+#       print("rmse: ", rmse)
+#       print("li_deviation: ", li_deviation)
+
+#       rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
+#       deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
+#           li_deviation
+
+#       print("rmse_array: ", rmse_array)
+#       print("deviation_array: ", deviation_array)
+
+
+# print("rmse_array: ", rmse_array)
+# print("deviation_array: ", deviation_array)
+
+
+# data = (rmse_array, deviation_array)
+# save_data(data, "heatmap.pickle")
+
 
 
 
