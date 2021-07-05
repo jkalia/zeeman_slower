@@ -26,7 +26,7 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
 
 # Simulates the motion of the atoms in the B field 
 # TODO: doesn't work for the ideal field, which it definitely should 
-def simulate_atom(atom, intensity, coil_winding=[0], current_for_coils=[0], 
+def simulate_atom(atom, intensity, v_initial, coil_winding=[0], current_for_coils=[0], 
                   dt=1e-7, z_max=1, max_steps=20000, optimized=True):
 
     # Choose atom to simulate
@@ -37,7 +37,7 @@ def simulate_atom(atom, intensity, coil_winding=[0], current_for_coils=[0],
         mu0 = ideal.mu0_er
         Isat = ideal.Isat_er
         laser_detuning = ideal.laser_detuning_er
-        v_initial = ideal.initial_velocity_er
+        # v_initial = ideal.initial_velocity_er
         v_final = ideal.final_velocity_er
     else:
         m = ideal.m_li
@@ -46,7 +46,7 @@ def simulate_atom(atom, intensity, coil_winding=[0], current_for_coils=[0],
         mu0 = ideal.mu0_li
         Isat = ideal.Isat_li_d2
         laser_detuning = ideal.laser_detuning_li
-        v_initial = ideal.initial_velocity_li
+        # v_initial = ideal.initial_velocity_li
         v_final = ideal.final_velocity_li
 
     s = intensity / Isat
