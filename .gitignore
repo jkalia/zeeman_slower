@@ -1,0 +1,2 @@
+# Ignore local compilations of Python
+__pycache__
