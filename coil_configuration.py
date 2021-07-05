@@ -67,7 +67,7 @@ def give_coil_winding_and_current(num_coils, fixed_densities,
 def calculate_B_field_coil(coil_winding, current_for_coils, discretization):
 
     # Starts total B field to zero initially
-    total_B_field = np.zeros(len(coil_winding))
+    total_B_field = np.zeros(len(discretization))
 
     for position, coil_num in np.ndenumerate(coil_winding):
         axial_position =  (position[0] * parameters.wire_width 

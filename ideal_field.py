@@ -44,15 +44,18 @@ def get_laser_detuning(capture_velocity, k):
 
 # Er parameters for ZS
 initial_velocity_er = 470                                           # [m/s]
-final_velocity_er = 5                                               # [m/s]
+final_velocity_er = 5
 eta_er = 0.5
 mu0_er = 1.13719 * uB
 laser_detuning_er = round(get_laser_detuning(initial_velocity_er, k_er), -6)
 
 
 # Li parameters for ZS
+initial_velocity_li = 691                                           # [m/s]
+final_velocity_li = 0
 eta_li = 0.38
 mu0_li = 1 * uB
+laser_detuning_li = round(get_laser_detuning(initial_velocity_li, k_li), -6)
 
 
 # Determine ideal B field for slower
@@ -74,6 +77,7 @@ def Bbias(mu0, laser_detuning):
 def B_field(B0, Bbias, slower_length):
     return lambda z : Bbias + B0 * np.sqrt(1 - z / slower_length)
 
+# Outputs in SI
 def get_slower_parameters(k, linewidth, m, eta, capture_velocity, mu0, 
                           laser_detuning):
     max_acceleration_val = max_acceleration(k, linewidth, m)
@@ -82,16 +86,17 @@ def get_slower_parameters(k, linewidth, m, eta, capture_velocity, mu0,
     B0_val = B0(capture_velocity, k, mu0)
     Bbias_val = Bbias(mu0, laser_detuning)
 
-    print("max acceleration: ", max_acceleration_val)
-    print("slower_acceleration_val:", slower_acceleration_val)
-    print("slower_length_val: ", slower_length_val)
-    print("B0_val: ", B0_val)
-    print("Bbias_val: ", Bbias_val)
+    # print("max acceleration: ", max_acceleration_val)
+    # print("slower_acceleration_val:", slower_acceleration_val)
+    # print("slower_length_val: ", slower_length_val)
+    # print("B0_val: ", B0_val)
+    # print("Bbias_val: ", Bbias_val)
 
     return slower_length_val, B_field(B0_val, Bbias_val, slower_length_val)
 
 
 # Gives the ideal B field with the correct discretization
+# Outputs in Gauss
 def get_ideal_B_field(ideal_B_field, discretization):
     B_field = ideal_B_field(discretization) * -1 * 10**4
     return np.nan_to_num(B_field)
