@@ -11,6 +11,15 @@ import scipy.constants
 import parameters
 
 
+# Add coils to the end of the slower 
+def add_coils(num_coils, num_positions):
+    added_coils = np.zeros(num_coils)
+    for i in range(len(added_coils)):
+        added_coils[i] = ((num_positions + i) * parameters.wire_width 
+                          + parameters.wire_width / 2)
+    return added_coils
+
+
 # B field of coil as a function of z
 def B_z_single_coil(current, radius, z_location):
     return lambda z : ((scipy.constants.mu_0 * current * radius**2) / 
@@ -101,13 +110,4 @@ def calculate_B_field_coil(coil_winding, current_for_coils, discretization):
     total_B_field = total_B_field * 10**4
 
     return total_B_field
-
-
-# Add coils to the end of the slower 
-def add_coils(num_coils, num_positions):
-    added_coils = np.zeros(num_coils)
-    for i in range(len(added_coils)):
-        added_coils[i] = ((num_positions + i) * parameters.wire_width 
-                          + parameters.wire_width / 2)
-    return added_coils
 
