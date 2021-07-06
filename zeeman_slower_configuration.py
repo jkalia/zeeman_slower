@@ -433,11 +433,11 @@ ax.set_ylabel("Velocity [m/s]")
 ax.set_title("Motion of Li atom in the Slower")
 ax.legend()
 
-# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                          "zeeman_slower", "figs", "debugging.pdf")
-# fig.savefig(file_path, bbox_inches="tight")
+file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+                         "zeeman_slower", "figs", "debugging1.pdf")
+fig.savefig(file_path, bbox_inches="tight")
 
-plt.show()
+# plt.show()
 
 
 
