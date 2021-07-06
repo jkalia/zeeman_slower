@@ -27,7 +27,7 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
 # Simulates the motion of the atoms in the B field 
 # TODO: doesn't work for the ideal field, which it definitely should 
 def simulate_atom(atom, intensity, v_initial, coil_winding=[0], current_for_coils=[0], 
-                  dt=1e-7, z_max=1, max_steps=200000, optimized=True):
+                  dt=1e-9, z_max=1, max_steps=2000000, optimized=True):
 
     # Choose atom to simulate
     if atom=="Er":
