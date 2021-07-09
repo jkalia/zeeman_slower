@@ -551,47 +551,47 @@ for x in range(-50, 51, 1):
                  "detuning = {}".format(laser_detuning_li))
     ax.legend()
 
-    file_name = "detuning_{}".format()
+    file_name = "detuning_{}.pdf".format(laser_detuning_li)
 
-    # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-    #                          "zeeman_slower", "figs", "debugging1.pdf")
-    # fig.savefig(file_path, bbox_inches="tight")
-
-
+    file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+                             "zeeman_slower", "detuning", file_name)
+    fig.savefig(file_path, bbox_inches="tight")
 
 
 
-v_i_li = ideal.initial_velocity_li 
-laser_detuning_li = ideal.laser_detuning_li * 1.01
 
-# Plot simulations
-fig, ax = plt.subplots()
+
+# v_i_li = ideal.initial_velocity_li 
+# laser_detuning_li = ideal.laser_detuning_li * 1.01
+
+# # Plot simulations
+# fig, ax = plt.subplots()
     
-# Simulation of atom in ideal B field
-t_ideal, z_ideal, v_ideal, a_ideal = \
-    simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
-                               optimized=False)
+# # Simulation of atom in ideal B field
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#     simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#                                optimized=False)
 
-# Simulation of atom through calculated B field 
-t, z, v, a = simulate.simulate_atom(li_atom, 2, v_i_li, laser_detuning_li, 
-                                        coil_winding, current_for_coils) 
+# # Simulation of atom through calculated B field 
+# t, z, v, a = simulate.simulate_atom(li_atom, 2, v_i_li, laser_detuning_li, 
+#                                         coil_winding, current_for_coils) 
 
-ax.plot(z_ideal, v_ideal, "k--", 
-            label="ideal B field (v_i = {:.0f})".format(v_i_li))
-ax.plot(z, v, label="v_i = {:.0f}".format(v_i_li))
+# ax.plot(z_ideal, v_ideal, "k--", 
+#             label="ideal B field (v_i = {:.0f})".format(v_i_li))
+# ax.plot(z, v, label="v_i = {:.0f}".format(v_i_li))
 
 
 
-ax.set_xlabel("Position [m]")
-ax.set_ylabel("Velocity [m/s]")
-ax.set_title("Motion of Li atom in the Slower \n detuning = {}".format(laser_detuning_li))
-ax.legend()
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Li atom in the Slower \n detuning = {}".format(laser_detuning_li))
+# ax.legend()
 
-# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                          "zeeman_slower", "figs", "debugging1.pdf")
-# fig.savefig(file_path, bbox_inches="tight")
+# # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+# #                          "zeeman_slower", "figs", "debugging1.pdf")
+# # fig.savefig(file_path, bbox_inches="tight")
 
-plt.show()
+# plt.show()
 
 
 
