@@ -1,7 +1,7 @@
 # Jasmine Kalia
 # June 25th, 2021
 # propagation.py
-# Propagate some atoms through the magnetic field created by 
+# Propagate atoms through the magnetic field created in 
 # zeeman_slower_configuration.py.
 
 import numpy as np 
@@ -25,31 +25,9 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
  
 
 # Simulates the motion of the atoms in the B field 
-# TODO: doesn't work for the ideal field, which it definitely should 
-def simulate_atom(atom, intensity, v_initial, coil_winding=[0], current_for_coils=[0], 
-                  dt=1e-6, z_max=1, max_steps=20000, optimized=True):
-
-    # Choose atom to simulate
-    if atom=="Er":
-        m = ideal.m_er
-        linewidth = ideal.linewidth_er
-        k = ideal.k_er
-        mu0 = ideal.mu0_er
-        Isat = ideal.Isat_er
-        laser_detuning = ideal.laser_detuning_er
-        # v_initial = ideal.initial_velocity_er
-        v_final = ideal.final_velocity_er
-    else:
-        m = ideal.m_li
-        linewidth = ideal.linewidth_li
-        k = ideal.k_li
-        mu0 = ideal.mu0_li
-        Isat = ideal.Isat_li_d2
-        laser_detuning = ideal.laser_detuning_li
-        # v_initial = ideal.initial_velocity_li
-        v_final = ideal.final_velocity_li
-
-    s = intensity / Isat
+def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0], 
+                  current_for_coils=[0], dt=1e-6, z_max=1, max_steps=20000, 
+                  optimized=True):
 
     ts = np.arange(0, max_steps*dt, dt)
     zs = np.zeros(max_steps)
@@ -60,16 +38,18 @@ def simulate_atom(atom, intensity, v_initial, coil_winding=[0], current_for_coil
     z = -0.05
     counter = 0
 
-    while (v >= v_final) and (z <= z_max) and (counter < max_steps):
+    while (z <= z_max) and (counter < max_steps):
 
         if optimized:
-            a = acceleration(m, linewidth, k, mu0, s, laser_detuning, v, 
+            a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                             laser_detuning, v, 
                              (coil.calculate_B_field_coil(coil_winding, 
                                                           current_for_coils, 
                                                           np.array([z]))[0] 
                                                           * 10**(-4)))
         else:
-            a = acceleration(m, linewidth, k, mu0, s, laser_detuning, v, 
+            a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                             laser_detuning, v, 
                              (ideal.get_ideal_B_field(ideal.ideal_B_field, 
                                                       np.array([z]))[0] 
                                                       * 10**(-4)))

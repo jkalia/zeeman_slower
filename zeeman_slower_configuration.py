@@ -26,6 +26,7 @@ import solenoid_configuration as solenoid
 import parameters
 import plotting
 import simulate
+import atom 
 
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -404,7 +405,7 @@ coil_winding, current_for_coils = \
 # total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
 #                                           np.array([.54]))
 
-print(coil_winding)
+# print(coil_winding)
 # print(total_field)
 # print(len(coil_winding))
 # print(np.count_nonzero(coil_winding))
@@ -494,6 +495,103 @@ print(coil_winding)
 
 # plt.show()
 
+
+
+# Choose atom to simulate
+# if atom=="Er":
+#     laser_detuning = ideal.laser_detuning_er
+#     v_initial = ideal.initial_velocity_er
+#     v_final = ideal.final_velocity_er
+# else:
+#     laser_detuning = ideal.laser_detuning_li
+#     v_initial = ideal.initial_velocity_li
+#     v_final = ideal.final_velocity_li
+
+
+# Make instances of each kind of atom
+er_atom = atom.Atom("Er")
+li_atom = atom.Atom("Li")
+
+s = 2
+v_i_li = ideal.initial_velocity_li
+laser_detuning_li = ideal.laser_detuning_li
+
+
+# Plot simulations
+for x in range(-50, 51, 1):
+
+    fig, ax = plt.subplots()
+
+    laser_detuning_li = (ideal.laser_detuning_li 
+                         + ideal.laser_detuning_li * x/100)
+
+    for y in range(-1, 2, 1):
+
+        v_i_li = (ideal.initial_velocity_li + x * 10)
+
+        # Simulation of atom in ideal B field
+        t_ideal, z_ideal, v_ideal, a_ideal = \
+            simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+                                   optimized=False)
+
+        # Simulation of atom through calculated B field 
+        t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, 
+                                            laser_detuning_li, coil_winding, 
+                                            current_for_coils) 
+
+        ax.plot(z_ideal, v_ideal, "--", 
+                label="ideal B field (v_i = {:.0f}, v_f = {:.0f})".format(
+                                                                    v_i_li, 
+                                                                    v[-1]))
+        ax.plot(z, v, label="v_i = {:.0f}, v_f = {:.0f}".format(v_i_li, v[-1]))
+
+    ax.set_xlabel("Position [m]")
+    ax.set_ylabel("Velocity [m/s]")
+    ax.set_title("Motion of Li atom in the Slower, \n" 
+                 "detuning = {}".format(laser_detuning_li))
+    ax.legend()
+
+    file_name = "detuning_{}".format()
+
+    # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+    #                          "zeeman_slower", "figs", "debugging1.pdf")
+    # fig.savefig(file_path, bbox_inches="tight")
+
+
+
+
+
+v_i_li = ideal.initial_velocity_li 
+laser_detuning_li = ideal.laser_detuning_li * 1.01
+
+# Plot simulations
+fig, ax = plt.subplots()
+    
+# Simulation of atom in ideal B field
+t_ideal, z_ideal, v_ideal, a_ideal = \
+    simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+                               optimized=False)
+
+# Simulation of atom through calculated B field 
+t, z, v, a = simulate.simulate_atom(li_atom, 2, v_i_li, laser_detuning_li, 
+                                        coil_winding, current_for_coils) 
+
+ax.plot(z_ideal, v_ideal, "k--", 
+            label="ideal B field (v_i = {:.0f})".format(v_i_li))
+ax.plot(z, v, label="v_i = {:.0f}".format(v_i_li))
+
+
+
+ax.set_xlabel("Position [m]")
+ax.set_ylabel("Velocity [m/s]")
+ax.set_title("Motion of Li atom in the Slower \n detuning = {}".format(laser_detuning_li))
+ax.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "debugging1.pdf")
+# fig.savefig(file_path, bbox_inches="tight")
+
+plt.show()
 
 
 
