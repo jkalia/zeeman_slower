@@ -401,41 +401,45 @@ coil_winding, current_for_coils = \
                                      fixed_lengths, np.round(final[0:-2]), 
                                      final[-2], final[-1])
 
+# total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
+#                                           np.array([.54]))
+
 print(coil_winding)
+# print(total_field)
 # print(len(coil_winding))
 # print(np.count_nonzero(coil_winding))
 
 
-# Plot simulations
-fig, ax = plt.subplots()
+# # Plot simulations
+# fig, ax = plt.subplots()
 
-# Simulation of atom in ideal B field
-t_ideal, z_ideal, v_ideal, a_ideal = \
-  simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
-                         optimized=False)
-ax.plot(z_ideal, v_ideal, "k--", 
-        label="ideal B field (v_initial = {:.0f})".format(
-          ideal.initial_velocity_li)
-        )
+# # Simulation of atom in ideal B field
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
+#                          optimized=False)
+# ax.plot(z_ideal, v_ideal, "k--", 
+#         label="ideal B field (v_initial = {:.0f})".format(
+#           ideal.initial_velocity_li)
+#         )
 
-# Simulation of atoms through calculated B field for different initial 
-# velocities
-for x in range(11, 9, -1):
-    t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
-                                        ideal.initial_velocity_li * (x/100 + .9), 
-                                        coil_winding, current_for_coils)
-    ax.plot(z, v, 
-            label="v_initial = {:.0f}".format(
-                ideal.initial_velocity_li * (x/100 + .9)))
+# # Simulation of atoms through calculated B field for different initial 
+# # velocities
+# for x in range(11, 9, -1):
+#     t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
+#                                         ideal.initial_velocity_li * (x/100 + .9), 
+#                                         coil_winding, current_for_coils)
+#     ax.plot(z, v, 
+#             label="v_initial = {:.0f}".format(
+#                 ideal.initial_velocity_li * (x/100 + .9)))
 
-ax.set_xlabel("Position [m]")
-ax.set_ylabel("Velocity [m/s]")
-ax.set_title("Motion of Li atom in the Slower")
-ax.legend()
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Li atom in the Slower")
+# ax.legend()
 
-file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-                         "zeeman_slower", "figs", "debugging1.pdf")
-fig.savefig(file_path, bbox_inches="tight")
+# # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+# #                          "zeeman_slower", "figs", "debugging1.pdf")
+# # fig.savefig(file_path, bbox_inches="tight")
 
 # plt.show()
 
