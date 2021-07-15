@@ -123,7 +123,7 @@ def plot_slower_bottom(axis, discretization, coil_winding_final,
     denote_regions(axis, discretization, coil_winding_final, write=False)
     axis.set_xlabel("Position (m)")
     axis.set_ylabel("Coil winding")
-    axis.set_yticks(np.arange(0, 6, step=0.5))
+    axis.set_yticks(np.arange(0, 7.5, step=0.5))
     axis.grid(b=True, axis="y")
     return 
 
@@ -189,6 +189,17 @@ def plot_diff(axis_top, axis_bottom, x, x_long, y, discretization, ideal_field,
     return
 
 
+def plot_simple(axis, x, y, discretization, total_field_final, title):
+    axis.plot(x, y , color="m", linestyle="--", 
+         label="ideal B field to optimize to")
+    axis.plot(discretization, total_field_final, color="k",
+         marker=".", label="optimized B field")
+    axis.set_xlabel("Position (m)")
+    axis.set_ylabel("B field (G)")
+    axis.set_title(label=title)
+    return 
+
+
 def make_plots(x, x_long, y, discretization, ideal_field, 
                solenoid_field_initial, coil_winding_initial, 
                current_for_coils_initial, total_field_initial, 
@@ -201,6 +212,7 @@ def make_plots(x, x_long, y, discretization, ideal_field,
     fig2, ax2 = plt.subplots()
     fig3, ax3 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
     fig4, ax4 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+    fig5, ax5 = plt.subplots()
 
     plot_initial(ax1, x, x_long, y, discretization, ideal_field, 
                  solenoid_field_initial, current_for_coils_initial, 
@@ -214,6 +226,8 @@ def make_plots(x, x_long, y, discretization, ideal_field,
     plot_diff(ax4[0], ax4[1], x, x_long, y, discretization, ideal_field, 
               solenoid_field_final, coil_winding_final, current_for_coils_final, 
               total_field_final, B_field_range)
+    plot_simple(ax5, x, y, discretization, total_field_final, title)
+
 
     fig1.set_size_inches(12, 8)
     fig2.set_size_inches(12, 8)
@@ -221,11 +235,13 @@ def make_plots(x, x_long, y, discretization, ideal_field,
     fig3.set_size_inches(12, 8)
     fig4.suptitle(t=title)
     fig4.set_size_inches(12, 8)
+    fig5.set_size_inches(12, 8)
 
     fig1.savefig(file_path + "/initial.pdf", bbox_inches="tight")
     fig2.savefig(file_path + "/lines.pdf", bbox_inches="tight")
     fig3.savefig(file_path + "/slower.pdf", bbox_inches="tight")
     fig4.savefig(file_path + "/diff.pdf", bbox_inches="tight")
+    fig5.savefig(file_path + "/simple.pdf", bbox_inches="tight")
 
     return 
 

@@ -188,7 +188,7 @@ def retrieve_run_data(file_path):
 
 # Wrapper for optimization
 def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, iterations, folder_location):
+                     z, y, guess, iterations, folder_location, counter):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -222,7 +222,7 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
     rmse = calculate_RMSE(ideal_B_field_adjusted[0:B_field_range], 
                           total_field_final[0:B_field_range])
     li_deviation = max_deviation(total_field_final, ideal_B_field_adjusted, 
-                              B_field_range)
+                                 B_field_range)
 
     # Plot title 
     title = ("lc = {}, hc = {}, \n "
@@ -231,9 +231,10 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
         rmse, rmse_label, li_deviation, flag))
 
     # Name folder 
-    directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap".format(
+    directory = \
+        "{}sections_{}hclength_{}hcmaxdensity_{}overlap_{}counter".format(
         len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
-        fixed_overlap)
+        fixed_overlap, counter)
 
     file_path = os.path.join(folder_location, directory)
     if not os.path.exists(file_path):
@@ -248,14 +249,14 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
                         title, file_path)
 
     data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
-            final)
+            final, flag)
 
     file_name = "data.pickle"
     f = os.path.join(file_path, file_name)
 
     save_data(data, f)
 
-    return rmse, li_deviation
+    return rmse, li_deviation, flag, final
 
 
 # Wrapper for plotting and generating values post-optimization
@@ -318,7 +319,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
                         title, file_path)
 
     data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
-            final)
+            final, flag)
 
     file_name = "data.pickle"
     f = os.path.join(file_path, file_name)
@@ -329,22 +330,23 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 ################################################################################
 
+# Completed run for one possible solutions
 
 # Location to save data
-folder_location = \
-    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
+# folder_location = \
+#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
 
 # # Iterations for optimizer
 # iterations = 20000
 
 # Arrays which defines the solenoid configuration for the low current section. 
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-             0.5, 0.25, 0]
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+#              0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
-fixed_densities = [2]
-fixed_lengths = [6]
-fixed_overlap = 0
+# fixed_densities = [2]
+# fixed_lengths = [6]
+# fixed_overlap = 0
 
 # z = np.linspace(0, ideal.slower_length_val, 100000)
 # y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
@@ -370,17 +372,17 @@ fixed_overlap = 0
 # print("final: ", final)
 
 
-guess = [-7.44649506, 0.000217686255, 0.000289963625, 5.69787469e-07,
-         -6.03636938e-07, 7.39882542, 7.99586292, 7.66019569, 9.46768959,
-         10.4478657, -11.8695287, -10.3297987, -5.29031708, 8.77704977,
-         -2.44430421, 2.50143956, 9.06183171, -7.09477639, 12.0, 29.5916806,
-         129.141887]
-final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
-         -6.03636938e-07,  6.99444598e+00,  8.14020624e+00,  7.59039476e+00,
-          9.51184227e+00,  1.04877096e+01, -1.19425779e+01, -1.03911870e+01,
-         -5.35495084e+00,  8.84634912e+00, -2.46417535e+00,  2.51996538e+00,
-          9.14485245e+00, -7.18603523e+00,  1.20000000e+01,  2.98967317e+01,
-          1.28602604e+02]
+# guess = [-7.44649506, 0.000217686255, 0.000289963625, 5.69787469e-07,
+#          -6.03636938e-07, 7.39882542, 7.99586292, 7.66019569, 9.46768959,
+#          10.4478657, -11.8695287, -10.3297987, -5.29031708, 8.77704977,
+#          -2.44430421, 2.50143956, 9.06183171, -7.09477639, 12.0, 29.5916806,
+#          129.141887]
+# final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
+#          -6.03636938e-07,  6.99444598e+00,  8.14020624e+00,  7.59039476e+00,
+#           9.51184227e+00,  1.04877096e+01, -1.19425779e+01, -1.03911870e+01,
+#          -5.35495084e+00,  8.84634912e+00, -2.46417535e+00,  2.51996538e+00,
+#           9.14485245e+00, -7.18603523e+00,  1.20000000e+01,  2.98967317e+01,
+#           1.28602604e+02]
 
 
 
@@ -390,17 +392,107 @@ final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
 #                                        folder_location)
 
 
+################################################################################
+# Trying to optimize solution more
 
-discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
+# Location to save data
+folder_location = os.path.join("C:\\", "Users","Erbium", "Documents", 
+                               "zeeman_slower", "heatmap1")
 
-z_result = np.linspace(0, ideal.slower_length_val, 10000)
-y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
+# # Iterations for optimizer
+iterations = 10000
 
-coil_winding, current_for_coils = \
-  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
-                                     fixed_lengths, np.round(final[0:-2]), 
-                                     final[-2], final[-1])
+# Arrays which defines the solenoid configuration for the low current section. 
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+             0.5, 0.25, 0]
+
+# Arrays which define the solenoid configuration for the high current section.
+fixed_densities = [2]
+fixed_lengths = [6]
+fixed_overlap = 0
+
+z = np.linspace(0, ideal.slower_length_val, 10000)
+y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
+
+# Iterate fixed_lengths from 4 to 10 
+min_length = 4
+max_length = 10
+
+# Initialize array for storing data
+rmse_array = np.zeros(((max_length - min_length + 1), 
+                      np.ceil(max_length / 2).astype(int) + 1))
+deviation_array = np.zeros(((max_length - min_length + 1), 
+                           np.ceil(max_length / 2).astype(int) + 1))
+
+# Iterate over fixed lengths
+for i in range(min_length, (max_length + 1), 1):
+
+    fixed_lengths[0] = i
+
+    # Set max overlap
+    max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
+    if max_overlap > 2:
+        max_overlap = 2
+
+    # Iterate over fixed_overlap
+    for j in range(max_overlap + 1):
+
+        flag = 0
+        flag_2 = 0
+        counter = 0
+        fixed_overlap = j
+
+        while (flag != 1) and (flag != 3):
+
+            print("fixed_lengths: ", fixed_lengths)
+            print("fixed_overlap: ", fixed_overlap)
+            print("counter: ", counter)
+
+            # Run optimization and collect data
+            rmse, li_deviation, flag, final = \
+                run_optimization(fixed_densities, densities, fixed_lengths, 
+                                 fixed_overlap, z, y_data, guess, iterations,
+                                 folder_location, counter)
+
+            print("rmse: ", rmse)   
+            print("li_deviation: ", li_deviation)
+            guess = final
+            counter += 1
+
+            if flag == 2:
+                flag_2 += 1
+            if flag_2 > 200:
+                break
+
+        rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
+        deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
+            li_deviation
+
+        print("rmse_array: ", rmse_array)
+        print("deviation_array: ", deviation_array)
+
+
+print("rmse_array: ", rmse_array)
+print("deviation_array: ", deviation_array)
+
+data = (rmse_array, deviation_array)
+save_data(data, "heatmap.pickle")
+
+
+################################################################################
+
+
+# discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+#         discretize(fixed_lengths, fixed_overlap)
+
+# z_result = np.linspace(0, ideal.slower_length_val, 10000)
+# y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
+
+# coil_winding, current_for_coils = \
+#   coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
+#                                      fixed_lengths, np.round(final[0:-2]), 
+#                                      final[-2], final[-1])
 
 # total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
 #                                           np.array([.54]))
@@ -509,89 +601,104 @@ coil_winding, current_for_coils = \
 
 
 # Make instances of each kind of atom
-er_atom = atom.Atom("Er")
-li_atom = atom.Atom("Li")
+# li_atom = atom.Atom("Li")
 
-s = 2
-v_i_li = ideal.initial_velocity_li
-laser_detuning_li = ideal.laser_detuning_li
+# s = 2
+# v_i_li = ideal.initial_velocity_li
+# laser_detuning_li = ideal.laser_detuning_li
+
+# er_atom = atom.Atom("Er")
+
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# s = 1
+
+# # Plot simulations
+# for x in range(-50, 51, 1):
+
+#     fig, ax = plt.subplots()
+
+#     laser_detuning_li = (ideal.laser_detuning_li 
+#                          + ideal.laser_detuning_li * x/100)
+#     print("laser_detuning_li: ", laser_detuning_li)
+
+#     for y in range(-1, 2, 1):
+
+#         v_i_li = (ideal.initial_velocity_li + y * 10)
+#         print("v_i_li: ", v_i_li)
+
+#         # Simulation of atom in ideal B field
+#         t_ideal, z_ideal, v_ideal, a_ideal = \
+#             simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#                                    optimized=False)
+
+#         # Simulation of atom through calculated B field 
+#         t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, 
+#                                             laser_detuning_li, coil_winding, 
+#                                             current_for_coils) 
+
+#         ax.plot(z_ideal, v_ideal, "--", 
+#                 label="ideal B field (v_i = {:.0f}, v_f = {:.0f})".format(
+#                                                                     v_i_li, 
+#                                                                     v[-1]))
+#         ax.plot(z, v, label="v_i = {:.0f}, v_f = {:.0f}".format(v_i_li, v[-1]))
+
+#     ax.set_xlabel("Position [m]")
+#     ax.set_ylabel("Velocity [m/s]")
+#     ax.set_title("Motion of Li atom in the Slower, \n" 
+#                  "detuning = {}".format(laser_detuning_li))
+#     ax.legend()
+
+#     file_name = "detuning_{:.2e}.pdf".format(laser_detuning_li)
+
+#     file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                              "zeeman_slower", "detuning", file_name)
+#     fig.savefig(file_path, bbox_inches="tight")
 
 
-# Plot simulations
-for x in range(-50, 51, 1):
-
-    fig, ax = plt.subplots()
-
-    laser_detuning_li = (ideal.laser_detuning_li 
-                         + ideal.laser_detuning_li * x/100)
-
-    for y in range(-1, 2, 1):
-
-        v_i_li = (ideal.initial_velocity_li + x * 10)
-
-        # Simulation of atom in ideal B field
-        t_ideal, z_ideal, v_ideal, a_ideal = \
-            simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
-                                   optimized=False)
-
-        # Simulation of atom through calculated B field 
-        t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, 
-                                            laser_detuning_li, coil_winding, 
-                                            current_for_coils) 
-
-        ax.plot(z_ideal, v_ideal, "--", 
-                label="ideal B field (v_i = {:.0f}, v_f = {:.0f})".format(
-                                                                    v_i_li, 
-                                                                    v[-1]))
-        ax.plot(z, v, label="v_i = {:.0f}, v_f = {:.0f}".format(v_i_li, v[-1]))
-
-    ax.set_xlabel("Position [m]")
-    ax.set_ylabel("Velocity [m/s]")
-    ax.set_title("Motion of Li atom in the Slower, \n" 
-                 "detuning = {}".format(laser_detuning_li))
-    ax.legend()
-
-    file_name = "detuning_{}.pdf".format(laser_detuning_li)
-
-    file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-                             "zeeman_slower", "detuning", file_name)
-    fig.savefig(file_path, bbox_inches="tight")
 
 
 
+# # v_i_li = ideal.initial_velocity_li 
+# # laser_detuning_li = ideal.laser_detuning_li * 1.01
 
 
-# v_i_li = ideal.initial_velocity_li 
-# laser_detuning_li = ideal.laser_detuning_li * 1.01
+# er_atom = atom.Atom("Er")
+
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# s = 1
 
 # # Plot simulations
 # fig, ax = plt.subplots()
     
 # # Simulation of atom in ideal B field
 # t_ideal, z_ideal, v_ideal, a_ideal = \
-#     simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#     simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
 #                                optimized=False)
 
 # # Simulation of atom through calculated B field 
-# t, z, v, a = simulate.simulate_atom(li_atom, 2, v_i_li, laser_detuning_li, 
+# t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
 #                                         coil_winding, current_for_coils) 
 
 # ax.plot(z_ideal, v_ideal, "k--", 
-#             label="ideal B field (v_i = {:.0f})".format(v_i_li))
-# ax.plot(z, v, label="v_i = {:.0f}".format(v_i_li))
+#             label="ideal B field (v_i = {:.0f})".format(v_i_er))
+# ax.plot(z, v, label="v_i = {:.0f}".format(v_i_er))
 
 
 
 # ax.set_xlabel("Position [m]")
 # ax.set_ylabel("Velocity [m/s]")
-# ax.set_title("Motion of Li atom in the Slower \n detuning = {}".format(laser_detuning_li))
+# ax.set_title("Motion of Er atom in the Slower \n detuning = {}, s = {}".format(laser_detuning_er, s))
 # ax.legend()
 
-# # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-# #                          "zeeman_slower", "figs", "debugging1.pdf")
-# # fig.savefig(file_path, bbox_inches="tight")
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "er2.pdf")
+# fig.savefig(file_path, bbox_inches="tight")
 
-# plt.show()
+# # plt.show()
 
 
 
