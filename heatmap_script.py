@@ -80,6 +80,27 @@ plt.show()
 
 
 ################################################################################
+# # Trying to optimize solution more
+
+# # Location to save data
+# folder_location = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                                "zeeman_slower", "heatmap1")
+
+# # # Iterations for optimizer
+# iterations = 10000
+
+# # Arrays which defines the solenoid configuration for the low current section. 
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+#              0.5, 0.25, 0]
+
+# # Arrays which define the solenoid configuration for the high current section.
+# fixed_densities = [2]
+# fixed_lengths = [6]
+# fixed_overlap = 0
+
+# z = np.linspace(0, ideal.slower_length_val, 10000)
+# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+# guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
 
 # # Iterate fixed_lengths from 4 to 10 
 # min_length = 4
@@ -93,32 +114,54 @@ plt.show()
 
 # # Iterate over fixed lengths
 # for i in range(min_length, (max_length + 1), 1):
-#   fixed_lengths[0] = i 
 
-#   # Set max overlap
-#   max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
+#     fixed_lengths[0] = i
 
-#   for j in range(max_overlap + 1):
-#       fixed_overlap = j
+#     # Set max overlap
+#     max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
+#     if max_overlap > 2:
+#         max_overlap = 2
 
-#       # Run optimization and collect data
-#       rmse, li_deviation = run_optimization(fixed_densities, densities, 
-#                                             fixed_lengths, fixed_overlap, 
-#                                             z, y_data, guess, iterations)
-#       print("rmse: ", rmse)
-#       print("li_deviation: ", li_deviation)
+#     # Iterate over fixed_overlap
+#     for j in range(max_overlap + 1):
 
-#       rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
-#       deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
-#           li_deviation
+#         flag = 0
+#         flag_2 = 0
+#         counter = 0
+#         fixed_overlap = j
 
-#       print("rmse_array: ", rmse_array)
-#       print("deviation_array: ", deviation_array)
+#         while (flag != 1) and (flag != 3):
+
+#             print("fixed_lengths: ", fixed_lengths)
+#             print("fixed_overlap: ", fixed_overlap)
+#             print("counter: ", counter)
+
+#             # Run optimization and collect data
+#             rmse, li_deviation, flag, final = \
+#                 run_optimization(fixed_densities, densities, fixed_lengths, 
+#                                  fixed_overlap, z, y_data, guess, iterations,
+#                                  folder_location, counter)
+
+#             print("rmse: ", rmse)   
+#             print("li_deviation: ", li_deviation)
+#             guess = final
+#             counter += 1
+
+#             if flag == 2:
+#                 flag_2 += 1
+#             if flag_2 > 200:
+#                 break
+
+#         rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
+#         deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
+#             li_deviation
+
+#         print("rmse_array: ", rmse_array)
+#         print("deviation_array: ", deviation_array)
 
 
 # print("rmse_array: ", rmse_array)
 # print("deviation_array: ", deviation_array)
-
 
 # data = (rmse_array, deviation_array)
 # save_data(data, "heatmap.pickle")

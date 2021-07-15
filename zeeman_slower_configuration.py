@@ -181,9 +181,10 @@ def retrieve_run_data(file_path):
     fixed_overlap = retrieved_data[3]
     guess = retrieved_data[4]
     final = retrieved_data[5]
+    flag = retrieved_data[6]
 
     return (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
-            final)
+            final, flag)
 
 
 # Wrapper for optimization
@@ -330,7 +331,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 ################################################################################
 
-# Completed run for one possible solutions
+# Run optimizer
 
 # Location to save data
 # folder_location = \
@@ -358,130 +359,55 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 #                                       folder_location)
 
 
+################################################################################
 # Unpickle data
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
-# file = os.path.join(folder_location, "run1", "data.pickle")
+# file = os.path.join(folder_location, 
+#                     "19sections_6hclength_2hcmaxdensity_0overlap_new", 
+#                     "data.pickle")
 # (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
-#             final) = retrieve_run_data(file)
+#             final, flag) = retrieve_run_data(file)
 # print("fixed_densities: ", fixed_densities)
 # print("densities: ", densities)
 # print("fixed_lengths: ", fixed_lengths)
 # print("fixed_overlap: ", fixed_overlap)
 # print("guess: ", guess)
 # print("final: ", final)
-
-
-# guess = [-7.44649506, 0.000217686255, 0.000289963625, 5.69787469e-07,
-#          -6.03636938e-07, 7.39882542, 7.99586292, 7.66019569, 9.46768959,
-#          10.4478657, -11.8695287, -10.3297987, -5.29031708, 8.77704977,
-#          -2.44430421, 2.50143956, 9.06183171, -7.09477639, 12.0, 29.5916806,
-#          129.141887]
-# final = [-7.18428594e+00, -2.85549832e-06, -9.70206319e-07,  5.69787469e-07,
-#          -6.03636938e-07,  6.99444598e+00,  8.14020624e+00,  7.59039476e+00,
-#           9.51184227e+00,  1.04877096e+01, -1.19425779e+01, -1.03911870e+01,
-#          -5.35495084e+00,  8.84634912e+00, -2.46417535e+00,  2.51996538e+00,
-#           9.14485245e+00, -7.18603523e+00,  1.20000000e+01,  2.98967317e+01,
-#           1.28602604e+02]
-
-
-
-# rmse, li_deviation = post_optimization(fixed_densities, densities, 
-#                                        fixed_lengths, fixed_overlap, 
-#                                        z, y_data, guess, final, 
-#                                        folder_location)
-
+# print("flag: ", flag)
 
 ################################################################################
-# Trying to optimize solution more
+# Post optimization
 
-# Location to save data
-folder_location = os.path.join("C:\\", "Users","Erbium", "Documents", 
-                               "zeeman_slower", "heatmap1")
+folder_location = \
+    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
 
-# # Iterations for optimizer
-iterations = 10000
-
-# Arrays which defines the solenoid configuration for the low current section. 
+fixed_densities = [2]
 densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
              0.5, 0.25, 0]
-
-# Arrays which define the solenoid configuration for the high current section.
-fixed_densities = [2]
 fixed_lengths = [6]
 fixed_overlap = 0
-
-z = np.linspace(0, ideal.slower_length_val, 10000)
-y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
-
-# Iterate fixed_lengths from 4 to 10 
-min_length = 4
-max_length = 10
-
-# Initialize array for storing data
-rmse_array = np.zeros(((max_length - min_length + 1), 
-                      np.ceil(max_length / 2).astype(int) + 1))
-deviation_array = np.zeros(((max_length - min_length + 1), 
-                           np.ceil(max_length / 2).astype(int) + 1))
-
-# Iterate over fixed lengths
-for i in range(min_length, (max_length + 1), 1):
-
-    fixed_lengths[0] = i
-
-    # Set max overlap
-    max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
-    if max_overlap > 2:
-        max_overlap = 2
-
-    # Iterate over fixed_overlap
-    for j in range(max_overlap + 1):
-
-        flag = 0
-        flag_2 = 0
-        counter = 0
-        fixed_overlap = j
-
-        while (flag != 1) and (flag != 3):
-
-            print("fixed_lengths: ", fixed_lengths)
-            print("fixed_overlap: ", fixed_overlap)
-            print("counter: ", counter)
-
-            # Run optimization and collect data
-            rmse, li_deviation, flag, final = \
-                run_optimization(fixed_densities, densities, fixed_lengths, 
-                                 fixed_overlap, z, y_data, guess, iterations,
-                                 folder_location, counter)
-
-            print("rmse: ", rmse)   
-            print("li_deviation: ", li_deviation)
-            guess = final
-            counter += 1
-
-            if flag == 2:
-                flag_2 += 1
-            if flag_2 > 200:
-                break
-
-        rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
-        deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
-            li_deviation
-
-        print("rmse_array: ", rmse_array)
-        print("deviation_array: ", deviation_array)
+guess = [-7.22898856e+00, -1.92519981e-06, -6.34518412e-07, -8.82164728e-07,
+          7.01947561e-07,  7.06642982e+00,  8.12184856e+00,  7.59530427e+00,
+          9.50767008e+00,  1.04795059e+01, -1.19299365e+01, -1.03797288e+01,
+         -5.34390819e+00, -8.83375563e+00,  2.46071163e+00,  2.51653805e+00,
+         -9.12990925e+00, 7.16913954e+00,  1.10000000e+02,  2.98418721e+01,
+          1.28736289e+02]
+final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00, 2.52389398e+00,
+         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
+          1.28534803e+02]
 
 
-print("rmse_array: ", rmse_array)
-print("deviation_array: ", deviation_array)
-
-data = (rmse_array, deviation_array)
-save_data(data, "heatmap.pickle")
+rmse, li_deviation = post_optimization(fixed_densities, densities, 
+                                       fixed_lengths, fixed_overlap, 
+                                       z, y_data, guess, final, 
+                                       folder_location)
 
 
 ################################################################################
-
 
 # discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
 #         discretize(fixed_lengths, fixed_overlap)
