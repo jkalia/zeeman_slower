@@ -401,34 +401,43 @@ final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
           1.28534803e+02]
 
 
-rmse, li_deviation = post_optimization(fixed_densities, densities, 
-                                       fixed_lengths, fixed_overlap, 
-                                       z, y_data, guess, final, 
-                                       folder_location)
+# rmse, li_deviation = post_optimization(fixed_densities, densities, 
+#                                        fixed_lengths, fixed_overlap, 
+#                                        z, y_data, guess, final, 
+#                                        folder_location)
 
 
 ################################################################################
 
-# discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-#         discretize(fixed_lengths, fixed_overlap)
+discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        discretize(fixed_lengths, fixed_overlap)
 
-# z_result = np.linspace(0, ideal.slower_length_val, 10000)
-# y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
+z_result = np.linspace(0, ideal.slower_length_val, 10000)
+y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
 
-# coil_winding, current_for_coils = \
-#   coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
-#                                      fixed_lengths, np.round(final[0:-2]), 
-#                                      final[-2], final[-1])
+coil_winding, current_for_coils = \
+  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
+                                     fixed_lengths, np.round(final[0:-2]), 
+                                     final[-2], final[-1])
 
-# total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
-#                                           np.array([.54]))
+total_length = coil.calculate_total_length(coil_winding)
+high_current_length = coil.calculate_high_current_section_length(coil_winding, current_for_coils)
+low_current_length = coil.calculate_low_current_section_length(coil_winding, current_for_coils)
 
-# print(coil_winding)
-# print(total_field)
-# print(len(coil_winding))
-# print(np.count_nonzero(coil_winding))
+total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
+                                          z_result)
+
+print(coil_winding)
+print(current_for_coils)
+print(total_field)
+
+print("total_length: ", total_length)
+print("low_current_length: ", low_current_length)
+print("high_current_length: ", high_current_length)
 
 
+
+################################################################################
 # # Plot simulations
 # fig, ax = plt.subplots()
 
