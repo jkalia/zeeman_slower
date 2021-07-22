@@ -25,8 +25,10 @@ import coil_configuration as coil
 import solenoid_configuration as solenoid 
 import parameters
 import plotting
+import heatmap_script as heatmap
 import simulate
 import atom 
+
 
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -341,7 +343,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # # Iterations for optimizer
 # iterations = 20000
 
-# Arrays which defines the solenoid configuration for the low current section. 
+# Arrays which define the solenoid configuration for the low current section. 
 # densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
 #              0.5, 0.25, 0]
 
@@ -438,55 +440,101 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 
 
 ################################################################################
-# TODO: today, get all the code working to generate these heatmaps and then hit
-# run over the weekend on the main computer 
-
-# For lithium
-li_atom = atom.Atom("Li")
-s = 2
-v_i_li = ideal.initial_velocity_li
-laser_detuning = ideal.laser_detuning_li
-
-t_i, z_i, v_i, a_i = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning, 
-                                            optimized=False)
-t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning,
-                                    coil_winding=coil_winding,
-                                    current_for_coils=current_for_coils)
+# TODO: today, get all the code working to generate these heatmaps
 
 
-fig_li, ax_li = plt.subplots()
+# # For lithium
+# li_atom = atom.Atom("Li")
+# s = 2
+# v_i_li = ideal.initial_velocity_li
+# laser_detuning_li = ideal.laser_detuning_li
 
-ax_li.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
-           v_i_li))
-ax_li.plot(z, v, label="v_initial = {:.0f}".format(v_i_li))
+# t_i, z_i, v_i, a_i = simulate.simulate_atom(li_atom, s, v_i_li, 
+#                                             laser_detuning_li, 
+#                                             optimized=False)
+# t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li,
+#                                     coil_winding=coil_winding,
+#                                     current_for_coils=current_for_coils)
+
+
+# fig_li, ax_li = plt.subplots()
+
+# ax_li.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
+#            v_i_li))
+# ax_li.plot(z, v, label="v_initial = {:.0f}".format(v_i_li))
             
-ax_li.set_xlabel("Position [m]")
-ax_li.set_ylabel("Velocity [m/s]")
-ax_li.set_title("Motion of Li atom in the Slower")
-ax_li.legend()
+# ax_li.set_xlabel("Position [m]")
+# ax_li.set_ylabel("Velocity [m/s]")
+# ax_li.set_title("Motion of Li atom in the Slower")
+# ax_li.legend()
+
 
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
 #                          "zeeman_slower", "figs", "debugging1.pdf")
 # fig.savefig(file_path, bbox_inches="tight")
 
-plt.show()
+
+# # For erbium
+# er_atom = atom.Atom("Er")
+# s = 2
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# t_i, z_i, v_i, a_i = simulate.simulate_atom(er_atom, s, v_i_er, 
+#                                             laser_detuning_er, 
+#                                             optimized=False)
+# t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
+#                                     coil_winding=coil_winding,
+#                                     current_for_coils=current_for_coils)
+
+
+# fig_er, ax_er = plt.subplots()
+
+# ax_er.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
+#            v_i_er))
+# ax_er.plot(z, v, label="v_initial = {:.0f}".format(v_i_er))
+            
+# ax_er.set_xlabel("Position [m]")
+# ax_er.set_ylabel("Velocity [m/s]")
+# ax_er.set_title("Motion of Er atom in the Slower")
+# ax_er.legend()
+
+
+
+# plt.show()
 
 
 
 
 
 
-# shift = 60 * 10**6
-# saturations = np.linspace(1, 2, 20)
+shift = 60 * 10**6
+saturations = np.linspace(1, 2, 20)
+
+# Lithium
+li_atom = atom.Atom("Li")
+detunings = np.linspace(ideal.laser_detuning_li - shift, 
+                        ideal.laser_detuning_li + shift, 24)
+v_cutoff = 20
+
+# Initialize array for storing data
+final_velocities = np.zeros((len(detunings), len(saturations)))
+
+for d in range(len(detunings)):
+    for s in range(len(saturations)):
+        v = simulate.simulate_atom(li_atom, s, ideal.initial_velocity_li, d, 
+                                   coil_winding=coil_winding, 
+                                   current_for_coils=current_for_coils, 
+                                   optimized=True, full_output=False)
+        if v < v_cutoff:
+            final_velocities[d][s] = v
+        else:
+            final_velocities[d][s] = 100
+
+print("final_velocities: ", final_velocities)
 
 
-# # Lithium
-# detunings = np.linspace(ideal.laser_detuning_li - shift, 
-#                         ideal.laser_detuning_li + shift, 24)
-# v_cutoff = 20
 
-# for i in range(len(detunings)):
-#     for j in range(len(saturations)):
 
 
 

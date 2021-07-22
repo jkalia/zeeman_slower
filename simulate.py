@@ -92,7 +92,7 @@ def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0],
 
             counter += 1
 
-        return v, counter
+        return v
 
 
 
