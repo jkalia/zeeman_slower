@@ -389,7 +389,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
 
-file_path = os.path.join("C:\\", "Users","Lithium", "Documents", 
+file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
                          "zeeman_slower", "figs")
 
 z = np.linspace(0, ideal.slower_length_val, 100000)
@@ -553,10 +553,10 @@ print("er_final_velocities: ", er_final_velocities)
 
 heatmap.make_heatmap(li_final_velocities, len(li_detunings), len(saturations), 
                      "Final velocity of Lithium in ZS", "saturation",
-                     "detuning", file_path, "li_final_velocities")
+                     "detuning", file_path, "li_final_velocities.pdf")
 heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
                      "Final velocity of Erbium in ZS", "saturation",
-                     "detuning", file_path, "er_final_velocities")
+                     "detuning", file_path, "er_final_velocities.pdf")
 
 
 ################################################################################
