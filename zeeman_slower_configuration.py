@@ -386,8 +386,11 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 # Post optimization
 
-folder_location = \
-    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
+# folder_location = \
+#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
+
+file_path = os.path.join("C:\\", "Users","Lithium", "Documents", 
+                         "zeeman_slower", "figs")
 
 z = np.linspace(0, ideal.slower_length_val, 100000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
@@ -440,7 +443,7 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 
 
 ################################################################################
-# TODO: today, get all the code working to generate these heatmaps
+# Plot motion of atom through ZS
 
 
 # # For lithium
@@ -499,13 +502,11 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 # ax_er.set_title("Motion of Er atom in the Slower")
 # ax_er.legend()
 
-
-
 # plt.show()
 
 
-
-
+################################################################################
+# Make heatmaps of detuning versus saturation for the final velocity of atoms
 
 
 shift = 60 * 10**6
@@ -513,44 +514,52 @@ saturations = np.linspace(1, 2, 20)
 
 # Lithium
 li_atom = atom.Atom("Li")
-detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                        ideal.laser_detuning_li + shift, 24)
-v_cutoff = 20
+li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+                           ideal.laser_detuning_li + shift, 24)
 
 # Initialize array for storing data
-final_velocities = np.zeros((len(detunings), len(saturations)))
+li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
 
-for d in range(len(detunings)):
+for d in range(len(li_detunings)):
     for s in range(len(saturations)):
         v = simulate.simulate_atom(li_atom, s, ideal.initial_velocity_li, d, 
                                    coil_winding=coil_winding, 
                                    current_for_coils=current_for_coils, 
                                    optimized=True, full_output=False)
-        if v < v_cutoff:
-            final_velocities[d][s] = v
-        else:
-            final_velocities[d][s] = 100
-
-print("final_velocities: ", final_velocities)
+        li_final_velocities[d][s] = v
+        print("li_final_velocities: ", li_final_velocities)
 
 
+# Erbium
+er_atom = atom.Atom("Er")
+er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
+                           ideal.laser_detuning_er + shift, 24)
+
+# Initialize array for storing data
+er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
+
+for d in range(len(er_detunings)):
+    for s in range(len(saturations)):
+        v = simulate.simulate_atom(er_atom, s, ideal.initial_velocity_er, d, 
+                                   coil_winding=coil_winding, 
+                                   current_for_coils=current_for_coils, 
+                                   optimized=True, full_output=False)
+        er_final_velocities[d][s] = v 
+        print("er_final_velocities: ", er_final_velocities)
+
+print("li_final_velocities: ", li_final_velocities)
+print("er_final_velocities: ", er_final_velocities)
 
 
+heatmap.make_heatmap(li_final_velocities, len(li_detunings), len(saturations), 
+                     "Final velocity of Lithium in ZS", "saturation",
+                     "detuning", file_path, "li_final_velocities")
+heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
+                     "Final velocity of Erbium in ZS", "saturation",
+                     "detuning", file_path, "er_final_velocities")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+################################################################################
 
 
 

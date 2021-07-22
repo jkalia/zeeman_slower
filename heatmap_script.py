@@ -1,13 +1,12 @@
 import numpy as np 
 import matplotlib
 import matplotlib.pyplot as plt 
-from scipy import optimize
-import random
+import os
 
 
-# Iterate fixed_lengths from 4 to 10 
-min_length = 4
-max_length = 10
+# # Iterate fixed_lengths from 4 to 10 
+# min_length = 4
+# max_length = 10
 
 
 
@@ -167,8 +166,8 @@ max_length = 10
 # save_data(data, "heatmap.pickle")
 
 
-def make_heatmap(array, iter1, iter2, y_labels, title, ylabel, xlabel, 
-                 file_path):
+def make_heatmap(array, iter1, iter2, title, xlabel, ylabel, file_path, 
+                 file_name):
 
     fig, ax = plt.subplots()
     im = ax.imshow(array)
@@ -181,15 +180,15 @@ def make_heatmap(array, iter1, iter2, y_labels, title, ylabel, xlabel,
             text = ax.text(j, i, np.round(array[i][j], 2), ha="center", 
                            va="center", color="w")
 
-
-    ax.set_yticklabels(y_labels)
     ax.set_title(title)
-    ax.set_ylabel(ylabel)
     ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
     fig.tight_layout()
     fig.set_size_inches(12, 8)
 
-    fig.savefig(file_path + "/heatmap.pdf", bbox_inches="tight")
+    file = os.path.join(file_path, file_name)
+
+    fig.savefig(file, bbox_inches="tight")
 
     return
 
