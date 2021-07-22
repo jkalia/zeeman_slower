@@ -27,45 +27,72 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
 # Simulates the motion of the atoms in the B field 
 def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0], 
                   current_for_coils=[0], dt=1e-6, z_max=1, max_steps=20000, 
-                  optimized=True):
-
-    ts = np.arange(0, max_steps*dt, dt)
-    zs = np.zeros(max_steps)
-    vs = np.zeros(max_steps)
-    acs = np.zeros(max_steps)
+                  optimized=True, full_output=True):
 
     v = v_initial
     z = -0.05
     counter = 0
 
-    while (z <= z_max) and (counter < max_steps):
+    if full_output:
 
-        if optimized:
-            a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                             laser_detuning, v, 
-                             (coil.calculate_B_field_coil(coil_winding, 
-                                                          current_for_coils, 
+        ts = np.arange(0, max_steps*dt, dt)
+        zs = np.zeros(max_steps)
+        vs = np.zeros(max_steps)
+        acs = np.zeros(max_steps)
+
+        while (z <= z_max) and (counter < max_steps):
+
+            if optimized:
+                a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                                 laser_detuning, v, 
+                                 (coil.calculate_B_field_coil(coil_winding, 
+                                                              current_for_coils, 
+                                                              np.array([z]))[0] 
+                                                              * 10**(-4)))
+            else:
+                a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                                 laser_detuning, v, 
+                                 (ideal.get_ideal_B_field(ideal.ideal_B_field, 
                                                           np.array([z]))[0] 
                                                           * 10**(-4)))
-        else:
-            a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                             laser_detuning, v, 
-                             (ideal.get_ideal_B_field(ideal.ideal_B_field, 
-                                                      np.array([z]))[0] 
-                                                      * 10**(-4)))
 
-        z += v * dt + 0.5 * a * dt**2
-        v -= a * dt 
+            z += v * dt + 0.5 * a * dt**2
+            v -= a * dt 
         
-        acs[counter] = a
-        vs[counter] = v 
-        zs[counter] = z
+            acs[counter] = a
+            vs[counter] = v 
+            zs[counter] = z
 
-        counter += 1
+            counter += 1
 
-    print("v_final = {}, z = {}, counter = {}".format(v, z, counter))
+        print("v_final = {}, z = {}, counter = {}".format(v, z, counter))
 
-    return ts[0:counter], zs[0:counter], vs[0:counter], acs[0:counter]
+        return ts[0:counter], zs[0:counter], vs[0:counter], acs[0:counter]
+
+    else:
+
+        while (z <= z_max) and (counter < max_steps):
+
+            if optimized:
+                a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                                 laser_detuning, v, 
+                                 (coil.calculate_B_field_coil(coil_winding, 
+                                                              current_for_coils, 
+                                                              np.array([z]))[0] 
+                                                              * 10**(-4)))
+            else:
+                a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                                 laser_detuning, v, 
+                                 (ideal.get_ideal_B_field(ideal.ideal_B_field, 
+                                                          np.array([z]))[0] 
+                                                          * 10**(-4)))
+
+            z += v * dt + 0.5 * a * dt**2
+            v -= a * dt 
+
+            counter += 1
+
+        return v, counter
 
 
 

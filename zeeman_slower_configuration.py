@@ -262,7 +262,7 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 # Wrapper for plotting and generating values post-optimization
 def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                      z, y, guess, final, folder_location):
+                      z, y, guess, final, flag, folder_location):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -298,9 +298,9 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
     # Plot title 
     title = ("lc = {}, hc = {}, \n "
-        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}".format(
-        final[-2], final[-1], fixed_overlap, 
-        rmse, rmse_label, li_deviation))
+        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}, \n "
+        "optimizer flag = {}".format(final[-2], final[-1], fixed_overlap, 
+        rmse, rmse_label, li_deviation, flag))
 
     # Name folder 
     directory = "{}sections_{}hclength_{}hcmaxdensity_{}overlap".format(
@@ -328,6 +328,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
     save_data(data, f)
 
     return rmse, li_deviation
+
 
 ################################################################################
 
@@ -360,7 +361,9 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 
 ################################################################################
+
 # Unpickle data
+
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
 # file = os.path.join(folder_location, 
@@ -376,11 +379,16 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # print("final: ", final)
 # print("flag: ", flag)
 
+
 ################################################################################
+
 # Post optimization
 
 folder_location = \
-    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
+    "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
+
+z = np.linspace(0, ideal.slower_length_val, 100000)
+y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 fixed_densities = [2]
 densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
@@ -399,15 +407,14 @@ final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00, 2.52389398e+00,
          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
           1.28534803e+02]
+flag = 1
 
 
 # rmse, li_deviation = post_optimization(fixed_densities, densities, 
 #                                        fixed_lengths, fixed_overlap, 
-#                                        z, y_data, guess, final, 
+#                                        z, y_data, guess, final, flag,
 #                                        folder_location)
 
-
-################################################################################
 
 discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -421,19 +428,81 @@ coil_winding, current_for_coils = \
                                      final[-2], final[-1])
 
 total_length = coil.calculate_total_length(coil_winding)
-high_current_length = coil.calculate_high_current_section_length(coil_winding, current_for_coils)
-low_current_length = coil.calculate_low_current_section_length(coil_winding, current_for_coils)
+high_current_length = coil.calculate_high_current_section_length(coil_winding, 
+    current_for_coils)
+low_current_length = coil.calculate_low_current_section_length(coil_winding, 
+    current_for_coils)
 
 total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
                                           z_result)
 
-print(coil_winding)
-print(current_for_coils)
-print(total_field)
 
-print("total_length: ", total_length)
-print("low_current_length: ", low_current_length)
-print("high_current_length: ", high_current_length)
+################################################################################
+# TODO: today, get all the code working to generate these heatmaps and then hit
+# run over the weekend on the main computer 
+
+# For lithium
+li_atom = atom.Atom("Li")
+s = 2
+v_i_li = ideal.initial_velocity_li
+laser_detuning = ideal.laser_detuning_li
+
+t_i, z_i, v_i, a_i = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning, 
+                                            optimized=False)
+t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning,
+                                    coil_winding=coil_winding,
+                                    current_for_coils=current_for_coils)
+
+
+fig_li, ax_li = plt.subplots()
+
+ax_li.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
+           v_i_li))
+ax_li.plot(z, v, label="v_initial = {:.0f}".format(v_i_li))
+            
+ax_li.set_xlabel("Position [m]")
+ax_li.set_ylabel("Velocity [m/s]")
+ax_li.set_title("Motion of Li atom in the Slower")
+ax_li.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "debugging1.pdf")
+# fig.savefig(file_path, bbox_inches="tight")
+
+plt.show()
+
+
+
+
+
+
+# shift = 60 * 10**6
+# saturations = np.linspace(1, 2, 20)
+
+
+# # Lithium
+# detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                         ideal.laser_detuning_li + shift, 24)
+# v_cutoff = 20
+
+# for i in range(len(detunings)):
+#     for j in range(len(saturations)):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
