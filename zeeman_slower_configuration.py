@@ -16,7 +16,6 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt 
 from scipy import optimize
-from scipy import misc
 import pickle 
 import os
 
@@ -389,7 +388,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
 
-file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
                          "zeeman_slower", "figs")
 
 z = np.linspace(0, ideal.slower_length_val, 100000)
@@ -538,17 +537,18 @@ saturations = np.linspace(1, 2, 10)
 # Lithium
 li_atom = atom.Atom("Li")
 li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                           ideal.laser_detuning_li + shift, 40)
+                            ideal.laser_detuning_li + shift, 20)
 
 # Initialize array for storing data
 li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
 
-for d in range(len(li_detunings)): ##DUMB
-    for s in range(len(saturations)): ##DUMB
-        v = simulate.simulate_atom(li_atom, s, ideal.initial_velocity_li, d, 
-                                   coil_winding=coil_winding, 
-                                   current_for_coils=current_for_coils, 
-                                   optimized=True, full_output=False)
+for d, detuning in np.ndenumerate(li_detunings): ##DUMB
+    for s, saturation in np.ndenumerate(saturations): ##DUMB
+        v = simulate.simulate_atom(li_atom, saturation, 
+                                    ideal.initial_velocity_li, detuning, 
+                                    coil_winding=coil_winding, 
+                                    current_for_coils=current_for_coils, 
+                                    optimized=True, full_output=False)
         li_final_velocities[d][s] = v
         print("li_final_velocities: ", li_final_velocities)
 
@@ -556,17 +556,18 @@ for d in range(len(li_detunings)): ##DUMB
 # Erbium
 er_atom = atom.Atom("Er")
 er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-                           ideal.laser_detuning_er + shift, 40)
+                            ideal.laser_detuning_er + shift, 40)
 
 # Initialize array for storing data
 er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
 
-for d in range(len(er_detunings)):
-    for s in range(len(saturations)):
-        v = simulate.simulate_atom(er_atom, s, ideal.initial_velocity_er, d, 
-                                   coil_winding=coil_winding, 
-                                   current_for_coils=current_for_coils, 
-                                   optimized=True, full_output=False)
+for d, detuning in np.ndenumerate(er_detunings):
+    for s, saturation in np.ndenumerate(saturations):
+        v = simulate.simulate_atom(er_atom, saturation, 
+                                    ideal.initial_velocity_er, detuning, 
+                                    coil_winding=coil_winding, 
+                                    current_for_coils=current_for_coils, 
+                                    optimized=True, full_output=False)
         er_final_velocities[d][s] = v 
         print("er_final_velocities: ", er_final_velocities)
 
@@ -575,11 +576,11 @@ print("er_final_velocities: ", er_final_velocities)
 
 
 heatmap.make_heatmap(li_final_velocities, len(li_detunings), len(saturations), 
-                     "Final velocity of Lithium in ZS", "saturation",
-                     "detuning", file_path, "li_final_velocities.pdf")
+                      "Final velocity of Lithium in ZS", "saturation",
+                      "detuning", file_path, "li_final_velocities.pdf")
 heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
-                     "Final velocity of Erbium in ZS", "saturation",
-                     "detuning", file_path, "er_final_velocities.pdf")
+                      "Final velocity of Erbium in ZS", "saturation",
+                      "detuning", file_path, "er_final_velocities.pdf")
 
 
 ################################################################################
@@ -636,16 +637,16 @@ heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations),
 # zprime = np.gradient(total_field)
 
 
-# fig, ax = plt.subplots()
+# # fig, ax = plt.subplots()
 # fig1, ax1 = plt.subplots()
 
 
-# ax.plot(z, total_field, label="calculated B field")
-# ax.plot(z, y, label="ideal B field")
-# ax.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
-# ax.legend()
+# # ax.plot(z, total_field, label="calculated B field")
+# # ax.plot(z, y, label="ideal B field")
+# # ax.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
+# # ax.legend()
 
-# plt.show()
+# # plt.show()
 
 
 # ax1.set_xlabel("Position (m)")
@@ -653,23 +654,27 @@ heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations),
 # ax1.plot(z, total_field, color="tab:red")
 # ax1.plot(z, y, linestyle="--", color="tab:red")
 # ax1.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
-# ax1.set_xlim(MOT_distance-0.05, MOT_distance+0.05)
-# ax1.set_ylim(-10, 50)
+# ax1.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+# ax1.set_ylim(0, 10)
 # ax1.tick_params(axis="y", labelcolor="tab:red")
 
 
 # ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 # ax2.set_ylabel("Gradient (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
 # ax2.plot(z, zprime*100, color="tab:blue")
-# ax2.set_ylim(-20, 5)
+# ax2.set_ylim(-5, 0)
 # ax2.tick_params(axis="y", labelcolor="tab:blue")
 
 # ax1.legend()
 # fig1.tight_layout()
 
-# fig1.savefig("/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/figs/gradient.pdf")
-
+# path_name = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                          "zeeman_slower", "figs", "gradient.pdf")
 # plt.show()
+
+# fig1.savefig(path_name)
+
+
 
 
 

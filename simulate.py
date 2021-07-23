@@ -5,16 +5,9 @@
 # zeeman_slower_configuration.py.
 
 import numpy as np 
-import matplotlib
-import matplotlib.pyplot as plt 
-import scipy.integrate
 
 import ideal_field as ideal
 import coil_configuration as coil 
-
-
-matplotlib.rcParams['mathtext.fontset'] = 'stix'
-matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
 
 def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):

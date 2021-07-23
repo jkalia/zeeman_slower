@@ -3,6 +3,9 @@ import matplotlib
 import matplotlib.pyplot as plt 
 import os
 
+matplotlib.rcParams['mathtext.fontset'] = 'stix'
+matplotlib.rcParams['font.family'] = 'STIXGeneral'
+
 
 # # Iterate fixed_lengths from 4 to 10 
 # min_length = 4
