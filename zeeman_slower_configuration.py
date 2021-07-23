@@ -459,6 +459,16 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 #                                     coil_winding=coil_winding,
 #                                     current_for_coils=current_for_coils)
 
+# v_ideal = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#                                  optimized=False, full_output=False)
+# v_final = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li,
+#                                  coil_winding=coil_winding,
+#                                  current_for_coils=current_for_coils, 
+#                                  full_output=False)
+# print("v_ideal: ", v_ideal)
+# print("v_final: ", v_final)
+
+
 
 # fig_li, ax_li = plt.subplots()
 
@@ -473,8 +483,8 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 
 
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                          "zeeman_slower", "figs", "debugging1.pdf")
-# fig.savefig(file_path, bbox_inches="tight")
+#                          "zeeman_slower", "figs", "debugging_li.pdf")
+# fig_li.savefig(file_path, bbox_inches="tight")
 
 
 # # For erbium
@@ -490,6 +500,15 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 #                                     coil_winding=coil_winding,
 #                                     current_for_coils=current_for_coils)
 
+# v_ideal = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
+#                                  optimized=False, full_output=False)
+# v_final = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
+#                                  coil_winding=coil_winding,
+#                                  current_for_coils=current_for_coils, 
+#                                  full_output=False)
+# print("v_ideal: ", v_ideal)
+# print("v_final: ", v_final)
+
 
 # fig_er, ax_er = plt.subplots()
 
@@ -502,6 +521,10 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 # ax_er.set_title("Motion of Er atom in the Slower")
 # ax_er.legend()
 
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "debugging_er.pdf")
+# fig_er.savefig(file_path, bbox_inches="tight")
+
 # plt.show()
 
 
@@ -509,19 +532,19 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 # Make heatmaps of detuning versus saturation for the final velocity of atoms
 
 
-shift = 60 * 10**6
-saturations = np.linspace(1, 2, 20)
+shift = 20 * 10**6
+saturations = np.linspace(1, 2, 10)
 
 # Lithium
 li_atom = atom.Atom("Li")
 li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                           ideal.laser_detuning_li + shift, 24)
+                           ideal.laser_detuning_li + shift, 40)
 
 # Initialize array for storing data
 li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
 
-for d in range(len(li_detunings)):
-    for s in range(len(saturations)):
+for d in range(len(li_detunings)): ##DUMB
+    for s in range(len(saturations)): ##DUMB
         v = simulate.simulate_atom(li_atom, s, ideal.initial_velocity_li, d, 
                                    coil_winding=coil_winding, 
                                    current_for_coils=current_for_coils, 
@@ -533,7 +556,7 @@ for d in range(len(li_detunings)):
 # Erbium
 er_atom = atom.Atom("Er")
 er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-                           ideal.laser_detuning_er + shift, 24)
+                           ideal.laser_detuning_er + shift, 40)
 
 # Initialize array for storing data
 er_final_velocities = np.zeros((len(er_detunings), len(saturations)))

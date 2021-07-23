@@ -48,6 +48,7 @@ final_velocity_er = 5
 eta_er = 0.5
 mu0_er = 1.13719 * uB
 laser_detuning_er = round(get_laser_detuning(initial_velocity_er, k_er), -6)
+print(laser_detuning_er)
 
 
 # Li parameters for ZS
@@ -56,6 +57,7 @@ final_velocity_li = 0
 eta_li = 0.38
 mu0_li = 1 * uB
 laser_detuning_li = round(get_laser_detuning(initial_velocity_li, k_li), -6)
+print(laser_detuning_li)
 
 
 # Determine ideal B field for slower
