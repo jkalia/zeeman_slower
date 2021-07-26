@@ -183,9 +183,13 @@ def retrieve_run_data(file_path):
     guess = retrieved_data[4]
     final = retrieved_data[5]
     flag = retrieved_data[6]
-
+    
     return (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
             final, flag)
+
+
+def retrieve_heatmap_data(file_path):
+    return pickle.load(open(file_path, "rb"))
 
 
 # Wrapper for optimization
@@ -531,32 +535,40 @@ total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
 # Make heatmaps of detuning versus saturation for the final velocity of atoms
 
 
-shift = 20 * 10**6
-saturations = np.linspace(1, 2, 10)
+# shift = 20 * 10**6
+saturations = np.arange(1, 5.2, 0.2)
 
-# Lithium
-li_atom = atom.Atom("Li")
-li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                            ideal.laser_detuning_li + shift, 20)
+# # Lithium
+# li_atom = atom.Atom("Li")
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 20)
 
-# Initialize array for storing data
-li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
+# # Initialize array for storing data
+# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
 
-for d, detuning in np.ndenumerate(li_detunings): ##DUMB
-    for s, saturation in np.ndenumerate(saturations): ##DUMB
-        v = simulate.simulate_atom(li_atom, saturation, 
-                                    ideal.initial_velocity_li, detuning, 
-                                    coil_winding=coil_winding, 
-                                    current_for_coils=current_for_coils, 
-                                    optimized=True, full_output=False)
-        li_final_velocities[d][s] = v
-        print("li_final_velocities: ", li_final_velocities)
+# for d, detuning in np.ndenumerate(li_detunings): ##DUMB
+#     for s, saturation in np.ndenumerate(saturations): ##DUMB
+#         v = simulate.simulate_atom(li_atom, saturation, 
+#                                     ideal.initial_velocity_li, detuning, 
+#                                     coil_winding=coil_winding, 
+#                                     current_for_coils=current_for_coils, 
+#                                     optimized=True, full_output=False)
+#         li_final_velocities[d][s] = v
+#         print("li_final_velocities: ", li_final_velocities)
+        
+# print("li_final_velocities: ", li_final_velocities)
+# heatmap.make_heatmap(li_final_velocities, len(li_detunings), len(saturations), 
+#                       "Final velocity of Lithium in ZS", "saturation",
+#                       "detuning", file_path, "li_final_velocities.pdf")
+# save_data(li_final_velocities, 
+#           os.path.join(file_path, "li_final_velocities.pickle"))
 
 
 # Erbium
+shift = 100 * 10**6
 er_atom = atom.Atom("Er")
-er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-                            ideal.laser_detuning_er + shift, 40)
+er_detunings = np.arange(ideal.laser_detuning_er - shift, 
+                         ideal.laser_detuning_er, 1 * 10**6)
 
 # Initialize array for storing data
 er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
@@ -571,20 +583,28 @@ for d, detuning in np.ndenumerate(er_detunings):
         er_final_velocities[d][s] = v 
         print("er_final_velocities: ", er_final_velocities)
 
-print("li_final_velocities: ", li_final_velocities)
+
 print("er_final_velocities: ", er_final_velocities)
-
-
-heatmap.make_heatmap(li_final_velocities, len(li_detunings), len(saturations), 
-                      "Final velocity of Lithium in ZS", "saturation",
-                      "detuning", file_path, "li_final_velocities.pdf")
-heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
-                      "Final velocity of Erbium in ZS", "saturation",
-                      "detuning", file_path, "er_final_velocities.pdf")
+# heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
+#                       "Final velocity of Erbium in ZS", "saturation",
+#                       "detuning", file_path, "er_final_velocities.pdf")
+save_data(er_final_velocities, 
+          os.path.join(file_path, "er_final_velocities_high_isat.pickle"))
 
 
 ################################################################################
+# Unpickle heatmap data
 
+folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+                          "zeeman_slower", "figs")
+
+li_file = os.path.join(folder_location, "li_final_velocities.pickle")
+li_heatmap = retrieve_heatmap_data(li_file)
+print("li_final_velocities: ", li_heatmap)
+
+er_file = os.path.join(folder_location, "er_final_velocities.pickle")
+er_heatmap = retrieve_heatmap_data(er_file)
+print("er_final_velocities: ", er_heatmap)
 
 
 ################################################################################
