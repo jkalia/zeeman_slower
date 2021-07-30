@@ -212,7 +212,36 @@ def calculate_high_current_section_length(coil_winding, current_for_coils):
     return total_length
 
 
+# Calculates the length of the section  
+def calculate_section_length(coil_winding, current_for_coils, start_point, 
+                             end_point):
+    
+    # Start total length at zero
+    total_length = 0
+    
+    for position, coil_num in np.ndenumerate(coil_winding):
+        if position[0] >= start_point and position[0] < end_point:
+    
+            # get integer number of coils
+            full_coils = np.floor(coil_num)
 
+            for coil in range(full_coils.astype(int)):
+                radial_position = ((parameters.slower_diameter / 2) 
+                               + (parameters.wire_height / 2) 
+                               + coil * parameters.wire_height)
+                total_length += 2 * np.pi * radial_position
+
+            # get partial coil winding
+            if coil_num != full_coils:
+
+                partial_winding = coil_num - np.floor(coil_num)
+                coil = np.ceil(coil_num).astype(int)
+                radial_position = ((parameters.slower_diameter / 2) 
+                               + (parameters.wire_height / 2) 
+                               + coil * parameters.wire_height)
+                total_length += 2 * np.pi * radial_position * partial_winding
+
+    return total_length
 
 
 

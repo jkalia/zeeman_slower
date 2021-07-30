@@ -24,11 +24,9 @@ import coil_configuration as coil
 import solenoid_configuration as solenoid 
 import parameters
 import plotting
-import heatmap_script as heatmap
+# import heatmap_script as heatmap
 import simulate
 import atom 
-
-
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
@@ -444,6 +442,10 @@ low_current_length = coil.calculate_low_current_section_length(coil_winding,
 total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
                                           z_result)
 
+print(coil_winding)
+print(coil_winding[106:113])
+print(coil.calculate_section_length(coil_winding, current_for_coils, 106 , 112))
+print(coil.calculate_total_length(coil_winding))
 
 ################################################################################
 # Plot motion of atom through ZS
@@ -564,47 +566,51 @@ saturations = np.arange(1, 5.2, 0.2)
 #           os.path.join(file_path, "li_final_velocities.pickle"))
 
 
-# Erbium
-shift = 100 * 10**6
-er_atom = atom.Atom("Er")
-er_detunings = np.arange(ideal.laser_detuning_er - shift, 
-                         ideal.laser_detuning_er, 1 * 10**6)
+# # Erbium
+# shift = 100 * 10**6
+# er_atom = atom.Atom("Er")
+# er_detunings = np.arange(ideal.laser_detuning_er - shift, 
+#                          ideal.laser_detuning_er, 1 * 10**6)
 
-# Initialize array for storing data
-er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
+# # Initialize array for storing data
+# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
 
-for d, detuning in np.ndenumerate(er_detunings):
-    for s, saturation in np.ndenumerate(saturations):
-        v = simulate.simulate_atom(er_atom, saturation, 
-                                    ideal.initial_velocity_er, detuning, 
-                                    coil_winding=coil_winding, 
-                                    current_for_coils=current_for_coils, 
-                                    optimized=True, full_output=False)
-        er_final_velocities[d][s] = v 
-        print("er_final_velocities: ", er_final_velocities)
+# for d, detuning in np.ndenumerate(er_detunings):
+#     for s, saturation in np.ndenumerate(saturations):
+#         v = simulate.simulate_atom(er_atom, saturation, 
+#                                     ideal.initial_velocity_er, detuning, 
+#                                     coil_winding=coil_winding, 
+#                                     current_for_coils=current_for_coils, 
+#                                     optimized=True, full_output=False)
+#         er_final_velocities[d][s] = v 
+#         print("er_final_velocities: ", er_final_velocities)
 
 
-print("er_final_velocities: ", er_final_velocities)
-# heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
-#                       "Final velocity of Erbium in ZS", "saturation",
-#                       "detuning", file_path, "er_final_velocities.pdf")
-save_data(er_final_velocities, 
-          os.path.join(file_path, "er_final_velocities_high_isat.pickle"))
+# print("er_final_velocities: ", er_final_velocities)
+# # heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
+# #                       "Final velocity of Erbium in ZS", "saturation",
+# #                       "detuning", file_path, "er_final_velocities.pdf")
+# save_data(er_final_velocities, 
+#           os.path.join(file_path, "er_final_velocities_high_isat.pickle"))
 
 
 ################################################################################
 # Unpickle heatmap data
 
-folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
-                          "zeeman_slower", "figs")
+# folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+#                           "zeeman_slower", "figs")
 
-li_file = os.path.join(folder_location, "li_final_velocities.pickle")
-li_heatmap = retrieve_heatmap_data(li_file)
-print("li_final_velocities: ", li_heatmap)
+# li_file = os.path.join(folder_location, "li_final_velocities.pickle")
+# li_heatmap = retrieve_heatmap_data(li_file)
+# print("li_final_velocities: ", li_heatmap)
 
-er_file = os.path.join(folder_location, "er_final_velocities.pickle")
-er_heatmap = retrieve_heatmap_data(er_file)
-print("er_final_velocities: ", er_heatmap)
+# er_file = os.path.join(folder_location, "er_final_velocities.pickle")
+# er_heatmap = retrieve_heatmap_data(er_file)
+# print("er_final_velocities: ", er_heatmap)
+
+# er_file_high_isat = os.path.join(folder_location, "er_final_velocities_high_isat.pickle")
+# er_high_isat = retrieve_heatmap_data(er_file_high_isat)
+# print("high isat: ", er_high_isat)
 
 
 ################################################################################
