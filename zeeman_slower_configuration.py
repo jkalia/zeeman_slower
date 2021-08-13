@@ -76,8 +76,20 @@ def max_deviation(total_field_final, ideal_field, B_field_range):
          * 10**(-4) * ideal.mu0_li / ideal.hbar / ideal.linewidth_li)))
 
 
+# TODO: add in a section here about not changing the coil winding and only
+# making the current a free parameter
 def residuals(guess, y, z, num_coils, fixed_densities, densities, 
-              fixed_lengths):
+              fixed_lengths, coils=[0], optimize_coil_winding=True):
+    
+    if optimize_coil_winding == False:
+        print("here")
+        print("coils: ", coils)
+        return  y - solenoid.calculate_B_field_solenoid(z, num_coils, 
+                                                   fixed_densities, 
+                                                   densities, fixed_lengths, 
+                                                   coils, guess[-2], 
+                                                   guess[-1])
+    
     return y - solenoid.calculate_B_field_solenoid(z, num_coils, 
                                                    fixed_densities, 
                                                    densities, fixed_lengths, 
@@ -85,12 +97,28 @@ def residuals(guess, y, z, num_coils, fixed_densities, densities,
                                                    guess[-1])
 
 
+# TODO: add in a section here about not changing the coil winding and only
+# making the current a free parameter
 def optimizer(residuals, guess, x, y, iterations, num_coils, fixed_densities, 
-              densities, fixed_lengths, fixed_overlap):
+              densities, fixed_lengths, fixed_overlap, 
+              optimize_coil_winding=True):
 
     print("optimizing!")
     print("fixed_lengths = {}, fixed_overlap = {}".format(fixed_lengths, 
                                                           fixed_overlap))
+    
+    if optimize_coil_winding == False:
+        current_guess = guess[-2::]
+        coils = guess[0:-2]
+        final, flag = optimize.leastsq(residuals, current_guess, 
+                                       args=(y, x, num_coils, fixed_densities, 
+                                             densities, fixed_lengths, coils,
+                                             optimize_coil_winding), 
+                                       maxfev=iterations)    
+        print("optimizing complete")
+        return final, flag
+        
+    
     final, flag = optimize.leastsq(residuals, guess, 
                                    args=(y, x, num_coils, fixed_densities, 
                                          densities, fixed_lengths), 
@@ -192,7 +220,8 @@ def retrieve_heatmap_data(file_path):
 
 # Wrapper for optimization
 def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, iterations, folder_location, counter):
+                     z, y, guess, iterations, folder_location, counter,
+                     optimize_coil_winding=True):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -203,7 +232,7 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
     final, flag = optimizer(residuals, guess, z, y, iterations, num_coils, 
                             fixed_densities, densities, fixed_lengths, 
-                            fixed_overlap)
+                            fixed_overlap, optimize_coil_winding)
 
     (solenoid_field_init, coil_winding_init, 
         current_for_coils_init, total_field_init) = \
@@ -338,29 +367,41 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # Run optimizer
 
 # Location to save data
-# folder_location = \
-#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
+folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                               "zeeman_slower", 
+                               "3.6mm_optimization_plots")
 
-# # Iterations for optimizer
-# iterations = 20000
+# Iterations for optimizer
+iterations = 20000
 
 # Arrays which define the solenoid configuration for the low current section. 
-# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-#              0.5, 0.25, 0]
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+              0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
-# fixed_densities = [2]
-# fixed_lengths = [6]
-# fixed_overlap = 0
+fixed_densities = [2]
+fixed_lengths = [6]
+fixed_overlap = 0
 
-# z = np.linspace(0, ideal.slower_length_val, 100000)
-# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-# guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
+z = np.linspace(0, ideal.slower_length_val, 10000)
+y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+guess = [-7.12653878, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07, 
+          7.01947561e-07, 6.91609592, 8.16322065, 7.57713685, 9.52046922, 
+          10.4963877, -11.9580619, -10.4047639, -5.36808583, -8.86173341, 
+          2.46843583, 2.52389398, -9.16285867, 7.20514955, 110.0, 29.9625224, 
+          128.534803]
 
-# rmse, li_deviation = run_optimization(fixed_densities, densities, 
-#                                       fixed_lengths, fixed_overlap, 
-#                                       z, y_data, guess, iterations, 
-#                                       folder_location)
+discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        discretize(fixed_lengths, fixed_overlap)
+
+rmse, li_deviation, flag, final = run_optimization(fixed_densities, densities, 
+                                                   fixed_lengths, 
+                                                   fixed_overlap, z, y_data, 
+                                                   guess, iterations, 
+                                                   folder_location, 0, 
+                                                   False)
+
+
 
 
 ################################################################################
@@ -369,8 +410,10 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
-# file = os.path.join(folder_location, 
-#                     "19sections_6hclength_2hcmaxdensity_0overlap_new", 
+
+# file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
+#                     "3.5mm_optimization_plots_post", 
+#                     "19sections_6hclength_2hcmaxdensity_0overlap", 
 #                     "data.pickle")
 # (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
 #             final, flag) = retrieve_run_data(file)
@@ -381,6 +424,23 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # print("guess: ", guess)
 # print("final: ", final)
 # print("flag: ", flag)
+
+# fixed_densities = [2]
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+#              0.5, 0.25, 0]
+# fixed_lengths = [6]
+# fixed_overlap = 0
+# guess = [-7.22898856, -1.92519981e-06, -6.34518412e-07, -8.82164728e-07, 
+#          7.01947561e-07, 7.06642982, 8.12184856, 7.59530427, 9.50767008, 
+#          10.4795059, -11.9299365, -10.3797288, -5.34390819, -8.83375563, 
+#          2.46071163, 2.51653805, -9.12990925, 7.16913954, 110.0, 29.8418721, 
+#          128.736289]
+# final = [-7.12653878, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07, 
+#          7.01947561e-07, 6.91609592, 8.16322065, 7.57713685, 9.52046922, 
+#          10.4963877, -11.9580619, -10.4047639, -5.36808583, -8.86173341, 
+#          2.46843583, 2.52389398, -9.16285867, 7.20514955, 110.0, 29.9625224, 
+#          128.534803]
+# flag = 1
 
 
 ################################################################################
@@ -449,87 +509,87 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # Run optimizer
 
 # Location to save data
-folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                               "zeeman_slower", "3.6mm_optimization_plots")
+# folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                                "zeeman_slower", "3.6mm_optimization_plots")
 
 # Iterations for optimizer
-iterations = 10000
+# iterations = 10000
 
 # Arrays which define the solenoid configuration for the low current section. 
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-              0.5, 0.25, 0]
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+#               0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
-fixed_densities = [2]
-fixed_lengths = [6]
-fixed_overlap = 0
+# fixed_densities = [2]
+# fixed_lengths = [6]
+# fixed_overlap = 0
 
-z = np.linspace(0, ideal.slower_length_val, 10000)
-y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
+# z = np.linspace(0, ideal.slower_length_val, 10000)
+# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+# guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
 
 # Iterate fixed_lengths from 4 to 10 
-min_length = 4
-max_length = 10
+# min_length = 4
+# max_length = 10
 
 # Initialize array for storing data
-rmse_array = np.zeros(((max_length - min_length + 1), 
-                      np.ceil(max_length / 2).astype(int) + 1))
-deviation_array = np.zeros(((max_length - min_length + 1), 
-                           np.ceil(max_length / 2).astype(int) + 1))
+# rmse_array = np.zeros(((max_length - min_length + 1), 
+#                       np.ceil(max_length / 2).astype(int) + 1))
+# deviation_array = np.zeros(((max_length - min_length + 1), 
+#                            np.ceil(max_length / 2).astype(int) + 1))
 
 # Iterate over fixed lengths
-for i in range(min_length, (max_length + 1), 1):
-    fixed_lengths[0] = i
+# for i in range(min_length, (max_length + 1), 1):
+#     fixed_lengths[0] = i
     
-    # Set max overlap
-    max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
-    if max_overlap > 2:
-        max_overlap = 2
+#     # Set max overlap
+#     max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
+#     if max_overlap > 2:
+#         max_overlap = 2
 
-    # Iterate over fixed_overlap
-    for j in range(max_overlap + 1):
+#     # Iterate over fixed_overlap
+#     for j in range(max_overlap + 1):
 
-        flag = 0
-        flag_2 = 0
-        counter = 0
-        fixed_overlap = j
+#         flag = 0
+#         flag_2 = 0
+#         counter = 0
+#         fixed_overlap = j
 
-        while (flag != 1) and (flag != 3):
+#         while (flag != 1) and (flag != 3):
 
-            print("fixed_lengths: ", fixed_lengths)
-            print("fixed_overlap: ", fixed_overlap)
-            print("counter: ", counter)
+#             print("fixed_lengths: ", fixed_lengths)
+#             print("fixed_overlap: ", fixed_overlap)
+#             print("counter: ", counter)
 
-            # Run optimization and collect data
-            rmse, li_deviation, flag, final = \
-                run_optimization(fixed_densities, densities, fixed_lengths, 
-                                 fixed_overlap, z, y_data, guess, iterations,
-                                 folder_location, counter)
+#             # Run optimization and collect data
+#             rmse, li_deviation, flag, final = \
+#                 run_optimization(fixed_densities, densities, fixed_lengths, 
+#                                  fixed_overlap, z, y_data, guess, iterations,
+#                                  folder_location, counter)
 
-            print("rmse: ", rmse)   
-            print("li_deviation: ", li_deviation)
-            guess = final
-            counter += 1
+#             print("rmse: ", rmse)   
+#             print("li_deviation: ", li_deviation)
+#             guess = final
+#             counter += 1
 
-            if flag == 2:
-                flag_2 += 1
-            if flag_2 > 200:
-                break
+#             if flag == 2:
+#                 flag_2 += 1
+#             if flag_2 > 200:
+#                 break
 
-        rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
-        deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
-            li_deviation
+#         rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
+#         deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
+#             li_deviation
 
-        print("rmse_array: ", rmse_array)
-        print("deviation_array: ", deviation_array)
+#         print("rmse_array: ", rmse_array)
+#         print("deviation_array: ", deviation_array)
 
 
-print("rmse_array: ", rmse_array)
-print("deviation_array: ", deviation_array)
+# print("rmse_array: ", rmse_array)
+# print("deviation_array: ", deviation_array)
 
-data = (rmse_array, deviation_array)
-save_data(data, os.path.join(folder_location, "heatmap.pickle"))
+# data = (rmse_array, deviation_array)
+# save_data(data, os.path.join(folder_location, "heatmap.pickle"))
 
 
 
