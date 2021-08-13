@@ -21,10 +21,10 @@ matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
 
-# file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-#                          "zeeman_slower", "figs")
+file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                          "zeeman_slower")
 
-file_path = "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower"
+# file_path = "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower"
 
 z = np.linspace(0, ideal.slower_length_val, 100000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
@@ -81,8 +81,8 @@ for position, coil_num in np.ndenumerate(coil_winding):
     # get integer number of coils
     full_coils = np.ceil(coil_num)
 
-    for coil in range(full_coils.astype(int)):
-        radial_position = coil + 1
+    for c in range(full_coils.astype(int)):
+        radial_position = c + 1
 
         print(radial_position, axial_position)
 

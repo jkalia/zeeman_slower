@@ -390,30 +390,31 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
 
-file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                         "zeeman_slower", "figs")
+# file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                          "zeeman_slower", "figs")
 
-z = np.linspace(0, ideal.slower_length_val, 100000)
-y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+# z = np.linspace(0, ideal.slower_length_val, 100000)
+# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
-fixed_densities = [2]
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-             0.5, 0.25, 0]
-fixed_lengths = [6]
-fixed_overlap = 0
-guess = [-7.22898856e+00, -1.92519981e-06, -6.34518412e-07, -8.82164728e-07,
-          7.01947561e-07,  7.06642982e+00,  8.12184856e+00,  7.59530427e+00,
-          9.50767008e+00,  1.04795059e+01, -1.19299365e+01, -1.03797288e+01,
-         -5.34390819e+00, -8.83375563e+00,  2.46071163e+00,  2.51653805e+00,
-         -9.12990925e+00, 7.16913954e+00,  1.10000000e+02,  2.98418721e+01,
-          1.28736289e+02]
-final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
-          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
-          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
-         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00, 2.52389398e+00,
-         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
-          1.28534803e+02]
-flag = 1
+# Current best solution, for 3.5mm wire_width and wire_height 
+# fixed_densities = [2]
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+#              0.5, 0.25, 0]
+# fixed_lengths = [6]
+# fixed_overlap = 0
+# guess = [-7.22898856e+00, -1.92519981e-06, -6.34518412e-07, -8.82164728e-07,
+#           7.01947561e-07,  7.06642982e+00,  8.12184856e+00,  7.59530427e+00,
+#           9.50767008e+00,  1.04795059e+01, -1.19299365e+01, -1.03797288e+01,
+#          -5.34390819e+00, -8.83375563e+00,  2.46071163e+00,  2.51653805e+00,
+#          -9.12990925e+00, 7.16913954e+00,  1.10000000e+02,  2.98418721e+01,
+#           1.28736289e+02]
+# final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+#           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+#           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+#          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00, 2.52389398e+00,
+#          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
+#           1.28534803e+02]
+# flag = 1
 
 
 # rmse, li_deviation = post_optimization(fixed_densities, densities, 
@@ -422,30 +423,142 @@ flag = 1
 #                                        folder_location)
 
 
-discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
+# discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+#         discretize(fixed_lengths, fixed_overlap)
 
-z_result = np.linspace(0, ideal.slower_length_val, 10000)
-y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
+# z = np.linspace(0, ideal.slower_length_val, 10000)
+# y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
-coil_winding, current_for_coils = \
-  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
-                                     fixed_lengths, np.round(final[0:-2]), 
-                                     final[-2], final[-1])
+# coil_winding, current_for_coils = \
+#   coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
+#                                      fixed_lengths, np.round(final[0:-2]), 
+#                                      final[-2], final[-1])
 
-total_length = coil.calculate_total_length(coil_winding)
-high_current_length = coil.calculate_high_current_section_length(coil_winding, 
-    current_for_coils)
-low_current_length = coil.calculate_low_current_section_length(coil_winding, 
-    current_for_coils)
+# total_length = coil.calculate_total_length(coil_winding)
+# high_current_length = coil.calculate_high_current_section_length(coil_winding, 
+#     current_for_coils)
+# low_current_length = coil.calculate_low_current_section_length(coil_winding, 
+#     current_for_coils)
 
-total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
-                                          z_result)
+# total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, z)
 
-print(coil_winding)
-print(coil_winding[106:113])
-print(coil.calculate_section_length(coil_winding, current_for_coils, 106 , 112))
-print(coil.calculate_total_length(coil_winding))
+# print(coil_winding)
+
+##############################################################################
+# Rerun ZS optimization using 3.6mm for wire thickness
+# Run optimizer
+
+# Location to save data
+folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                               "zeeman_slower", "3.6mm_optimization_plots")
+
+# Iterations for optimizer
+iterations = 10000
+
+# Arrays which define the solenoid configuration for the low current section. 
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+              0.5, 0.25, 0]
+
+# Arrays which define the solenoid configuration for the high current section.
+fixed_densities = [2]
+fixed_lengths = [6]
+fixed_overlap = 0
+
+z = np.linspace(0, ideal.slower_length_val, 10000)
+y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+guess = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 110, 35, 120]
+
+# Iterate fixed_lengths from 4 to 10 
+min_length = 4
+max_length = 10
+
+# Initialize array for storing data
+rmse_array = np.zeros(((max_length - min_length + 1), 
+                      np.ceil(max_length / 2).astype(int) + 1))
+deviation_array = np.zeros(((max_length - min_length + 1), 
+                           np.ceil(max_length / 2).astype(int) + 1))
+
+# Iterate over fixed lengths
+for i in range(min_length, (max_length + 1), 1):
+    fixed_lengths[0] = i
+    
+    # Set max overlap
+    max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
+    if max_overlap > 2:
+        max_overlap = 2
+
+    # Iterate over fixed_overlap
+    for j in range(max_overlap + 1):
+
+        flag = 0
+        flag_2 = 0
+        counter = 0
+        fixed_overlap = j
+
+        while (flag != 1) and (flag != 3):
+
+            print("fixed_lengths: ", fixed_lengths)
+            print("fixed_overlap: ", fixed_overlap)
+            print("counter: ", counter)
+
+            # Run optimization and collect data
+            rmse, li_deviation, flag, final = \
+                run_optimization(fixed_densities, densities, fixed_lengths, 
+                                 fixed_overlap, z, y_data, guess, iterations,
+                                 folder_location, counter)
+
+            print("rmse: ", rmse)   
+            print("li_deviation: ", li_deviation)
+            guess = final
+            counter += 1
+
+            if flag == 2:
+                flag_2 += 1
+            if flag_2 > 200:
+                break
+
+        rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
+        deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
+            li_deviation
+
+        print("rmse_array: ", rmse_array)
+        print("deviation_array: ", deviation_array)
+
+
+print("rmse_array: ", rmse_array)
+print("deviation_array: ", deviation_array)
+
+data = (rmse_array, deviation_array)
+save_data(data, os.path.join(folder_location, "heatmap.pickle"))
+
+
+
+##############################################################################
+# TODO: Put half gaps in coil winding
+# TODO: Post-processing to get rid of slight deivations in B field caused by
+# these gaps 
+
+
+##############################################################################
+# TODO: Calculate resistance, temperature change per minute, length, of each
+# section
+
+
+
+
+# Total B field
+# fig, ax = plt.subplots()
+
+# ax.plot(z, y, label="ideal B field", color="tab:orange")
+# ax.plot(z, total_field, label="calculated B field",  color="royalblue")
+
+# ax.legend()
+
+# fig.set_size_inches(12, 8)
+# fig.savefig(os.path.join(file_path, "total_field_no_comp.pdf"), bbox_inches="tight")
+
+# plt.show()
+
 
 ################################################################################
 # Plot motion of atom through ZS
@@ -538,7 +651,7 @@ print(coil.calculate_total_length(coil_winding))
 
 
 # shift = 20 * 10**6
-saturations = np.arange(1, 5.2, 0.2)
+# saturations = np.arange(1, 5.2, 0.2)
 
 # # Lithium
 # li_atom = atom.Atom("Li")
