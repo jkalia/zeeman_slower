@@ -76,49 +76,21 @@ def max_deviation(total_field_final, ideal_field, B_field_range):
          * 10**(-4) * ideal.mu0_li / ideal.hbar / ideal.linewidth_li)))
 
 
-# TODO: add in a section here about not changing the coil winding and only
-# making the current a free parameter
 def residuals(guess, y, z, num_coils, fixed_densities, densities, 
-              fixed_lengths, coils=[0], optimize_coil_winding=True):
-    
-    if optimize_coil_winding == False:
-        print("here")
-        print("coils: ", coils)
-        return  y - solenoid.calculate_B_field_solenoid(z, num_coils, 
-                                                   fixed_densities, 
-                                                   densities, fixed_lengths, 
-                                                   coils, guess[-2], 
-                                                   guess[-1])
-    
+              fixed_lengths):
     return y - solenoid.calculate_B_field_solenoid(z, num_coils, 
                                                    fixed_densities, 
                                                    densities, fixed_lengths, 
                                                    guess[0:-2], guess[-2], 
                                                    guess[-1])
+     
 
-
-# TODO: add in a section here about not changing the coil winding and only
-# making the current a free parameter
 def optimizer(residuals, guess, x, y, iterations, num_coils, fixed_densities, 
-              densities, fixed_lengths, fixed_overlap, 
-              optimize_coil_winding=True):
+              densities, fixed_lengths, fixed_overlap):
 
     print("optimizing!")
     print("fixed_lengths = {}, fixed_overlap = {}".format(fixed_lengths, 
                                                           fixed_overlap))
-    
-    if optimize_coil_winding == False:
-        current_guess = guess[-2::]
-        coils = guess[0:-2]
-        final, flag = optimize.leastsq(residuals, current_guess, 
-                                       args=(y, x, num_coils, fixed_densities, 
-                                             densities, fixed_lengths, coils,
-                                             optimize_coil_winding), 
-                                       maxfev=iterations)    
-        print("optimizing complete")
-        return final, flag
-        
-    
     final, flag = optimize.leastsq(residuals, guess, 
                                    args=(y, x, num_coils, fixed_densities, 
                                          densities, fixed_lengths), 
@@ -220,8 +192,7 @@ def retrieve_heatmap_data(file_path):
 
 # Wrapper for optimization
 def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, iterations, folder_location, counter,
-                     optimize_coil_winding=True):
+                     z, y, guess, iterations, folder_location, counter):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
@@ -232,7 +203,7 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
     final, flag = optimizer(residuals, guess, z, y, iterations, num_coils, 
                             fixed_densities, densities, fixed_lengths, 
-                            fixed_overlap, optimize_coil_winding)
+                            fixed_overlap)
 
     (solenoid_field_init, coil_winding_init, 
         current_for_coils_init, total_field_init) = \
@@ -290,6 +261,110 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
     save_data(data, f)
 
     return rmse, li_deviation, flag, final
+
+
+##############################################################################
+# Optimize without changing the coil winding, change the current only
+def residuals_current(guess, y, z, num_coils, fixed_densities, densities, 
+                      fixed_lengths, coils):
+    return y - solenoid.calculate_B_field_solenoid(z, num_coils, 
+                                                   fixed_densities, 
+                                                   densities, fixed_lengths, 
+                                                   coils, guess[-2], 
+                                                   guess[-1])
+     
+
+def optimizer_current(residuals_current, guess, x, y, iterations, num_coils, 
+                      fixed_densities, densities, fixed_lengths, 
+                      fixed_overlap, coils):
+
+    print("optimizing!")
+    print("fixed_lengths = {}, fixed_overlap = {}".format(fixed_lengths, 
+                                                          fixed_overlap))
+    final, flag = optimize.leastsq(residuals_current, guess, 
+                                   args=(y, x, num_coils, fixed_densities, 
+                                         densities, fixed_lengths, coils), 
+                                   maxfev=iterations)
+    print("optimizing complete")
+    return final, flag
+
+
+def run_optimization_current(fixed_densities, densities, fixed_lengths, 
+                             fixed_overlap, coils, z, y, guess, iterations, 
+                             folder_location, counter):
+    
+    discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        discretize(fixed_lengths, fixed_overlap)
+
+    # Data used for calculations of measures of goodness 
+    B_field_range = (len(discretized_slower_adjusted) 
+                     - (np.sum(fixed_lengths) - fixed_overlap) + 1)
+
+    final, flag = optimizer_current(residuals_current, guess, z, y, 
+                                    iterations, num_coils, 
+                                    fixed_densities, densities, fixed_lengths, 
+                                    fixed_overlap, coils)
+
+    (solenoid_field_init, coil_winding_init, 
+        current_for_coils_init, total_field_init) = \
+        get_configurations(z_long, num_coils, fixed_densities, densities, 
+                           fixed_lengths, coils, guess[-2], guess[-1], 
+                           discretized_slower_adjusted, ideal_B_field_adjusted,
+                           B_field_range)[0:4]
+
+    (solenoid_field_final, coil_winding_final, 
+        current_for_coils_final, total_field_final, rmse_label) = \
+        get_configurations(z_long, num_coils, fixed_densities, densities, 
+                           fixed_lengths, coils, final[-2], final[-1], 
+                           discretized_slower_adjusted, ideal_B_field_adjusted,
+                           B_field_range)
+
+    print("coil_winding: ", coil_winding_final)
+    print("current_for_coils: ", current_for_coils_final)
+
+    # Measures of goodness
+    rmse = calculate_RMSE(ideal_B_field_adjusted[0:B_field_range], 
+                          total_field_final[0:B_field_range])
+    li_deviation = max_deviation(total_field_final, ideal_B_field_adjusted, 
+                                 B_field_range)
+
+    # Plot title 
+    title = ("lc = {}, hc = {}, \n "
+        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}, \n "
+        "optimizer flag = {}".format(final[-2], final[-1], fixed_overlap, 
+        rmse, rmse_label, li_deviation, flag))
+
+    # Name folder 
+    directory = \
+        "{}sections_{}hclength_{}hcmaxdensity_{}overlap_{}counter"\
+        "_current_only".format(
+        len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
+        fixed_overlap, counter)
+
+    file_path = os.path.join(folder_location, directory)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
+
+    plotting.make_plots(z, z_long, y, discretized_slower_adjusted, 
+                        ideal_B_field_adjusted, solenoid_field_init, 
+                        coil_winding_init, current_for_coils_init, 
+                        total_field_init, solenoid_field_final, 
+                        coil_winding_final, current_for_coils_final, 
+                        total_field_final, fixed_overlap, B_field_range, 
+                        title, file_path)
+
+    data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
+            final, flag)
+
+    file_name = "data.pickle"
+    f = os.path.join(file_path, file_name)
+
+    save_data(data, f)
+
+    return rmse, li_deviation, flag, final
+
+
+##############################################################################
 
 
 # Wrapper for plotting and generating values post-optimization
@@ -385,21 +460,23 @@ fixed_overlap = 0
 
 z = np.linspace(0, ideal.slower_length_val, 10000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-guess = [-7.12653878, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07, 
+coils = [-7.12653878, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07, 
           7.01947561e-07, 6.91609592, 8.16322065, 7.57713685, 9.52046922, 
           10.4963877, -11.9580619, -10.4047639, -5.36808583, -8.86173341, 
-          2.46843583, 2.52389398, -9.16285867, 7.20514955, 110.0, 29.9625224, 
-          128.534803]
+          2.46843583, 2.52389398, -9.16285867, 7.20514955, 110.0]
+guess = [29.9625224, 128.534803]
 
 discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
 
-rmse, li_deviation, flag, final = run_optimization(fixed_densities, densities, 
-                                                   fixed_lengths, 
-                                                   fixed_overlap, z, y_data, 
-                                                   guess, iterations, 
-                                                   folder_location, 0, 
-                                                   False)
+rmse, li_deviation, flag, final = run_optimization_current(fixed_densities, 
+                                                           densities, 
+                                                           fixed_lengths, 
+                                                           fixed_overlap, 
+                                                           coils, z, 
+                                                           y_data, guess, 
+                                                           iterations, 
+                                                           folder_location, 0)
 
 
 
