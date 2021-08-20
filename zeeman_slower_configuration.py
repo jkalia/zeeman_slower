@@ -85,16 +85,17 @@ def average_deviation(total_field_final, ideal_field, B_field_range):
 
 
 def error_function(z, threshold):
-    return special.erf(z)
+    return threshold * special.erf(z / threshold)
+
 
 # Residuals have units of Gauss
 def residuals(guess, y, z, num_coils, fixed_densities, densities, 
               fixed_lengths):
-    return y - solenoid.calculate_B_field_solenoid(z, num_coils, 
-                                                   fixed_densities, 
-                                                   densities, fixed_lengths, 
-                                                   guess[0:-2], guess[-2], 
-                                                   guess[-1])
+    z = y - solenoid.calculate_B_field_solenoid(z, num_coils, fixed_densities, 
+                                                densities, fixed_lengths, 
+                                                guess[0:-2], guess[-2], 
+                                                guess[-1])
+    return error_function(z, 14)
      
 
 def optimizer(residuals, guess, x, y, iterations, num_coils, fixed_densities, 
@@ -464,7 +465,7 @@ folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents",
                                "optimization_plots")
 
 # Iterations for optimizer
-iterations = 20000
+iterations = 100000
 
 # Arrays which define the solenoid configuration for the low current section. 
 densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
@@ -472,29 +473,29 @@ densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1,
 
 # Arrays which define the solenoid configuration for the high current section.
 fixed_densities = [2]
-fixed_lengths = [4]
+fixed_lengths = [6]
 fixed_overlap = 0
 
 z = np.linspace(0, ideal.slower_length_val, 10000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
+guess = [ 7.46286753e+00,  7.50127744e-05, -2.97577736e-08,  4.37936288e-07,
+        2.62536916e-07,  6.71546909e+00,  8.26635769e+00,  7.27954550e+00,
+        9.26884072e+00,  1.01511516e+01,  1.15243033e+01,  1.03045138e+01,
+        4.30488331e+00, -1.90132265e-08, -1.69062861e-07,  1.15922271e+01,
+        1.14877925e+01,  6.51562247e+00,  1.10000000e+02,  3.04286283e+01,
+        1.32986725e+02]
 
-guess = [ 6.82072065e+00, -1.46538585e-07, -3.88500070e-07,  5.89036731e-07,
- -9.52316936e-07,  5.98989802e+00,  8.29155617e+00,  8,
-  10,  11,  12,  11,
-  4,  10,  3,  3,
-  10,  7.10414022e+00,  2.00000000e+01,  3.11918588e+01,
-  1.32184637e+02]
 
 discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         discretize(fixed_lengths, fixed_overlap)
         
-counter = 300
+counter = 506
         
-rmse, li_deviation, av_li_deviation, flag, final = \
-    run_optimization(fixed_densities, densities, fixed_lengths, 
-                      fixed_overlap, z, y_data, guess, iterations, 
-                      folder_location, counter)
+# rmse, li_deviation, av_li_deviation, flag, final = \
+#     run_optimization(fixed_densities, densities, fixed_lengths, 
+#                       fixed_overlap, z, y_data, guess, iterations, 
+#                       folder_location, counter)
 
 
 
@@ -580,21 +581,60 @@ rmse, li_deviation, av_li_deviation, flag, final = \
 # folder_location = \
 #     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
 
-file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
-                    "3.6mm", "optimization_plots",
-                    "19sections_6hclength_2hcmaxdensity_0overlap_300counter", 
-                    "data.pickle")
-(fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
-            final, flag) = retrieve_run_data(file)
+# file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
+#                     "3.5mm", "optimization_plots",
+#                     "19sections_6hclength_2hcmaxdensity_0overlap", 
+#                     "data.pickle")
+# (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
+#             final, flag) = retrieve_run_data(file)
 # print("fixed_densities: ", fixed_densities)
 # print("densities: ", densities)
 # print("fixed_lengths: ", fixed_lengths)
 # print("fixed_overlap: ", fixed_overlap)
 # print("guess: ", guess)
-print("final: ", final)
-print("flag: ", flag)
+# print("final: ", final)
+# print("flag: ", flag)
 
 
+fixed_densities:  [2]
+densities:  [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 0.5, 0.25, 0]
+fixed_lengths:  [6]
+fixed_overlap:  0
+final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
+         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.34065176,
+          136.20716456]
+
+discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        discretize(fixed_lengths, fixed_overlap)
+
+z = np.linspace(0, ideal.slower_length_val, 10000)
+y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+
+coil_winding, current_for_coils = \
+  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
+                                      fixed_lengths, np.round(final[0:-2]), 
+                                      final[-2], final[-1])
+total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, z)
+
+print(coil_winding)
+
+fig, ax = plt.subplots() 
+
+ax.plot(z, total_field, label="total field")
+
+
+for eta in range(0, 10):
+    slower_length_val, ideal_B_field = \
+        ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, 
+                                    eta * 0.01 + 0.45, 
+                                    ideal.initial_velocity_er, ideal.mu0_er, 
+                                    ideal.laser_detuning_er)
+        z = np.linspace(0, slower_length_val, 10000)
+        y_data = ideal.get_ideal_B_field(ideal_B_field, z)
+        ax.plot(z, y_data, label="eta={:2f}, RMSE={:3f}".format(eta * 0.01 + 0.45, rmse))
 
 
 
