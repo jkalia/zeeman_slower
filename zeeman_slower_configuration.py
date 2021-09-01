@@ -36,15 +36,20 @@ matplotlib.rcParams['font.family'] = 'STIXGeneral'
 # Adds coils to the end of the slower, gives the correct discretized ideal 
 # B field profile and slower discretization, and gives discretization to use
 # for plotting
-def discretize(fixed_lengths, fixed_overlap):
+def discretize(fixed_lengths, fixed_overlap, eta):
 
     new_coils = np.sum(fixed_lengths) - fixed_overlap
+    
+    slower_length_val, ideal_B_field = \
+        ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, 
+                                    eta, ideal.initial_velocity_er, 
+                                    ideal.mu0_er, ideal.laser_detuning_er)
 
     discretized_slower = \
         np.linspace(0, 
-            (ideal.slower_length_val 
-                - (ideal.slower_length_val % parameters.wire_width)), 
-            np.ceil(ideal.slower_length_val / parameters.wire_width).astype(int)
+            (slower_length_val 
+                - (slower_length_val % parameters.wire_width)), 
+            np.ceil(slower_length_val / parameters.wire_width).astype(int)
         )
     discretized_slower_temp = \
         (discretized_slower + (parameters.wire_width / 2))[:-1].copy()
@@ -55,11 +60,11 @@ def discretize(fixed_lengths, fixed_overlap):
     num_coils = len(discretized_slower_adjusted)
 
     ideal_B_field_adjusted = \
-        ideal.get_ideal_B_field(ideal.ideal_B_field, 
+        ideal.get_ideal_B_field(ideal_B_field, 
                                 discretized_slower_adjusted)
 
     z_long = \
-        np.linspace(0, (ideal.slower_length_val 
+        np.linspace(0, (slower_length_val 
                         + new_coils * parameters.wire_width), 
                     10000)
 
@@ -205,10 +210,10 @@ def retrieve_heatmap_data(file_path):
 
 # Wrapper for optimization
 def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
-                     z, y, guess, iterations, folder_location, counter):
+                     z, y, guess, iterations, eta, folder_location, counter):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
+        discretize(fixed_lengths, fixed_overlap, eta)
 
     # Data used for calculations of measures of goodness 
     B_field_range = (len(discretized_slower_adjusted) 
@@ -283,6 +288,7 @@ def run_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 ##############################################################################
 # Optimize without changing the coil winding, change the current only
+
 def residuals_current(guess, y, z, num_coils, fixed_densities, densities, 
                       fixed_lengths, coils):
     return y - solenoid.calculate_B_field_solenoid(z, num_coils, 
@@ -309,10 +315,10 @@ def optimizer_current(residuals_current, guess, x, y, iterations, num_coils,
 
 def run_optimization_current(fixed_densities, densities, fixed_lengths, 
                              fixed_overlap, coils, z, y, guess, iterations, 
-                             folder_location, counter):
+                             eta, folder_location, counter):
     
     discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
+        discretize(fixed_lengths, fixed_overlap, eta)
 
     # Data used for calculations of measures of goodness 
     B_field_range = (len(discretized_slower_adjusted) 
@@ -345,19 +351,24 @@ def run_optimization_current(fixed_densities, densities, fixed_lengths,
                           total_field_final[0:B_field_range])
     li_deviation = max_deviation(total_field_final, ideal_B_field_adjusted, 
                                  B_field_range)
+    av_li_deviation = average_deviation(total_field_final, 
+                                        ideal_B_field_adjusted, B_field_range)
 
-    # Plot title 
-    title = ("lc = {}, hc = {}, \n "
-        "fixed overlap = {}, RMSE = {} ({}), max Li deviation = {}, \n "
-        "optimizer flag = {}".format(final[-2], final[-1], fixed_overlap, 
-        rmse, rmse_label, li_deviation, flag))
+
+    title = ("lc = {:.3f}, hc = {:.3f}, eta = {:.4f},  \n "
+        "fixed overlap = {}, coil winding len = {}, RMSE = {:.3f} ({}), "
+        "max Li deviation = {:.3}, ave. li deviation = {:.3} \n "
+        "optimizer flag = {}".format(final[-2], final[-1], eta, fixed_overlap, 
+                                     len(coil_winding_final), rmse, 
+                                     rmse_label, li_deviation, 
+                                     av_li_deviation, flag))
 
     # Name folder 
     directory = \
-        "{}sections_{}hclength_{}hcmaxdensity_{}overlap_{}counter"\
+        "{}sections_{}hclength_{}hcmaxdensity_{}overlap_{:.4f}eta_{}counter"\
         "_current_only".format(
         len(densities), np.sum(fixed_lengths), np.amax(fixed_densities), 
-        fixed_overlap, counter)
+        fixed_overlap, eta, counter)
 
     file_path = os.path.join(folder_location, directory)
     if not os.path.exists(file_path):
@@ -372,14 +383,14 @@ def run_optimization_current(fixed_densities, densities, fixed_lengths,
                         title, file_path)
 
     data = (fixed_densities, densities, fixed_lengths, fixed_overlap, guess, 
-            final, flag)
+            final, flag, eta)
 
     file_name = "data.pickle"
     f = os.path.join(file_path, file_name)
 
     save_data(data, f)
 
-    return rmse, li_deviation, flag, final
+    return rmse, li_deviation, av_li_deviation, flag, final
 
 
 ##############################################################################
@@ -469,7 +480,7 @@ iterations = 100000
 
 # Arrays which define the solenoid configuration for the low current section. 
 densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-              0.5, 0.25, 0]
+             0.5, 0.25, 0]
 
 # Arrays which define the solenoid configuration for the high current section.
 fixed_densities = [2]
@@ -486,16 +497,15 @@ guess = [ 7.46286753e+00,  7.50127744e-05, -2.97577736e-08,  4.37936288e-07,
         1.14877925e+01,  6.51562247e+00,  1.10000000e+02,  3.04286283e+01,
         1.32986725e+02]
 
-
-discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
         
 counter = 506
         
 # rmse, li_deviation, av_li_deviation, flag, final = \
 #     run_optimization(fixed_densities, densities, fixed_lengths, 
-#                       fixed_overlap, z, y_data, guess, iterations, 
+#                       fixed_overlap, z, y_data, guess, iterations, ideal.eta_er, 
 #                       folder_location, counter)
+
+
 
 
 
@@ -539,7 +549,7 @@ counter = 506
 #             # Run optimization and collect data
 #             rmse, li_deviation, av_li_deviation, flag, final = \
 #                 run_optimization(fixed_densities, densities, fixed_lengths, 
-#                                   fixed_overlap, z, y_data, guess, iterations,
+#                                   fixed_overlap, z, y_data, guess, iterations, eta,
 #                                   folder_location, counter)
 
 #             print("rmse: ", rmse)   
@@ -574,7 +584,7 @@ counter = 506
 
 
 
-################################################################################
+###############################################################################
 
 # Unpickle data
 
@@ -595,47 +605,96 @@ counter = 506
 # print("final: ", final)
 # print("flag: ", flag)
 
+###############################################################################
 
-fixed_densities:  [2]
-densities:  [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 0.5, 0.25, 0]
-fixed_lengths:  [6]
-fixed_overlap:  0
-final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+# Best optimized result for 3.5mm
+# Trying to see if this winding works for some different eta value
+
+# Location to save data
+folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                               "zeeman_slower", "eta", 
+                               "optimization_plots")
+
+# Iterations for optimizer
+iterations = 50000
+counter = 0
+
+# Arrays which define the solenoid configuration for the low current section. 
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 
+             1, 0.5, 0.25, 0]
+
+# Arrays which define the solenoid configuration for the high current section. 
+fixed_densities = [2]
+fixed_lengths = [6]
+fixed_overlap = 0
+
+
+guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
-         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.34065176,
-          136.20716456]
-
-discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-        discretize(fixed_lengths, fixed_overlap)
+         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
+          1.28534803e+02]
+coils = guess[0:-2]
+current_guess = guess[-2::]
 
 z = np.linspace(0, ideal.slower_length_val, 10000)
-y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
-coil_winding, current_for_coils = \
-  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
-                                      fixed_lengths, np.round(final[0:-2]), 
-                                      final[-2], final[-1])
-total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, z)
+# Data points to collect
+eta_max = 100
 
-print(coil_winding)
+# Arrays to store data
+eta_arr = np.zeros(eta_max)
+av_li_deviation_arr = np.zeros(eta_max)
+li_deviation_arr = np.zeros(eta_max)
 
-fig, ax = plt.subplots() 
-
-ax.plot(z, total_field, label="total field")
-
-
-for eta in range(0, 10):
+for x in range(0, eta_max):
+    eta = x * 0.001 + 0.41
+    
+    # Have to recalculate these
     slower_length_val, ideal_B_field = \
         ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, 
-                                    eta * 0.01 + 0.45, 
-                                    ideal.initial_velocity_er, ideal.mu0_er, 
-                                    ideal.laser_detuning_er)
-        z = np.linspace(0, slower_length_val, 10000)
-        y_data = ideal.get_ideal_B_field(ideal_B_field, z)
-        ax.plot(z, y_data, label="eta={:2f}, RMSE={:3f}".format(eta * 0.01 + 0.45, rmse))
+                                    eta, ideal.initial_velocity_er, 
+                                    ideal.mu0_er, ideal.laser_detuning_er)
+    z = np.linspace(0, slower_length_val, 10000)
+    y_data = ideal.get_ideal_B_field(ideal_B_field, z)
+    
+    rmse, li_deviation, av_li_deviation, flag, final = \
+        run_optimization_current(fixed_densities, densities, fixed_lengths, 
+                                  fixed_overlap, coils, z, y_data, 
+                                  current_guess, iterations, eta, 
+                                  folder_location, counter)
+    eta_arr[x] = eta
+    av_li_deviation_arr[x] = av_li_deviation
+    li_deviation_arr[x] = li_deviation
 
+
+fig, ax = plt.subplots()
+fig1, ax1 = plt.subplots()
+fig2, ax2 = plt.subplots()
+
+ax.plot(eta_arr, av_li_deviation_arr, label="average li deviation")
+ax.plot(eta_arr, li_deviation_arr, label="max li deviation")
+
+ax1.plot(eta_arr, av_li_deviation_arr, label="average li deviation")
+
+ax2.plot(eta_arr, li_deviation_arr, label="max li deviation")
+
+ax.set_xlabel("eta")
+ax.legend()
+ax1.set_xlabel("eta")
+ax1.legend()
+ax2.set_xlabel("eta")
+ax2.legend()
+
+
+file_path = os.path.join(folder_location, "eta_plot.pdf")
+fig.savefig(file_path, bbox_inches="tight")
+file_path = os.path.join(folder_location, "av_plot.pdf")
+fig1.savefig(file_path, bbox_inches="tight")
+file_path = os.path.join(folder_location, "dev_plot.pdf")
+fig2.savefig(file_path, bbox_inches="tight")
 
 
 
