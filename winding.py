@@ -11,10 +11,8 @@ import os
 
 import ideal_field as ideal
 import coil_configuration as coil 
-import solenoid_configuration as solenoid 
 import parameters
-import plotting
-import heatmap_script as heatmap
+# import heatmap_script as heatmap
 import zeeman_slower_configuration as zs
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
@@ -54,61 +52,193 @@ coil_winding, current_for_coils = \
   coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
                                      fixed_lengths, np.round(final[0:-2]), 
                                      final[-2], final[-1])
+total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
+                                          z_result)
 
-# total_length = coil.calculate_total_length(coil_winding)
-# high_current_length = coil.calculate_high_current_section_length(coil_winding, 
-#     current_for_coils)
-# low_current_length = coil.calculate_low_current_section_length(coil_winding, 
-#     current_for_coils)
+# Calculate the length of each section and additional metrics from the
+# winding
+# All sections are 0 indexed
+# Section 3: 6-62
+# section 2: 63-98
+# Section 1: 99-112
+# Section 4: 113-118
 
-# total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
-#                                           z_result)
+print("total length: ", coil.calculate_total_length(coil_winding))
+print("section 3 length: ", coil.calculate_section_length(coil_winding, current_for_coils, 6, 62))
+print("section 2 length: ", coil.calculate_section_length(coil_winding, current_for_coils, 63, 98))
+print("section 1 length: ", coil.calculate_section_length(coil_winding, current_for_coils, 99, 112))
+print("section 4 length: ", coil.calculate_section_length(coil_winding, current_for_coils, 113, 118))
 
-# Make schematic of Zeeman slower
-fig, ax = plt.subplots()
+section0 = coil_winding[0:6]
+section3 = coil_winding[6:63]
+section2 = coil_winding[63:99]
+section1 = coil_winding[99:113]
+section4 = coil_winding[113:119]
 
-# Turn into a list of x positions and radii
-for position, coil_num in np.ndenumerate(coil_winding):
+section0_current = current_for_coils[0:6]
+section3_current = current_for_coils[6:63]
+section2_current = current_for_coils[63:99]
+section1_current = current_for_coils[99:113]
+section4_current = current_for_coils[113:119]
 
-    axial_position = (position[0] * parameters.wire_width 
+
+
+
+# This function calculates the total B field from the coil winding with the 
+# half gap in between sections, and works with partial integer values
+def calculate_B_field_coil_gap(coil_winding, current_for_coils, discretization, 
+                           sections):
+
+    # Starts total B field to zero initially
+    total_B_field = np.zeros(len(discretization))
+
+    for position, coil_num in np.ndenumerate(coil_winding):
+        
+        axial_position =  (position[0] * parameters.wire_width 
                            + parameters.wire_width / 2)
+        if position[0] > sections[0]:
+            axial_position += parameters.wire_width / 2 
+        if position[0] > sections[1]:
+            axial_position += parameters.wire_width / 2 
+        if position[0] > sections[2]:
+            axial_position += parameters.wire_width / 2 
 
-    # get integer number of coils
-    full_coils = np.ceil(coil_num)
+        # get integer number of coils
+        full_coils = np.floor(coil_num)
 
-    for c in range(full_coils.astype(int)):
-        radial_position = c + 1
+        for c in range(full_coils.astype(int)):
+            radial_position = ((parameters.slower_diameter / 2) 
+                               + (parameters.wire_height / 2) 
+                               + c * parameters.wire_height)
+            current = current_for_coils[position[0]]
+            field_from_single_coil = \
+                coil.B_z_single_coil(current, radial_position, axial_position) 
+            total_B_field += field_from_single_coil(discretization)
 
-        print(radial_position, axial_position)
+        # get partial coil winding
+        if coil_num != full_coils:
 
-        # Add points to scatter plot
-        if radial_position < coil_num:
-            ax.scatter(axial_position, radial_position, s=20, marker="s", facecolors="None", edgecolors="b")
+            partial_winding = coil_num - np.floor(coil_num)
+            c = np.ceil(coil_num).astype(int)
+            radial_position = ((parameters.slower_diameter / 2) 
+                               + (parameters.wire_height / 2) 
+                               + c * parameters.wire_height)
+            current = current_for_coils[position[0]] * partial_winding
+            field_from_single_coil = \
+                coil.B_z_single_coil(current, radial_position, axial_position)
+            total_B_field += field_from_single_coil(discretization)
 
-        elif (radial_position - coil_num) == 0.5:
-            ax.scatter(axial_position, radial_position, s=20, marker="o", facecolors="None", edgecolors="b")
+    total_B_field = total_B_field * 10**4
 
-        elif (radial_position - coil_num) == 0.75:
-            ax.scatter(axial_position, radial_position, s=20, marker="D", facecolors="None", edgecolors="b")
-
-        else:
-            ax.scatter(axial_position, radial_position, s=20, marker="s", facecolors="None", edgecolors="b")
-
-
-fig.set_size_inches(14, 2)
-
-ax.set_xlabel("Position (m)")
-ax.set_ylabel("Layer #")
-ax.set_title("ZS Schematic")
-
-fig.savefig(os.path.join(folder_location, "schematic.pdf"), bbox_inches="tight")
-
+    return total_B_field
 
 
+sections = [62, 98, 112]
+total_field_gap = calculate_B_field_coil_gap(coil_winding, current_for_coils, 
+                                             z_result, sections)
+
+
+coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+       0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+       1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+       1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+       1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+       2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+       2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+       3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+       3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+       6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+       7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+
+
+current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 , 160, 160, 160, 160, 160, 160]
+
+
+total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, current_for_coils_edited, z_result, sections)
+
+
+# fig, ax = plt.subplots()
+
+# ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--",)
+# ax.plot(z_result, total_field, label="coil winding", color="k", linestyle="-")
+# ax.plot(z_result, total_field_gap, label="coil winding gapped", color="g", linestyle="-")
+# ax.plot(z_result, total_field_edited, label="coil winding gapped edited", color="b", linestyle="-")
+
+# ax.set_xlabel("Position (m)")
+# ax.set_ylabel("B field (G)")
+# ax.legend()
+
+# fig.set_size_inches(12, 8)
+# fig.savefig(os.path.join(folder_location, "gapped_winding.pdf"), bbox_inches="tight")
 
 
 
+# # Make schematic of Zeeman slower
+# fig, ax = plt.subplots()
 
+# # Turn into a list of x positions and radii
+# for position, coil_num in np.ndenumerate(coil_winding_edited):
+
+#     axial_position = (position[0] * parameters.wire_width 
+#                             + parameters.wire_width / 2)
+
+#     # get integer number of coils
+#     full_coils = np.ceil(coil_num)
+
+#     for c in range(full_coils.astype(int)):
+#         radial_position = c + 1
+
+#         print(radial_position, axial_position)
+
+#         # Add points to scatter plot
+#         if radial_position < coil_num:
+#             ax.scatter(axial_position, radial_position, s=20, marker="s", facecolors="None", edgecolors="b")
+
+#         elif (radial_position - coil_num) == 0.5:
+#             ax.scatter(axial_position, radial_position, s=20, marker="o", facecolors="None", edgecolors="b")
+
+#         elif (radial_position - coil_num) == 0.75:
+#             ax.scatter(axial_position, radial_position, s=20, marker="D", facecolors="None", edgecolors="b")
+
+#         else:
+#             ax.scatter(axial_position, radial_position, s=20, marker="s", facecolors="None", edgecolors="b")
+
+
+# fig.set_size_inches(14, 2)
+
+# ax.set_xlabel("Position (m)")
+# ax.set_ylabel("Layer #")
+# ax.set_title("ZS Schematic")
+
+# fig.savefig(os.path.join(folder_location, "schematic_edited.pdf"), bbox_inches="tight")
 
 
 

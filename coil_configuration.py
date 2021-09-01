@@ -213,7 +213,7 @@ def calculate_high_current_section_length(coil_winding, current_for_coils):
 
 
 # Calculates the length of the section  
-# Inclusive on the end point
+# Inclusive on both the start and the end point
 def calculate_section_length(coil_winding, current_for_coils, start_point, 
                              end_point):
     
