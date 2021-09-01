@@ -45,7 +45,7 @@ def get_laser_detuning(capture_velocity, k):
 # Er parameters for ZS
 initial_velocity_er = 470                                           # [m/s]
 final_velocity_er = 5
-eta_er = 0.5
+eta_er = 0.486
 mu0_er = 1.13719 * uB
 laser_detuning_er = round(get_laser_detuning(initial_velocity_er, k_er), -6)
 print(laser_detuning_er)

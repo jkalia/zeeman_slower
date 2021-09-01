@@ -472,11 +472,12 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 # Location to save data
 folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                               "zeeman_slower", "3.6mm", 
+                               "zeeman_slower", "3.5mm", 
                                "optimization_plots")
 
 # Iterations for optimizer
 iterations = 100000
+counter = 0
 
 # Arrays which define the solenoid configuration for the low current section. 
 densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
@@ -490,23 +491,29 @@ fixed_overlap = 0
 z = np.linspace(0, ideal.slower_length_val, 10000)
 y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
-guess = [ 7.46286753e+00,  7.50127744e-05, -2.97577736e-08,  4.37936288e-07,
-        2.62536916e-07,  6.71546909e+00,  8.26635769e+00,  7.27954550e+00,
-        9.26884072e+00,  1.01511516e+01,  1.15243033e+01,  1.03045138e+01,
-        4.30488331e+00, -1.90132265e-08, -1.69062861e-07,  1.15922271e+01,
-        1.14877925e+01,  6.51562247e+00,  1.10000000e+02,  3.04286283e+01,
-        1.32986725e+02]
 
-        
-counter = 506
-        
+guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
+         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
+          130.84645074]
+coils = guess[0:-2]
+current_guess = guess[-2::]
+
+    
+# rmse, li_deviation, av_li_deviation, flag, final = \
+#         run_optimization_current(fixed_densities, densities, fixed_lengths, 
+#                                  fixed_overlap, coils, z, y_data, 
+#                                  current_guess, iterations, ideal.eta_er, 
+#                                  folder_location, counter)
+
+
+
 # rmse, li_deviation, av_li_deviation, flag, final = \
 #     run_optimization(fixed_densities, densities, fixed_lengths, 
 #                       fixed_overlap, z, y_data, guess, iterations, ideal.eta_er, 
 #                       folder_location, counter)
-
-
-
 
 
 ###############################################################################
@@ -609,94 +616,93 @@ counter = 506
 
 # Best optimized result for 3.5mm
 # Trying to see if this winding works for some different eta value
+# It does! eta_er = 0.486
 
-# Location to save data
-folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                               "zeeman_slower", "eta", 
-                               "optimization_plots")
+# # Location to save data
+# folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                                "zeeman_slower", "eta", 
+#                                "optimization_plots")
 
-# Iterations for optimizer
-iterations = 50000
-counter = 0
+# # Iterations for optimizer
+# iterations = 50000
+# counter = 0
 
-# Arrays which define the solenoid configuration for the low current section. 
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 
-             1, 0.5, 0.25, 0]
+# # Arrays which define the solenoid configuration for the low current section. 
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 
+#              1, 0.5, 0.25, 0]
 
-# Arrays which define the solenoid configuration for the high current section. 
-fixed_densities = [2]
-fixed_lengths = [6]
-fixed_overlap = 0
+# # Arrays which define the solenoid configuration for the high current section. 
+# fixed_densities = [2]
+# fixed_lengths = [6]
+# fixed_overlap = 0
 
 
-guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
-          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
-          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
-         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
-         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
-          1.28534803e+02]
-coils = guess[0:-2]
-current_guess = guess[-2::]
+# guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+#           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+#           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+#          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
+#          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  2.99625224e+01,
+#           1.28534803e+02]
+# coils = guess[0:-2]
+# current_guess = guess[-2::]
 
-z = np.linspace(0, ideal.slower_length_val, 10000)
-y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+# z = np.linspace(0, ideal.slower_length_val, 10000)
+# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
-# Data points to collect
-eta_max = 100
+# # Data points to collect
+# eta_max = 100
 
-# Arrays to store data
-eta_arr = np.zeros(eta_max)
-av_li_deviation_arr = np.zeros(eta_max)
-li_deviation_arr = np.zeros(eta_max)
+# # Arrays to store data
+# eta_arr = np.zeros(eta_max)
+# av_li_deviation_arr = np.zeros(eta_max)
+# li_deviation_arr = np.zeros(eta_max)
 
-for x in range(0, eta_max):
-    eta = x * 0.001 + 0.41
+# for x in range(0, eta_max):
+#     eta = x * 0.001 + 0.41
     
-    # Have to recalculate these
-    slower_length_val, ideal_B_field = \
-        ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, 
-                                    eta, ideal.initial_velocity_er, 
-                                    ideal.mu0_er, ideal.laser_detuning_er)
-    z = np.linspace(0, slower_length_val, 10000)
-    y_data = ideal.get_ideal_B_field(ideal_B_field, z)
+#     # Have to recalculate these
+#     slower_length_val, ideal_B_field = \
+#         ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, 
+#                                     eta, ideal.initial_velocity_er, 
+#                                     ideal.mu0_er, ideal.laser_detuning_er)
+#     z = np.linspace(0, slower_length_val, 10000)
+#     y_data = ideal.get_ideal_B_field(ideal_B_field, z)
     
-    rmse, li_deviation, av_li_deviation, flag, final = \
-        run_optimization_current(fixed_densities, densities, fixed_lengths, 
-                                  fixed_overlap, coils, z, y_data, 
-                                  current_guess, iterations, eta, 
-                                  folder_location, counter)
-    eta_arr[x] = eta
-    av_li_deviation_arr[x] = av_li_deviation
-    li_deviation_arr[x] = li_deviation
+#     rmse, li_deviation, av_li_deviation, flag, final = \
+#         run_optimization_current(fixed_densities, densities, fixed_lengths, 
+#                                   fixed_overlap, coils, z, y_data, 
+#                                   current_guess, iterations, eta, 
+#                                   folder_location, counter)
+#     eta_arr[x] = eta
+#     av_li_deviation_arr[x] = av_li_deviation
+#     li_deviation_arr[x] = li_deviation
 
 
-fig, ax = plt.subplots()
-fig1, ax1 = plt.subplots()
-fig2, ax2 = plt.subplots()
+# fig, ax = plt.subplots()
+# fig1, ax1 = plt.subplots()
+# fig2, ax2 = plt.subplots()
 
-ax.plot(eta_arr, av_li_deviation_arr, label="average li deviation")
-ax.plot(eta_arr, li_deviation_arr, label="max li deviation")
+# ax.plot(eta_arr, av_li_deviation_arr, label="average li deviation")
+# ax.plot(eta_arr, li_deviation_arr, label="max li deviation")
 
-ax1.plot(eta_arr, av_li_deviation_arr, label="average li deviation")
+# ax1.plot(eta_arr, av_li_deviation_arr, label="average li deviation")
 
-ax2.plot(eta_arr, li_deviation_arr, label="max li deviation")
+# ax2.plot(eta_arr, li_deviation_arr, label="max li deviation")
 
-ax.set_xlabel("eta")
-ax.legend()
-ax1.set_xlabel("eta")
-ax1.legend()
-ax2.set_xlabel("eta")
-ax2.legend()
-
-
-file_path = os.path.join(folder_location, "eta_plot.pdf")
-fig.savefig(file_path, bbox_inches="tight")
-file_path = os.path.join(folder_location, "av_plot.pdf")
-fig1.savefig(file_path, bbox_inches="tight")
-file_path = os.path.join(folder_location, "dev_plot.pdf")
-fig2.savefig(file_path, bbox_inches="tight")
+# ax.set_xlabel("eta")
+# ax.legend()
+# ax1.set_xlabel("eta")
+# ax1.legend()
+# ax2.set_xlabel("eta")
+# ax2.legend()
 
 
+# file_path = os.path.join(folder_location, "eta_plot.pdf")
+# fig.savefig(file_path, bbox_inches="tight")
+# file_path = os.path.join(folder_location, "av_plot.pdf")
+# fig1.savefig(file_path, bbox_inches="tight")
+# file_path = os.path.join(folder_location, "dev_plot.pdf")
+# fig2.savefig(file_path, bbox_inches="tight")
 
 
 ################################################################################
