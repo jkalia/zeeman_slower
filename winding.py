@@ -192,6 +192,20 @@ s2_power = parameters.power(section0_current[0], s2_length)
 s1_power = parameters.power(section0_current[0], s1_length)
 s4_power = parameters.power(section4_current[0], s4_length)
 
+s3_voltage = parameters.voltage(section0_current[0], s3_length)
+s2_voltage = parameters.voltage(section0_current[0], s2_length)
+s1_voltage = parameters.voltage(section0_current[0], s1_length)
+s4_voltage = parameters.voltage(section4_current[0], s4_length)
+
+s3_temp_change = parameters.temp_increase_per_minute(section0_current[0], 
+                                                     s3_length)
+s2_temp_change = parameters.temp_increase_per_minute(section0_current[0], 
+                                                     s2_length)
+s1_temp_change = parameters.temp_increase_per_minute(section0_current[0], 
+                                                     s1_length)
+s4_temp_change = parameters.temp_increase_per_minute(section4_current[0], 
+                                                     s4_length)
+
 print("total length: ", coil.calculate_total_length(coil_winding))
 print("section 3 length: ", s3_length)
 print("section 2 length: ", s2_length)
@@ -207,6 +221,19 @@ print("section 3 power: ", s3_power)
 print("section 2 power: ", s2_power)
 print("section 1 power: ", s1_power)
 print("section 4 power: ", s4_power)
+
+print("section 3 voltage: ", s3_voltage)
+print("section 2 voltage: ", s2_voltage)
+print("section 1 voltage: ", s1_voltage)
+print("section 4 voltage: ", s4_voltage)
+
+print("section 3 temp change: ", s3_temp_change)
+print("section 2 temp change: ", s2_temp_change)
+print("section 1 temp change: ", s1_temp_change)
+print("section 4 temp change: ", s4_temp_change)
+
+
+
 
 
 # fig, ax = plt.subplots()
