@@ -13,7 +13,7 @@ slower_diameter = 0.0127 * 2                                # [m]
 wire_width = 0.0036                                         # [m]
 wire_height = 0.0036                                        # [m]
 n = 1 / wire_width                                          # [turns per m]
-length_to_MOT_from_ZS = 100.5 / 1000                        # [m]
+length_to_MOT_from_ZS = 101 / 1000                          # [m]
 
 
 resistivity_Cu = 1.68 * 10**(-8)                            # [Ohm m]
