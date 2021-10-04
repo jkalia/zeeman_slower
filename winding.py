@@ -86,17 +86,14 @@ fixed_overlap = 0
 final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
-         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
+         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00, 
          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
           130.84645074]
 
 discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         zs.discretize(fixed_lengths, fixed_overlap, ideal.eta_er)
 
-z_result = np.linspace(0, ideal.slower_length_val, 10000)
-
 z_result = np.linspace(0, ideal.slower_length_val+.1, 10000) 
-
 y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
 
 coil_winding, current_for_coils = \
@@ -153,9 +150,6 @@ current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.808663
         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
         30.8086634 , 160, 160, 160, 160, 160, 160]
 
-
-
-
 total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, 
                                                 current_for_coils_edited, 
                                                 z_result, sections)
@@ -168,7 +162,6 @@ total_field_edited = calculate_B_field_coil_gap(coil_winding_edited,
 # section 2: 63-98
 # Section 1: 99-112
 # Section 4: 113-118
-
 
 
 section0 = coil_winding_edited[0:6]
@@ -245,33 +238,33 @@ print("section 4 temp change: ", s4_temp_change)
 #                                                    z_result)
 
 
-fig, ax = plt.subplots()
-ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--")
-ax.plot(z_result, total_field_edited, label="section B field")
-
-ax.set_xlabel("Position (m)")
-ax.set_ylabel("B field (G)")
-ax.legend()
-
-fig.set_size_inches(12, 8)
-fig.savefig(os.path.join(folder_location, "section_3.pdf"), bbox_inches="tight")
-
-
-
-
 # fig, ax = plt.subplots()
-
-
-# ax.plot(z_result, total_field, label="coil winding", color="k", linestyle="-")
-# ax.plot(z_result, total_field_gap, label="coil winding gapped", color="g", linestyle="-")
-# ax.plot(z_result, total_field_edited, label="coil winding gapped edited", color="b", linestyle="-")
+# ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--")
+# ax.plot(z_result, total_field_edited, label="section B field")
 
 # ax.set_xlabel("Position (m)")
 # ax.set_ylabel("B field (G)")
 # ax.legend()
 
 # fig.set_size_inches(12, 8)
-# fig.savefig(os.path.join(folder_location, "gapped_winding.pdf"), bbox_inches="tight")
+# fig.savefig(os.path.join(folder_location, "section_3.pdf"), bbox_inches="tight")
+
+
+
+
+fig, ax = plt.subplots()
+
+ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--")
+ax.plot(z_result, total_field, label="coil winding", color="k", linestyle="-")
+ax.plot(z_result, total_field_gap, label="coil winding gapped", color="g", linestyle="-")
+ax.plot(z_result, total_field_edited, label="coil winding gapped edited", color="b", linestyle="-")
+
+ax.set_xlabel("Position (m)")
+ax.set_ylabel("B field (G)")
+ax.legend()
+
+fig.set_size_inches(12, 8)
+fig.savefig(os.path.join(folder_location, "gapped_winding.pdf"), bbox_inches="tight")
 
 
 
@@ -313,6 +306,11 @@ fig.savefig(os.path.join(folder_location, "section_3.pdf"), bbox_inches="tight")
 # ax.set_title("ZS Schematic")
 
 # fig.savefig(os.path.join(folder_location, "schematic_edited.pdf"), bbox_inches="tight")
+
+
+
+# Import data from 10/4/21 measurements
+
 
 
 
