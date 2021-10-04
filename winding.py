@@ -94,6 +94,9 @@ discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
         zs.discretize(fixed_lengths, fixed_overlap, ideal.eta_er)
 
 z_result = np.linspace(0, ideal.slower_length_val, 10000)
+
+z_result = np.linspace(0, ideal.slower_length_val+.1, 10000) 
+
 y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
 
 coil_winding, current_for_coils = \
@@ -149,6 +152,9 @@ current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.808663
         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
         30.8086634 , 160, 160, 160, 160, 160, 160]
+
+
+
 
 total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, 
                                                 current_for_coils_edited, 
@@ -234,11 +240,28 @@ print("section 4 temp change: ", s4_temp_change)
 
 
 
+# total_field_edited_3 = coil.calculate_B_field_coil(section0+section3+section2+section1+section4, 
+#                                                    np.concatenate((section0_current, np.multiply(section3_current,1),np.multiply(section2_current,1),np.multiply(section1_current,1),np.multiply(section4_current,1))), 
+#                                                    z_result)
+
+
+fig, ax = plt.subplots()
+ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--")
+ax.plot(z_result, total_field_edited, label="section B field")
+
+ax.set_xlabel("Position (m)")
+ax.set_ylabel("B field (G)")
+ax.legend()
+
+fig.set_size_inches(12, 8)
+fig.savefig(os.path.join(folder_location, "section_3.pdf"), bbox_inches="tight")
+
+
 
 
 # fig, ax = plt.subplots()
 
-# ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--",)
+
 # ax.plot(z_result, total_field, label="coil winding", color="k", linestyle="-")
 # ax.plot(z_result, total_field_gap, label="coil winding gapped", color="g", linestyle="-")
 # ax.plot(z_result, total_field_edited, label="coil winding gapped edited", color="b", linestyle="-")

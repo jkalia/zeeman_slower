@@ -177,27 +177,39 @@ fig1.savefig(os.path.join(file_path, "gradient_no_comp.pdf"),
 # We will reference the compensation coils off of the MOT location. 
 # Absolute minimum clearance in the vertical axis is 170mm
 
-coil1_hc = coil.B_total_rect_coil(high_current, 160 / 1000, 
-                                  (450 / 2) / 1000, 
+coil1_hc = coil.B_total_rect_coil(high_current, 135 / 1000, 
+                                  (500 / 2) / 1000, 
                                   MOT_distance - (65 / 1000), z)
 coil2_hc = coil.B_total_single_coil(-1 * high_current, 
                                     65 / 1000 + parameters.wire_width / 2, 
-                                    MOT_distance + (113 / 1000) + parameters.wire_width / 2, z)
+                                    MOT_distance + (110 / 1000) + parameters.wire_width / 2, z)
+
+# TODO: try 2 on pump tower side and still only 1 on ZS side 
 
 
-coil1_lc = coil.B_total_rect_coil(low_current, 160 / 1000, 
+
+position1 = 0
+position2 = position1 + parameters.wire_height
+
+coil1_lc = coil.B_total_rect_coil(low_current * 0, 160 / 1000, 
                                   (450 / 2) / 1000, 
                                   MOT_distance - (65 / 1000), z)
 coil2_lc = coil.B_total_single_coil(-1 * low_current * 0, 
                                     60 / 1000 + parameters.wire_width / 2, 
                                     MOT_distance + (113 / 1000) + parameters.wire_width / 2, z)
 
+
+comp_lc = coil2_lc + coil1_lc
+B_field = total_field_total + comp_lc
+B_field_lc = total_field_lc + comp_lc
+
+
 comp_hc = coil2_hc + coil1_hc
 B_field = total_field_total + comp_hc
 B_field_hc = total_field_hc + comp_hc
 
 zprime_comp = np.gradient(B_field)
-# zprime_comp_lc = np.gradient(comp_lc)
+zprime_comp_lc = np.gradient(B_field_lc)
 zprime_comp_hc = np.gradient(B_field_hc)
 
 
@@ -280,36 +292,41 @@ fig5, ax5 = plt.subplots()
 
 ax5.set_xlabel("Position (m)")
 ax5.set_ylabel("B field (Gauss)", color="tab:red")
-# ax5.plot(z, total_field_total, label="B field total (no comp)", color="indianred")
-
-# ax5.plot(z, total_field_hc, label="B field hc (no comp)", color="rosybrown")
-ax5.plot(z, B_field_hc , label="B field hc", color="purple")
-ax5.plot(z, coil1_hc , label="coil 1 hc", color="salmon")
-ax5.plot(z, coil2_hc , label="coil 2 hc", color="red")
-
-# ax5.plot(z, total_field_lc, label="B field lc (no comp)", color="rosybrown")
-
-
-
-
-
+ax4 = ax5.twinx()
+ax4.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")
 ax5.plot(z, y, linestyle="--", color="k")
 ax5.axvline(x=MOT_distance, linestyle="--", color="k", 
             label="MOT location = {}".format(MOT_distance))
+
+
+# hc set
+# ax5.plot(z, total_field_hc, label="B field hc (no comp)", color="rosybrown")
+# ax4.plot(z, zprime_hc*100, label="hc gradient (no comp)", color="lightsteelblue")
+ax5.plot(z, B_field_hc , label="B field hc", color="purple")
+ax5.plot(z, coil1_hc , label="coil 1 hc", color="salmon")
+ax5.plot(z, coil2_hc , label="coil 2 hc", color="red")
+ax4.plot(z, zprime_comp_hc*100, label="hc gradient", color="blue")
+
+
+# # lc set
+# # ax5.plot(z, total_field_lc, label="B field lc (no comp)", color="rosybrown")
+# # ax4.plot(z, zprime_lc*100, label="lc gradient (no comp)", color="cornflowerblue")
+# ax5.plot(z, B_field_lc , label="B field lc", color="purple")
+# ax5.plot(z, coil1_lc , label="coil 1 lc", color="salmon")
+# ax5.plot(z, coil2_lc , label="coil 2 lc", color="red")
+# ax4.plot(z, zprime_comp_lc*100, label="lc gradient", color="cornflowerblue")
+
+
+# # total set
+# ax5.plot(z, total_field_total, label="B field total (no comp)", color="indianred")
+# ax4.plot(z, zprime_total*100, label="total gradient (no comp)", color="royalblue")
+
+
+
+
 ax5.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
 ax5.set_ylim(-10, 10)
 ax5.tick_params(axis="y", labelcolor="tab:red")
-
-ax4 = ax5.twinx()  # instantiate a second axes that shares the same x-axis
-ax4.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
-# ax4.plot(z, zprime_total*100, label="total gradient (no comp)", color="royalblue")
-# ax4.plot(z, zprime_lc*100, label="lc gradient (no comp)", color="cornflowerblue")
-# ax4.plot(z, zprime_hc*100, label="hc gradient (no comp)", color="lightsteelblue")
-
-# ax4.plot(z, zprime_comp*100, label="total gradient", color="purple")
-# # ax4.plot(z, zprime_comp_lc*100, label="lc gradient", color="cornflowerblue")
-ax4.plot(z, zprime_comp_hc*100, label="hc gradient", color="blue")
-
 ax4.set_ylim(-5, 5)
 ax4.tick_params(axis="y", labelcolor="tab:blue")
 
