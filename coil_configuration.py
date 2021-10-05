@@ -26,6 +26,10 @@ def B_z_single_coil(current, radius, z_location):
                       (2 * ((radius**2 + (z_location - z)**2)**(3/2))))
 
 
+def B_total_single_coil(current, radius, z_location, discretization):
+    total_B_field = B_z_single_coil(current, radius, z_location)
+    return total_B_field(discretization) * 10**4
+
 # This function gives the coil winding from a discretized array 
 # lengths = [l0, l1, ...] and densities = [d0, d1, ...], where l0 indicates the 
 # the length of the last solenoid with thickness (or number of coils) d0. 
@@ -268,7 +272,7 @@ def B_z_rect_coil(current, lx, ly, z_location):
 
 def B_total_rect_coil(current, lx, ly, z_location, discretization):
     total_B_field = B_z_rect_coil(current, lx, ly, z_location)
-    return total_B_field(discretization)
+    return total_B_field(discretization) * 10**4
     
 
 

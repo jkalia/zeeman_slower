@@ -768,30 +768,55 @@ current_guess = guess[-2::]
 
 
 ##############################################################################
-# TODO: Put half gaps in coil winding
-# TODO: Post-processing to get rid of slight deivations in B field caused by
-# these gaps 
+# Final coil winding! We have entered in half gaps to reflect accuracy of
+# how the physical winding occurs and then done manual post-processing to 
+# get rid of slight deviations in B field caused by said gaps. See winding.py
+# for this. 
+# eta = 0.486 if wire_width = wire_height = 0.0036
+
+coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+       0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+       1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+       1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+       1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+       2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+       2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+       3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+       3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+       6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+       7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+
+current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 , 160, 160, 160, 160, 160, 160]
 
 
-##############################################################################
-# TODO: Calculate resistance, temperature change per minute, length, of each
-# section
-
-
-
-
-# Total B field
-# fig, ax = plt.subplots()
-
-# ax.plot(z, y, label="ideal B field", color="tab:orange")
-# ax.plot(z, total_field, label="calculated B field",  color="royalblue")
-
-# ax.legend()
-
-# fig.set_size_inches(12, 8)
-# fig.savefig(os.path.join(file_path, "total_field_no_comp.pdf"), bbox_inches="tight")
-
-# plt.show()
 
 
 ################################################################################
@@ -961,7 +986,9 @@ current_guess = guess[-2::]
 
 
 ################################################################################
-# # Plot simulations
+# Simulate atom motion through ZS 
+
+# Plot simulations
 # fig, ax = plt.subplots()
 
 # # Simulation of atom in ideal B field
@@ -993,61 +1020,6 @@ current_guess = guess[-2::]
 # # fig.savefig(file_path, bbox_inches="tight")
 
 # plt.show()
-
-
-
-
-
-# coils_used = np.count_nonzero(coil_winding)
-
-# MOT_distance = (len(coil_winding) * parameters.wire_width 
-#                 + parameters.length_to_MOT_from_ZS)
-
-# z = np.linspace(0, MOT_distance + .1, 10000)
-# y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
-
-# total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, z)
-# zprime = np.gradient(total_field)
-
-
-# # fig, ax = plt.subplots()
-# fig1, ax1 = plt.subplots()
-
-
-# # ax.plot(z, total_field, label="calculated B field")
-# # ax.plot(z, y, label="ideal B field")
-# # ax.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
-# # ax.legend()
-
-# # plt.show()
-
-
-# ax1.set_xlabel("Position (m)")
-# ax1.set_ylabel("B field (Gauss)", color="tab:red")
-# ax1.plot(z, total_field, color="tab:red")
-# ax1.plot(z, y, linestyle="--", color="tab:red")
-# ax1.axvline(x=MOT_distance, linestyle="--", color="k", label="MOT location")
-# ax1.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
-# ax1.set_ylim(0, 10)
-# ax1.tick_params(axis="y", labelcolor="tab:red")
-
-
-# ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-# ax2.set_ylabel("Gradient (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
-# ax2.plot(z, zprime*100, color="tab:blue")
-# ax2.set_ylim(-5, 0)
-# ax2.tick_params(axis="y", labelcolor="tab:blue")
-
-# ax1.legend()
-# fig1.tight_layout()
-
-# path_name = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-#                          "zeeman_slower", "figs", "gradient.pdf")
-# plt.show()
-
-# fig1.savefig(path_name)
-
-
 
 
 
