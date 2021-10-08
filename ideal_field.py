@@ -101,7 +101,13 @@ def get_slower_parameters(k, linewidth, m, eta, capture_velocity, mu0,
 # Outputs in Gauss
 def get_ideal_B_field(ideal_B_field, discretization):
     B_field = ideal_B_field(discretization) * -1 * 10**4
-    return np.nan_to_num(B_field)
+    B_field = np.nan_to_num(B_field)
+    
+    for i, mag in np.ndenumerate(B_field):
+        if B_field[i] < 0:
+            B_field[i] = 0
+    
+    return B_field
 
 
 # Obtain B field for increasing-field ZS 

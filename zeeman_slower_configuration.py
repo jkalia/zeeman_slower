@@ -26,8 +26,8 @@ import solenoid_configuration as solenoid
 import parameters
 import plotting
 # import heatmap_script as heatmap
-import simulate
-import atom 
+# import simulate
+# import atom 
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
@@ -774,47 +774,47 @@ current_guess = guess[-2::]
 # for this. 
 # eta = 0.486 if wire_width = wire_height = 0.0036
 
-coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
-       0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
-       1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
-       1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
-       1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
-       2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
-       2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
-       3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
-       3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
-       6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
-       7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+# coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+#        0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+#        1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+#        1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+#        1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+#        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+#        2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+#        3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+#        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+#        6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+#        7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
 
-current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 , 160, 160, 160, 160, 160, 160]
+# current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 , 160, 160, 160, 160, 160, 160]
 
 
 
@@ -1135,7 +1135,118 @@ current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.808663
 # # plt.show()
 
 
+###############################################################################
+# Fixing eta, hc, and lc for the real data
 
 
+def residuals_data(params, y, x):
+    return y - model_data(x, params)
 
 
+def model_data(x, params):
+    slower_parameters = ideal.get_slower_parameters(ideal.k_er, 
+                                                    ideal.linewidth_er, 
+                                                    ideal.m_er, params[0], 
+                                                    ideal.initial_velocity_er, 
+                                                    ideal.mu0_er, 
+                                                    ideal.laser_detuning_er)
+    ideal_B_field = slower_parameters[1]
+    return ideal.get_ideal_B_field(ideal_B_field, x)
+
+
+# Import data from 10/5/21 measurements
+file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                             "zeeman_slower")
+position_full, background, lc, hc = \
+    np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+
+
+position_full = ((position_full * .01) - 0.2516)
+position = position_full[0:93]
+
+low_currents = np.linspace(26, 28, 21)
+high_currents = np.linspace(100, 130, 61)
+
+reduced_chi_squareds = np.zeros((len(low_currents), len(high_currents)))
+etas = np.zeros((len(low_currents), len(high_currents)))
+
+
+# params[0] = eta
+init_params = [0.49]
+
+for i, l_current in np.ndenumerate(low_currents):
+    for j, h_current  in np.ndenumerate(high_currents):
+        print("low current = {}, high current = {}".format(l_current, 
+                                                            h_current))
+        data = (-1 * ((lc - background) * l_current / 2 
+                      + (hc - background) * h_current / 2))[0:93]
+        result = optimize.leastsq(residuals_data, init_params, 
+                                    args=(data, position), full_output=True)
+        chi_squared = (result[2]['fvec']**2).sum() / (len(result[2]['fvec']) 
+                                                      - len(result[0]))
+        reduced_chi_squareds[i][j] = chi_squared
+        etas[i][j] = result[0][0]
+        
+ 
+        
+        
+
+# # Save array
+# data = (reduced_chi_squareds, etas)
+# save_data(data, os.path.join(file_location, "reduced_chi_sqaured.pickle"))
+
+
+# Unpickle
+reduced_chi_squareds, etas = \
+    retrieve_heatmap_data(os.path.join(file_location, 
+                                        "reduced_chi_sqaured.pickle"))
+
+
+# fig, ax = plt.subplots()
+# im = ax.imshow(reduced_chi_squareds)
+
+# cbar = ax.figure.colorbar(im, ax=ax)
+
+# ax.set_yticks(np.arange(len(low_currents)))
+# ax.set_xticks(np.arange(len(high_currents)))
+# ax.set_yticklabels(list(map(str, np.round(low_currents, 2))))
+# ax.set_xticklabels(list(map(str, np.round(high_currents).astype(int))))
+
+# fig.set_size_inches(12, 8)
+# fig.savefig(os.path.join(os.path.join(file_location), "eta.pdf"), bbox_inches="tight")
+
+# fig, ax = plt.subplots()
+
+# ax.plot(z_result, y_result, label="ideal B field", color="k", linestyle="--")
+# ax.plot(z_result, total_field_edited, label="expected total B field", 
+#         color="green")
+# ax.plot(position, data, marker=".", 
+#         color="k", label="observed total B field")
+
+# ax.set_xlabel("Position (m)")
+# ax.set_ylabel("B field (G)")
+# ax.legend()
+
+# fig.set_size_inches(12, 8)
+# fig.savefig(os.path.join(os.path.join(file_location), "data.pdf"), bbox_inches="tight")
+
+# position = ((position * .01) - 0.2516)
+
+indices = np.where(reduced_chi_squareds == np.amin(reduced_chi_squareds))
+best_eta = etas[indices[0][0]][indices[1][0]]
+
+data = (-1 * ((lc - background) * low_currents[indices[0][0]] / 2 
+                      + (hc - background) * high_currents[indices[1][0]] / 2))
+
+fig, ax = plt.subplots()
+
+ax.plot(position_full, data, marker=".", color="k", label="observed total B field")
+ax.plot(position_full, model_data(position_full, [best_eta]), label="fit")
+
+ax.set_xlabel("Position (m)")
+ax.set_ylabel("B field (G)")
+ax.legend()
+
+fig.set_size_inches(12, 8)
+fig.savefig(os.path.join(os.path.join(file_location), "eta_fit.pdf"), bbox_inches="tight")
