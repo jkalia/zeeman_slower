@@ -127,59 +127,16 @@ def get_configurations(x_long, num_coils, fixed_densities, densities,
                                             low_current, high_current)
         
 
-    coil_winding_round, current_for_coils_round = \
+    coil_winding, current_for_coils = \
             coil.give_coil_winding_and_current(num_coils, fixed_densities, 
                                                densities, fixed_lengths, 
                                                np.round(lengths), low_current, 
                                                high_current)
-    total_field_round = coil.calculate_B_field_coil(coil_winding_round, 
-                                                    current_for_coils_round,
-                                                    discretization)
+    total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils,
+                                              discretization)
 
-    coil_winding_floor, current_for_coils_floor = \
-            coil.give_coil_winding_and_current(num_coils, fixed_densities, 
-                                               densities, fixed_lengths, 
-                                               np.floor(lengths), low_current, 
-                                               high_current)
-    total_field_floor = coil.calculate_B_field_coil(coil_winding_floor, 
-                                                    current_for_coils_floor,
-                                                    discretization)
-
-    coil_winding_ceil, current_for_coils_ceil = \
-            coil.give_coil_winding_and_current(num_coils, fixed_densities, 
-                                               densities, fixed_lengths, 
-                                               np.ceil(lengths), low_current, 
-                                               high_current)
-    total_field_ceil = coil.calculate_B_field_coil(coil_winding_ceil, 
-                                                   current_for_coils_ceil,
-                                                   discretization)
-
-    rmse_array = [0, 0, 0]
-    rmse_array[0] = calculate_RMSE(ideal_field[0:B_field_range], 
-                                   total_field_round[0:B_field_range])
-    rmse_array[1] = calculate_RMSE(ideal_field[0:B_field_range], 
-                                   total_field_floor[0:B_field_range])
-    rmse_array[2] = calculate_RMSE(ideal_field[0:B_field_range], 
-                                   total_field_ceil[0:B_field_range])
-    min_rmse = np.amin(rmse_array)
-
-    if rmse_array[0] == min_rmse:
-        coil_winding = coil_winding_round
-        current_for_coils = current_for_coils_round
-        total_field = total_field_round
-        label = "round"
-    elif rmse_array[1] == min_rmse:
-        coil_winding = coil_winding_floor
-        current_for_coils = current_for_coils_floor
-        total_field = total_field_floor
-        label = "floor"
-    else:
-        coil_winding = coil_winding_ceil
-        current_for_coils = current_for_coils_ceil
-        total_field = total_field_ceil
-        label = "ceil"
-
-    return solenoid_field, coil_winding, current_for_coils, total_field, label
+    return (solenoid_field, coil_winding, current_for_coils, total_field, 
+            "round")
 
 
 def save_data(data, file_path):
@@ -204,7 +161,7 @@ def retrieve_run_data(file_path):
             final, flag)
 
 
-def retrieve_heatmap_data(file_path):
+def retrieve_data(file_path):
     return pickle.load(open(file_path, "rb"))
 
 
@@ -394,8 +351,6 @@ def run_optimization_current(fixed_densities, densities, fixed_lengths,
 
 
 ##############################################################################
-
-
 # Wrapper for plotting and generating values post-optimization
 def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
                       z, y, guess, final, flag, folder_location):
@@ -467,15 +422,12 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 
 ################################################################################
-
 # Run optimizer
 
-# Location to save data
+
 folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
                                "zeeman_slower", "3.5mm", 
                                "optimization_plots")
-
-# Iterations for optimizer
 iterations = 100000
 counter = 0
 
@@ -517,8 +469,8 @@ current_guess = guess[-2::]
 
 
 ###############################################################################
+# # Iterate fixed_lengths to find best solution
 
-# # Iterate fixed_lengths from 4 to 10 
 # min_length = 4
 # max_length = 10
 
@@ -589,14 +541,8 @@ current_guess = guess[-2::]
 # save_data(data, os.path.join(folder_location, "heatmap.pickle"))
 
 
-
-
 ###############################################################################
-
-# Unpickle data
-
-# folder_location = \
-#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots/"
+# Unpickle run data
 
 # file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
 #                     "3.5mm", "optimization_plots",
@@ -612,18 +558,16 @@ current_guess = guess[-2::]
 # print("final: ", final)
 # print("flag: ", flag)
 
-###############################################################################
 
+###############################################################################
 # Best optimized result for 3.5mm
 # Trying to see if this winding works for some different eta value
 # It does! eta_er = 0.486
 
-# # Location to save data
+
 # folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
 #                                "zeeman_slower", "eta", 
 #                                "optimization_plots")
-
-# # Iterations for optimizer
 # iterations = 50000
 # counter = 0
 
@@ -650,7 +594,7 @@ current_guess = guess[-2::]
 # y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 # # Data points to collect
-# eta_max = 100
+# eta_max = 100s
 
 # # Arrays to store data
 # eta_arr = np.zeros(eta_max)
@@ -706,11 +650,7 @@ current_guess = guess[-2::]
 
 
 ################################################################################
-
 # Post optimization
-
-# folder_location = \
-#     "/Users/jkalia/Documents/research/fletcher_lab/zeeman_slower/optimization_plots_post/"
 
 # file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
 #                          "zeeman_slower", "figs")
@@ -764,8 +704,6 @@ current_guess = guess[-2::]
 
 # total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, z)
 
-# print(coil_winding)
-
 
 ##############################################################################
 # Final coil winding! We have entered in half gaps to reflect accuracy of
@@ -817,10 +755,8 @@ current_guess = guess[-2::]
 #         30.8086634 , 160, 160, 160, 160, 160, 160]
 
 
-
-
 ################################################################################
-# Plot motion of atom through ZS
+# Plot motion of atom through optimized slower winding
 
 
 # # For lithium
@@ -973,15 +909,15 @@ current_guess = guess[-2::]
 #                           "zeeman_slower", "figs")
 
 # li_file = os.path.join(folder_location, "li_final_velocities.pickle")
-# li_heatmap = retrieve_heatmap_data(li_file)
+# li_heatmap = retrieve_data(li_file)
 # print("li_final_velocities: ", li_heatmap)
 
 # er_file = os.path.join(folder_location, "er_final_velocities.pickle")
-# er_heatmap = retrieve_heatmap_data(er_file)
+# er_heatmap = retrieve_data(er_file)
 # print("er_final_velocities: ", er_heatmap)
 
 # er_file_high_isat = os.path.join(folder_location, "er_final_velocities_high_isat.pickle")
-# er_high_isat = retrieve_heatmap_data(er_file_high_isat)
+# er_high_isat = retrieve_data(er_file_high_isat)
 # print("high isat: ", er_high_isat)
 
 
@@ -1154,39 +1090,39 @@ def model_data(x, params):
     return ideal.get_ideal_B_field(ideal_B_field, x)
 
 
-# Import data from 10/5/21 measurements
-file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                             "zeeman_slower")
-position_full, background, lc, hc = \
-    np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
-                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+# # Import data from 10/5/21 measurements
+# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                              "zeeman_slower")
+# position_full, background, lc, hc = \
+#     np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
+#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
 
 
-position_full = ((position_full * .01) - 0.2516)
-position = position_full[0:93]
+# position_full = ((position_full * .01) - 0.2516)
+# position = position_full[0:93]
 
-low_currents = np.linspace(26, 28, 21)
-high_currents = np.linspace(100, 130, 61)
+# low_currents = np.linspace(25, 28, 21)
+# high_currents = np.linspace(90, 128, 61)
 
-reduced_chi_squareds = np.zeros((len(low_currents), len(high_currents)))
-etas = np.zeros((len(low_currents), len(high_currents)))
+# reduced_chi_squareds = np.zeros((len(low_currents), len(high_currents)))
+# etas = np.zeros((len(low_currents), len(high_currents)))
 
 
-# params[0] = eta
-init_params = [0.49]
+# # params[0] = eta
+# init_params = [0.49]
 
-for i, l_current in np.ndenumerate(low_currents):
-    for j, h_current  in np.ndenumerate(high_currents):
-        print("low current = {}, high current = {}".format(l_current, 
-                                                            h_current))
-        data = (-1 * ((lc - background) * l_current / 2 
-                      + (hc - background) * h_current / 2))[0:93]
-        result = optimize.leastsq(residuals_data, init_params, 
-                                    args=(data, position), full_output=True)
-        chi_squared = (result[2]['fvec']**2).sum() / (len(result[2]['fvec']) 
-                                                      - len(result[0]))
-        reduced_chi_squareds[i][j] = chi_squared
-        etas[i][j] = result[0][0]
+# for i, l_current in np.ndenumerate(low_currents):
+#     for j, h_current  in np.ndenumerate(high_currents):
+#         print("low current = {}, high current = {}".format(l_current, 
+#                                                             h_current))
+#         data = (-1 * ((lc - background) * l_current / 2 
+#                       + (hc - background) * h_current / 2))[0:93]
+#         result = optimize.leastsq(residuals_data, init_params, 
+#                                     args=(data, position), full_output=True)
+#         chi_squared = (result[2]['fvec']**2).sum() / (len(result[2]['fvec']) 
+#                                                       - len(result[0]))
+#         reduced_chi_squareds[i][j] = chi_squared
+#         etas[i][j] = result[0][0]
         
  
         
@@ -1197,10 +1133,10 @@ for i, l_current in np.ndenumerate(low_currents):
 # save_data(data, os.path.join(file_location, "reduced_chi_sqaured.pickle"))
 
 
-# Unpickle
-reduced_chi_squareds, etas = \
-    retrieve_heatmap_data(os.path.join(file_location, 
-                                        "reduced_chi_sqaured.pickle"))
+# # Unpickle
+# reduced_chi_squareds, etas = \
+#     retrieve_data(os.path.join(file_location, 
+#                                         "reduced_chi_sqaured.pickle"))
 
 
 # fig, ax = plt.subplots()
@@ -1214,7 +1150,8 @@ reduced_chi_squareds, etas = \
 # ax.set_xticklabels(list(map(str, np.round(high_currents).astype(int))))
 
 # fig.set_size_inches(12, 8)
-# fig.savefig(os.path.join(os.path.join(file_location), "eta.pdf"), bbox_inches="tight")
+# fig.savefig(os.path.join(os.path.join(file_location), "eta.pdf"), 
+#             bbox_inches="tight")
 
 # fig, ax = plt.subplots()
 
@@ -1229,24 +1166,27 @@ reduced_chi_squareds, etas = \
 # ax.legend()
 
 # fig.set_size_inches(12, 8)
-# fig.savefig(os.path.join(os.path.join(file_location), "data.pdf"), bbox_inches="tight")
+# fig.savefig(os.path.join(os.path.join(file_location), "data.pdf"), 
+#             bbox_inches="tight")
 
 # position = ((position * .01) - 0.2516)
 
-indices = np.where(reduced_chi_squareds == np.amin(reduced_chi_squareds))
-best_eta = etas[indices[0][0]][indices[1][0]]
+# indices = np.where(reduced_chi_squareds == np.amin(reduced_chi_squareds))
+# best_eta = etas[indices[0][0]][indices[1][0]]
 
-data = (-1 * ((lc - background) * low_currents[indices[0][0]] / 2 
-                      + (hc - background) * high_currents[indices[1][0]] / 2))
+# data = (-1 * ((lc - background) * low_currents[indices[0][0]] / 2 
+#                       + (hc - background) * high_currents[indices[1][0]] / 2))
 
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
 
-ax.plot(position_full, data, marker=".", color="k", label="observed total B field")
-ax.plot(position_full, model_data(position_full, [best_eta]), label="fit")
+# ax.plot(position_full, data, marker=".", color="k", 
+#         label="observed total B field")
+# ax.plot(position_full, model_data(position_full, [best_eta]), label="fit")
 
-ax.set_xlabel("Position (m)")
-ax.set_ylabel("B field (G)")
-ax.legend()
+# ax.set_xlabel("Position (m)")
+# ax.set_ylabel("B field (G)")
+# ax.legend()
 
-fig.set_size_inches(12, 8)
-fig.savefig(os.path.join(os.path.join(file_location), "eta_fit.pdf"), bbox_inches="tight")
+# fig.set_size_inches(12, 8)
+# fig.savefig(os.path.join(os.path.join(file_location), "eta_fit.pdf"), 
+#             bbox_inches="tight")
