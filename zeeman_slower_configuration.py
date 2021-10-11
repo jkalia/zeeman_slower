@@ -756,7 +756,7 @@ current_guess = guess[-2::]
 
 
 ################################################################################
-# Plot motion of atom through optimized slower winding
+# Plot motion of single atom through optimized slower winding
 
 
 # # For lithium
@@ -781,8 +781,6 @@ current_guess = guess[-2::]
 # print("v_ideal: ", v_ideal)
 # print("v_final: ", v_final)
 
-
-
 # fig_li, ax_li = plt.subplots()
 
 # ax_li.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
@@ -793,7 +791,6 @@ current_guess = guess[-2::]
 # ax_li.set_ylabel("Velocity [m/s]")
 # ax_li.set_title("Motion of Li atom in the Slower")
 # ax_li.legend()
-
 
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
 #                          "zeeman_slower", "figs", "debugging_li.pdf")
@@ -822,7 +819,6 @@ current_guess = guess[-2::]
 # print("v_ideal: ", v_ideal)
 # print("v_final: ", v_final)
 
-
 # fig_er, ax_er = plt.subplots()
 
 # ax_er.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
@@ -837,8 +833,6 @@ current_guess = guess[-2::]
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
 #                          "zeeman_slower", "figs", "debugging_er.pdf")
 # fig_er.savefig(file_path, bbox_inches="tight")
-
-# plt.show()
 
 
 ################################################################################
