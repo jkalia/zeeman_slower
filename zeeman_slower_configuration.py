@@ -26,8 +26,8 @@ import solenoid_configuration as solenoid
 import parameters
 import plotting
 # import heatmap_script as heatmap
-# import simulate
-# import atom 
+import simulate
+import atom 
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
@@ -836,87 +836,7 @@ current_guess = guess[-2::]
 
 
 ################################################################################
-# Make heatmaps of detuning versus saturation for the final velocity of atoms
-
-
-# shift = 20 * 10**6
-# saturations = np.arange(1, 5.2, 0.2)
-
-# # Lithium
-# li_atom = atom.Atom("Li")
-# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-#                             ideal.laser_detuning_li + shift, 20)
-
-# # Initialize array for storing data
-# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
-
-# for d, detuning in np.ndenumerate(li_detunings): ##DUMB
-#     for s, saturation in np.ndenumerate(saturations): ##DUMB
-#         v = simulate.simulate_atom(li_atom, saturation, 
-#                                     ideal.initial_velocity_li, detuning, 
-#                                     coil_winding=coil_winding, 
-#                                     current_for_coils=current_for_coils, 
-#                                     optimized=True, full_output=False)
-#         li_final_velocities[d][s] = v
-#         print("li_final_velocities: ", li_final_velocities)
-        
-# print("li_final_velocities: ", li_final_velocities)
-# heatmap.make_heatmap(li_final_velocities, len(li_detunings), len(saturations), 
-#                       "Final velocity of Lithium in ZS", "saturation",
-#                       "detuning", file_path, "li_final_velocities.pdf")
-# save_data(li_final_velocities, 
-#           os.path.join(file_path, "li_final_velocities.pickle"))
-
-
-# # Erbium
-# shift = 100 * 10**6
-# er_atom = atom.Atom("Er")
-# er_detunings = np.arange(ideal.laser_detuning_er - shift, 
-#                          ideal.laser_detuning_er, 1 * 10**6)
-
-# # Initialize array for storing data
-# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
-
-# for d, detuning in np.ndenumerate(er_detunings):
-#     for s, saturation in np.ndenumerate(saturations):
-#         v = simulate.simulate_atom(er_atom, saturation, 
-#                                     ideal.initial_velocity_er, detuning, 
-#                                     coil_winding=coil_winding, 
-#                                     current_for_coils=current_for_coils, 
-#                                     optimized=True, full_output=False)
-#         er_final_velocities[d][s] = v 
-#         print("er_final_velocities: ", er_final_velocities)
-
-
-# print("er_final_velocities: ", er_final_velocities)
-# # heatmap.make_heatmap(er_final_velocities, len(er_detunings), len(saturations), 
-# #                       "Final velocity of Erbium in ZS", "saturation",
-# #                       "detuning", file_path, "er_final_velocities.pdf")
-# save_data(er_final_velocities, 
-#           os.path.join(file_path, "er_final_velocities_high_isat.pickle"))
-
-
-################################################################################
-# Unpickle heatmap data
-
-# folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
-#                           "zeeman_slower", "figs")
-
-# li_file = os.path.join(folder_location, "li_final_velocities.pickle")
-# li_heatmap = retrieve_data(li_file)
-# print("li_final_velocities: ", li_heatmap)
-
-# er_file = os.path.join(folder_location, "er_final_velocities.pickle")
-# er_heatmap = retrieve_data(er_file)
-# print("er_final_velocities: ", er_heatmap)
-
-# er_file_high_isat = os.path.join(folder_location, "er_final_velocities_high_isat.pickle")
-# er_high_isat = retrieve_data(er_file_high_isat)
-# print("high isat: ", er_high_isat)
-
-
-################################################################################
-# Simulate atom motion through ZS 
+# Simulate motion of many atoms through ZS 
 
 # Plot simulations
 # fig, ax = plt.subplots()
@@ -1062,7 +982,97 @@ current_guess = guess[-2::]
 #                          "zeeman_slower", "figs", "er2.pdf")
 # fig.savefig(file_path, bbox_inches="tight")
 
-# # plt.show()
+
+################################################################################
+# Make heatmaps of detuning versus saturation for the final velocity of atoms
+# for the optimized slower
+
+# Import data from 10/5/21 measurements
+file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                             "zeeman_slower", "data_10.5.21")
+position_full, background, lc, hc = \
+    np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+
+l_current = 30.81
+h_current = 195
+position_full = ((position_full * .01) - 0.2516)
+data = (-1 * ((lc - background) * l_current / 2 
+              + (hc - background) * h_current / 2))
+
+
+# # Lithium
+# shift = 20 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
+
+# li_atom = atom.Atom("Li")
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 20)
+
+# # Initialize array for storing data
+# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
+
+# for d, detuning in np.ndenumerate(li_detunings): 
+#     for s, saturation in np.ndenumerate(saturations): 
+#         v = simulate.simulate_atom(li_atom, saturation, 
+#                                    ideal.initial_velocity_li, detuning, 
+#                                    positions=position_full, data=data,
+#                                    optimized=False, observed=True, 
+#                                    full_output=False)
+#         li_final_velocities[d][s] = v
+#         print("li_final_velocities: ", li_final_velocities)
+        
+# print("li_final_velocities: ", li_final_velocities)
+# save_data(li_final_velocities, 
+#           os.path.join(file_location, "li_final_velocities.pickle"))
+
+
+# # Erbium
+# shift = 100 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
+
+# er_atom = atom.Atom("Er")
+# er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
+#                           ideal.laser_detuning_er + shift / 4, 126)
+
+# # Initialize array for storing data
+# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
+
+# for d, detuning in np.ndenumerate(er_detunings):
+#     for s, saturation in np.ndenumerate(saturations):
+#         v = simulate.simulate_atom(er_atom, saturation, 
+#                                     ideal.initial_velocity_er, detuning, 
+#                                     positions=position_full, data=data, 
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
+#         er_final_velocities[d][s] = v 
+#         print("er_final_velocities: ", er_final_velocities)
+
+# print("er_final_velocities: ", er_final_velocities)
+# save_data(er_final_velocities, 
+#           os.path.join(file_location, "er_final_velocities_high_isat.pickle"))
+
+
+################################################################################
+# Unpickle heatmap data
+
+# folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+#                           "zeeman_slower", "figs")
+
+# li_file = os.path.join(folder_location, "li_final_velocities.pickle")
+# li_heatmap = retrieve_data(li_file)
+# print("li_final_velocities: ", li_heatmap)
+
+# er_file = os.path.join(folder_location, "er_final_velocities.pickle")
+# er_heatmap = retrieve_data(er_file)
+# print("er_final_velocities: ", er_heatmap)
+
+# er_file_high_isat = os.path.join(folder_location, "er_final_velocities_high_isat.pickle")
+# er_high_isat = retrieve_data(er_file_high_isat)
+# print("high isat: ", er_high_isat)
+
+
+
 
 
 ###############################################################################

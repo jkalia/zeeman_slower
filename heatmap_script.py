@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib
 import matplotlib.pyplot as plt 
+import pickle
 import os
 # import zeeman_slower_configuration as zs
 
@@ -10,119 +11,104 @@ matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
 
-# # Iterate fixed_lengths from 4 to 10 
+def make_heatmap(array, iter1, iter2, title, xlabel, ylabel, file_path, 
+                 file_name):
+    fig, ax = plt.subplots()
+    im = ax.imshow(array)
+    # Loop over data dimensions and create text annotations
+    for i in range(iter1):
+        for j in range(iter2):
+            print(i)
+            print(j)
+            text = ax.text(j, i, np.round(array[i][j], 2), ha="center", 
+                           va="center", color="w")
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    fig.tight_layout()
+    fig.set_size_inches(12, 8)
+    file = os.path.join(file_path, file_name)
+    fig.savefig(file, bbox_inches="tight")
+    return
+
+
+##############################################################################
+# Trying to optimize the solution more
+
+# rmse_array = [
+#  [4.261345,   6.45621162, 0.,         0.,         0.,         0.        ],
+#  [6.56767627, 5.02215333, 0.,         0.,         0.,         0.        ],
+#  [5.12067383, 6.67764858, 0.,         0.,         0.,         0.        ],
+#  [4.94217515, 5.9656794,  0.,         0.,         0.,         0.        ],
+#  [4.97210579, 4.99280766, 0.,         0.,         0.,         0.        ],
+#  [5.03272719, 4.71731003, 0.,         0.,         0.,         0.        ],
+#  [5.11554469, 4.67402702, 0.,         0.,         0.,         0.        ]]
+# deviation_array = [
+#  [ 5.85930167, 11.9326273,   0.,          0.,          0.,          0.      ],
+#  [ 4.52223978,  9.54256907,  0.,          0.,          0.,          0.      ],
+#  [ 4.53787603,  8.04629055,  0.,          0.,          0.,          0.      ],
+#  [ 3.98464181,  7.60117149,  0.,          0.,          0.,          0.      ],
+#  [ 3.67553848,  6.78164151,  0.,          0.,          0.,          0.      ],
+#  [ 3.50841342,  6.2725938,   0.,          0.,          0.,          0.      ],
+#  [ 3.4277186,   5.95421519,  0.,          0.,          0.,          0.      ]]
+# average_array = [
+#  [0.74683769, 0.92515479, 0.,         0.,         0.,         0.        ],
+#  [1.33414603, 0.69863461, 0.,         0.,         0.,         0.        ],
+#  [0.96934371, 1.24456255, 0.,         0.,         0.,         0.        ],
+#  [0.95763625, 1.13086844, 0.,         0.,         0.,         0.        ],
+#  [0.97493836, 0.89121708, 0.,         0.,         0.,         0.        ],
+#  [0.99262506, 0.84747737, 0.,         0.,         0.,         0.        ],
+#  [1.01295514, 0.85059986, 0.,         0.,         0.,         0.        ]]
+
+
+# fig_rmse, ax_rmse = plt.subplots()
+# fig_dev, ax_dev = plt.subplots()
+# fig_ave, ax_ave = plt.subplots()
+
+# im_rmse = ax_rmse.imshow(rmse_array)
+# im_dev = ax_dev.imshow(deviation_array)
+# im_ave = ax_ave.imshow(average_array)
+
 # min_length = 4
 # max_length = 10
 
+# # Loop over data dimensions and create text annotations
+# for i in range(max_length + 1 - min_length):
+#     for j in range(np.ceil(max_length / 2).astype(int) + 1):
+#         text = ax_rmse.text(j, i, np.round(rmse_array[i][j], 2),
+#                         ha="center", va="center", color="w")
+#         text = ax_dev.text(j, i, np.round(deviation_array[i][j], 2),
+#                         ha="center", va="center", color="w")
+#         text = ax_ave.text(j, i, np.round(average_array[i][j], 2),
+#                         ha="center", va="center", color="w")
+
+# y_labels = ["3", "4", "5", "6", "7", "8", "9", "10"]
+
+# ax_rmse.set_yticklabels(y_labels)
+# ax_dev.set_yticklabels(y_labels)
+# ax_ave.set_yticklabels(y_labels)
+
+# ax_rmse.set_title("RMSE")
+# ax_rmse.set_ylabel("fixed length")
+# ax_rmse.set_xlabel("fixed overlap")
+# fig_rmse.tight_layout()
+
+# ax_dev.set_title("max Li deviation")
+# ax_dev.set_ylabel("fixed length")
+# ax_dev.set_xlabel("fixed overlap")
+# fig_dev.tight_layout()
+
+# ax_ave.set_title("average Li deviation")
+# ax_ave.set_ylabel("fixed length")
+# ax_ave.set_xlabel("fixed overlap")
+# fig_ave.tight_layout()
 
 
-# From run overnight on 6/21/21
-# rmse_array = [[ 8.48746515,  9.97952066, 11.3569415,   0.,    0.,   0.        ],
-#  [10.97901425,  9.16825321,  8.86411585, 13.79452628,  0.,          0.        ],
-#  [ 8.17865624,  8.88781443,  7.85443844, 11.30155081,  0.,          0.        ],
-#  [11.60547799,  8.96410279,  7.49592904,  9.80667831, 13.51222824,  0.        ],
-#  [ 8.36018651,  9.14130748,  9.50929753,  8.8161949,  11.41697786,  0.        ],
-#  [ 6.95144548,  8.17007378,  9.42269643,  8.85713327, 11.06761548, 13.55682791],
-#  [ 8.56179801,  7.6615222,   9.33659978,  8.12664137,  9.83040328, 12.57638557]]
-
-
-# # From run overnight on 6/23/21
-# rmse_array = [
-#  [ 6.83181508, 10.17353859, 10.05432199,  0.,          0.,          0.   ],
-#  [ 8.11323506,  8.35562027,  8.82911397, 13.08085381,  0.,          0.   ],
-#  [ 7.6966789,   6.54063395,  7.31258223, 10.74469601,  0.,          0.   ],
-#  [ 7.38321057,  8.4697332,   7.22855785,  9.82670864, 14.24849468,  0.   ],
-#  [ 7.73987144,  6.41848887,  8.06805693,  8.44028877, 11.20249809,  0.   ],
-#  [ 7.77175933,  6.37434652,  6.44818484,  8.55515581, 10.53630675, 13.62142843],
-#  [ 8.09062395,  6.34553508,  7.94144803, 10.67725029, 10.68908727, 12.52766468]
-#              ]
-
-# deviation_array = [
-#  [ 4.41639875,  5.43204557, 17.60222496,  0.,          0.,          0.   ],
-#  [ 4.99048158,  5.53090427, 12.25989711, 26.09838964,  0.,          0.   ],
-#  [ 4.9747326,   4.68649303, 9.1437886,  18.04560498,  0.,          0.    ],
-#  [ 5.01179301,  5.64475566,  7.66223134, 15.12308931, 25.51731128,  0.   ],
-#  [ 4.98141638,  4.6851612,   6.93678641, 12.76334409, 20.12017164,  0.   ],
-#  [ 4.97655129,  4.67912928,  5.95551045, 11.62787776, 18.03675851, 23.6968532 ],
-#  [ 5.00390718,  4.65847359,  7.02942678, 11.50407231, 16.66917542, 21.44731769]
-#                   ]
-
-
-rmse_array = [
- [4.261345,   6.45621162, 0.,         0.,         0.,         0.        ],
- [6.56767627, 5.02215333, 0.,         0.,         0.,         0.        ],
- [5.12067383, 6.67764858, 0.,         0.,         0.,         0.        ],
- [4.94217515, 5.9656794,  0.,         0.,         0.,         0.        ],
- [4.97210579, 4.99280766, 0.,         0.,         0.,         0.        ],
- [5.03272719, 4.71731003, 0.,         0.,         0.,         0.        ],
- [5.11554469, 4.67402702, 0.,         0.,         0.,         0.        ]]
-deviation_array = [
- [ 5.85930167, 11.9326273,   0.,          0.,          0.,          0.      ],
- [ 4.52223978,  9.54256907,  0.,          0.,          0.,          0.      ],
- [ 4.53787603,  8.04629055,  0.,          0.,          0.,          0.      ],
- [ 3.98464181,  7.60117149,  0.,          0.,          0.,          0.      ],
- [ 3.67553848,  6.78164151,  0.,          0.,          0.,          0.      ],
- [ 3.50841342,  6.2725938,   0.,          0.,          0.,          0.      ],
- [ 3.4277186,   5.95421519,  0.,          0.,          0.,          0.      ]]
-average_array = [
- [0.74683769, 0.92515479, 0.,         0.,         0.,         0.        ],
- [1.33414603, 0.69863461, 0.,         0.,         0.,         0.        ],
- [0.96934371, 1.24456255, 0.,         0.,         0.,         0.        ],
- [0.95763625, 1.13086844, 0.,         0.,         0.,         0.        ],
- [0.97493836, 0.89121708, 0.,         0.,         0.,         0.        ],
- [0.99262506, 0.84747737, 0.,         0.,         0.,         0.        ],
- [1.01295514, 0.85059986, 0.,         0.,         0.,         0.        ]]
-
-
-fig_rmse, ax_rmse = plt.subplots()
-fig_dev, ax_dev = plt.subplots()
-fig_ave, ax_ave = plt.subplots()
-
-im_rmse = ax_rmse.imshow(rmse_array)
-im_dev = ax_dev.imshow(deviation_array)
-im_ave = ax_ave.imshow(average_array)
-
-min_length = 4
-max_length = 10
-
-# Loop over data dimensions and create text annotations
-for i in range(max_length + 1 - min_length):
-    for j in range(np.ceil(max_length / 2).astype(int) + 1):
-        text = ax_rmse.text(j, i, np.round(rmse_array[i][j], 2),
-                        ha="center", va="center", color="w")
-        text = ax_dev.text(j, i, np.round(deviation_array[i][j], 2),
-                        ha="center", va="center", color="w")
-        text = ax_ave.text(j, i, np.round(average_array[i][j], 2),
-                        ha="center", va="center", color="w")
-
-y_labels = ["3", "4", "5", "6", "7", "8", "9", "10"]
-
-ax_rmse.set_yticklabels(y_labels)
-ax_dev.set_yticklabels(y_labels)
-ax_ave.set_yticklabels(y_labels)
-
-ax_rmse.set_title("RMSE")
-ax_rmse.set_ylabel("fixed length")
-ax_rmse.set_xlabel("fixed overlap")
-fig_rmse.tight_layout()
-
-ax_dev.set_title("max Li deviation")
-ax_dev.set_ylabel("fixed length")
-ax_dev.set_xlabel("fixed overlap")
-fig_dev.tight_layout()
-
-ax_ave.set_title("average Li deviation")
-ax_ave.set_ylabel("fixed length")
-ax_ave.set_xlabel("fixed overlap")
-fig_ave.tight_layout()
-
-
-file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                               "zeeman_slower", "3.6mm", "optimization_plots")
-fig_rmse.savefig(os.path.join(file_path, "rmse.pdf"), bbox_inches="tight")
-fig_dev.savefig(os.path.join(file_path, "dev.pdf"), bbox_inches="tight")
-fig_ave.savefig(os.path.join(file_path, "ave.pdf"), bbox_inches="tight")
-
+# file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                                "zeeman_slower", "3.6mm", "optimization_plots")
+# fig_rmse.savefig(os.path.join(file_path, "rmse.pdf"), bbox_inches="tight")
+# fig_dev.savefig(os.path.join(file_path, "dev.pdf"), bbox_inches="tight")
+# fig_ave.savefig(os.path.join(file_path, "ave.pdf"), bbox_inches="tight")
 
 
 ################################################################################
@@ -213,32 +199,8 @@ fig_ave.savefig(os.path.join(file_path, "ave.pdf"), bbox_inches="tight")
 # save_data(data, "heatmap.pickle")
 
 
-def make_heatmap(array, iter1, iter2, title, xlabel, ylabel, file_path, 
-                 file_name):
-
-    fig, ax = plt.subplots()
-    im = ax.imshow(array)
-
-    # Loop over data dimensions and create text annotations
-    for i in range(iter1):
-        for j in range(iter2):
-            print(i)
-            print(j)
-            text = ax.text(j, i, np.round(array[i][j], 2), ha="center", 
-                           va="center", color="w")
-
-    ax.set_title(title)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    fig.tight_layout()
-    fig.set_size_inches(12, 8)
-
-    file = os.path.join(file_path, file_name)
-
-    fig.savefig(file, bbox_inches="tight")
-
-    return
-
+##############################################################################
+# Analyzing detuning versus saturation for optimized ZS
 
 
 # li_final_velocities = [[630.56532683, 627.8709937 , 624.31368836, 504.26320876,
@@ -587,7 +549,181 @@ def make_heatmap(array, iter1, iter2, title, xlabel, ylabel, file_path,
 # fig.savefig(file_path, bbox_inches="tight")
 
 
+##############################################################################
+# Analyzing detuning versus saturation for observed ZS
+
+# Unpickle heatmap data
+folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+                               "zeeman_slower", "data_10.5.21") 
+
+# li_file = os.path.join(folder_location, "li_final_velocities.pickle")
+# li_final_velocities = pickle.load(open(li_file, "rb"))
+
+er_file = os.path.join(folder_location, "er_final_velocities_high_isat.pickle")
+er_final_velocities_high_isat = pickle.load(open(er_file, "rb"))
+print("er_final_velocities: ", er_final_velocities_high_isat)
+
+
+# plt.figure(figsize=(40, 40))
+
+# Li
+# saturations = np.arange(1, 5.2, 0.2)
+# shift = 20 * 10**6
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 20)
+
+# Er
+shift = 100 * 10**6
+saturations = np.arange(1, 5.2, 0.2)
+er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
+                          ideal.laser_detuning_er + shift / 4, 126)
+
+# for i, vfinal in np.ndenumerate(er_final_velocities_high_isat):
+#     if vfinal < 0:
+#         er_final_velocities_high_isat[i[0]][i[1]] = -1000
+#     if vfinal < 5 and vfinal > 0:
+#         er_final_velocities_high_isat[i[0]][i[1]] = 0
+#     if vfinal > 5:
+#         er_final_velocities_high_isat[i[0]][i[1]] = 1000
+
+# fig_er, ax_er = plt.subplots()
+# im_er = ax_er.imshow(er_final_velocities_high_isat)
+
+
+# ax_er.set_xticks(np.arange(len(saturations)))
+# ax_er.set_yticks(np.arange(len(er_detunings)))
+# ax_er.set_xticklabels(list(map(str, np.round(saturations, 2))))
+# ax_er.set_yticklabels(list(map(str, np.round(er_detunings, -6))))
+
+# # Rotate the tick labels and set their alignment.
+# plt.setp(ax_er.get_xticklabels(), rotation=45, ha="right",
+#           rotation_mode="anchor")
+
+# # # Loop over data dimensions and create text annotations.
+# # for i in range(len(er_detunings)):
+# #     for j in range(len(saturations)):
+# #         text = ax_er.text(j, i, np.round(er_final_velocities_high_isat[i][j]),
+# #                         ha="center", va="center", color="w", fontsize='2')
+
+# ax_er.set_title("Motion of Er atoms in ZS (ideal detuning = -1172 MHz, cutoff = 5 m/s)")
+# ax_er.set_ylabel("detuning")
+# ax_er.set_xlabel("saturation")
+
+# fig_er.tight_layout()
+# fig_er.savefig(os.path.join(folder_location, 
+#                             "er_final_velocities_high_isat_binary.pdf"), 
+#                 bbox_inches="tight")
+
+
+
+# folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+#                                 "zeeman_slower", "figs")
+# er_file_high_isat = os.path.join(folder_location, 
+#                                   "er_final_velocities_high_isat.pickle")
+# er_high_isat = zs.retrieve_heatmap_data(er_file_high_isat)
+
+# shift = 100 * 10**6
+# er_detunings = np.arange(ideal.laser_detuning_er - shift, 
+#                           ideal.laser_detuning_er, 1 * 10**6)
+# saturations = np.arange(1, 5.2, 0.2)
+# vcutoff = 5
+
+# binaries = np.zeros(np.shape(er_high_isat))
+
+# for i, vfinal in np.ndenumerate(er_high_isat):
+#     if vfinal < 0:
+#         binaries[i[0]][i[1]] = -1000
+#     if vfinal < vcutoff and vfinal > 0:
+#         binaries[i[0]][i[1]] = 0
+#     if vfinal > vcutoff:
+#         binaries[i[0]][i[1]] = 1000
+
+
+# plt.figure(figsize=(20, 20))
+# fig, ax = plt.subplots()
+# im = ax.imshow(binaries)
+
+
+# ax.set_xticks(np.arange(len(saturations)))
+# ax.set_yticks(np.arange(len(er_detunings)))
+# ax.set_xticklabels(list(map(str, np.round(saturations, 2))))
+# ax.set_yticklabels(list(map(str, np.round(er_detunings, -6))))
+
+# # Rotate the tick labels and set their alignment.
+# plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+#           rotation_mode="anchor")
+
+# # # Loop over data dimensions and create text annotations.
+# # for i in range(len(er_detunings)):
+# #     for j in range(len(saturations)):
+# #         text = ax.text(j, i, np.round(er_high_isat[i][j]),
+# #                         ha="center", va="center", color="w", fontsize='2')
+
+# ax.set_title("Motion of Er atoms in ZS (ideal detuning = -1172 MHz, cutoff 5 m/s)")
+# ax.set_ylabel("detuning")
+# ax.set_xlabel("saturation")
+
+
+# fig.tight_layout()
+# file_path = folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+#                           "zeeman_slower", "figs", "er_final_velocities_binary_high_isat.pdf")
+# fig.savefig(file_path, bbox_inches="tight")
 
 
 
 
+# folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                                 "zeeman_slower", "figs")
+# er_file_high_isat = os.path.join(folder_location, 
+#                                   "er_final_velocities_high_isat.pickle")
+# er_high_isat = zs.retrieve_heatmap_data(er_file_high_isat)
+
+# shift = 100 * 10**6
+# er_detunings = np.arange(ideal.laser_detuning_er - shift, 
+#                           ideal.laser_detuning_er, 1 * 10**6)
+# saturations = np.arange(1, 5.2, 0.2)
+
+s_cutoff = len(saturations)
+d_cutoff_lower = 130
+d_cutoff_upper = 100
+er_high_isat_zoom = er_final_velocities_high_isat[d_cutoff_upper:d_cutoff_lower, 0:s_cutoff]
+binaries = np.zeros(np.shape(er_high_isat_zoom))
+
+vcutoff = 5
+for i, vfinal in np.ndenumerate(er_high_isat_zoom):
+    if vfinal < 0:
+        binaries[i[0]][i[1]] = -1000
+    if vfinal < vcutoff and vfinal > 0:
+        binaries[i[0]][i[1]] = 0
+    if vfinal > vcutoff:
+        binaries[i[0]][i[1]] = 1000
+
+
+plt.figure(figsize=(20, 40))
+fig, ax = plt.subplots()
+im = ax.imshow(binaries)
+
+
+ax.set_xticks(np.arange(len(saturations[0:s_cutoff])))
+ax.set_yticks(np.arange(len(er_detunings[d_cutoff_upper:d_cutoff_lower])))
+ax.set_xticklabels(list(map(str, np.round(saturations[0:s_cutoff], 2))))
+ax.set_yticklabels(list(map(str, np.round(er_detunings[d_cutoff_upper:d_cutoff_lower], -6))))
+
+# Rotate the tick labels and set their alignment.
+plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+          rotation_mode="anchor")
+
+# # Loop over data dimensions and create text annotations.
+# for i in range(len(er_detunings)):
+#     for j in range(len(saturations)):
+#         text = ax.text(j, i, np.round(er_high_isat[i][j]),
+#                         ha="center", va="center", color="w", fontsize='2')
+
+ax.set_title("Motion of Er atoms in ZS (ideal detuning = -1172 MHz, cutoff 5 m/s)")
+ax.set_ylabel("detuning")
+ax.set_xlabel("saturation")
+
+
+fig.tight_layout()
+
+fig.savefig(os.path.join(folder_location, "er_final_velocities_binary_high_isat_zoom3.pdf"), bbox_inches="tight")
