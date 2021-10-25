@@ -12,9 +12,11 @@ import coil_configuration as coil
 
 def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
     delta = (laser_detuning * 2 * np.pi + k * v + mu0 * B / ideal.hbar)
-    # delta = 0
     return (ideal.hbar * k / m * linewidth / 2 
             * s / (1 + s + (2 * delta / linewidth)**2))
+
+def intensity(z):
+    return 
  
 
 # Simulates the motion of the atoms in the B field 
