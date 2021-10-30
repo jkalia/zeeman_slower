@@ -17,11 +17,11 @@ matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
 
 file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                          "zeeman_slower", "3.5mm", "optimization_plots", 
-                          "19sections_6hclength_2hcmaxdensity_0overlap"
-                          "_0.4860eta_current_only", 
-                          "figs")
+                         "zeeman_slower", "data_10.5.21")
 
+###############
+# Expected data
+###############
 coil_winding_total = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 
                       0.25, 0.25, 0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 
                       0.5 , 0.5 , 0.5 , 0.5 , 1.  , 1.  , 1.  , 0.5 , 0.5 , 
@@ -95,9 +95,7 @@ high_current = -1 * current_for_coils[-1]
 slower_length = (len(coil_winding_total) * parameters.wire_width 
                  + parameters.wire_width * 1.5)
 MOT_distance = slower_length + parameters.length_to_MOT_from_ZS
-
 z = np.linspace(0, MOT_distance + .1, 10000)
-y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 total_field_total = winding.calculate_B_field_coil_gap(coil_winding_total, 
                                                        current_for_coils, z, 
@@ -109,9 +107,32 @@ total_field_hc = winding.calculate_B_field_coil_gap(coil_winding_hc,
                                                     current_for_coils, z, 
                                                     sections)
 
-zprime_total = np.gradient(total_field_total)
-zprime_lc = np.gradient(total_field_lc)
-zprime_hc = np.gradient(total_field_hc)
+zprime_total = np.gradient(total_field_total, z) * 0.01
+zprime_lc = np.gradient(total_field_lc, z) * 0.01
+zprime_hc = np.gradient(total_field_hc, z) * 0.01
+
+
+###############
+# Observed data
+###############
+position, background, lc, hc = \
+    np.genfromtxt(os.path.join(file_path, "10.5.21_ZS_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+print(position)
+position = (position*.01)-0.2516
+obs_lc_B_field = -1*(lc-background)*30.81/2
+obs_hc_B_field = -1*(hc-background)*195/2
+obs_total_B_field = (-1*(lc-background)*30.81/2-1*(hc-background)*195/2)
+
+obs_zprime_total = np.gradient(obs_total_B_field, position) * 0.01
+obs_zprime_lc = np.gradient(obs_lc_B_field, position) * 0.01
+obs_zprime_hc = np.gradient(obs_hc_B_field, position) * 0.01
+
+
+###############
+# Ideal data
+###############
+y = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 
 # Plot of total B field
@@ -124,12 +145,21 @@ ax.plot(z, total_field_lc, label="calculated B field lc",
         color="cornflowerblue")
 ax.plot(z, total_field_hc, label="calculated B field hc", 
         color="lightsteelblue")
+ax.plot(position, obs_total_B_field, marker=".", color="indigo", 
+        label="observed total B field")
+ax.plot(position, obs_lc_B_field, marker=".", color="darkviolet", 
+        label="observed lc B field")
+ax.plot(position, obs_hc_B_field, marker=".", color="plum", 
+        label="observed hc B field")
+
+
 
 ax.axvline(x=MOT_distance, linestyle="--", color="k", 
            label="MOT location = {}".format(MOT_distance))
 ax.set_title("Zeeman slower magnetic field (no compensation)")
 ax.set_xlabel("Position (m)")
 ax.set_ylabel("B field (Gauss)")
+
 ax.legend()
 
 fig.set_size_inches(12, 8)
@@ -142,10 +172,14 @@ fig1, ax1 = plt.subplots()
 
 ax1.set_xlabel("Position (m)")
 ax1.set_ylabel("B field (Gauss)", color="tab:red")
-ax1.plot(z, total_field_total, label="B field total", color="indianred")
-ax1.plot(z, total_field_lc, label="B field lc", color="lightcoral")
-ax1.plot(z, total_field_hc, label="B field hc", color="rosybrown")
-ax1.plot(z, y, linestyle="--", color="k")
+
+
+ax1.plot(position, obs_total_B_field, label="B field total", color="indianred")
+ax1.plot(position, obs_lc_B_field, label="B field lc", color="lightcoral")
+ax1.plot(position, obs_hc_B_field, label="B field hc", color="rosybrown")
+
+
+ax1.plot(z, y, linestyle="--", color="tab:red")
 ax1.axvline(x=MOT_distance, linestyle="--", color="k", 
             label="MOT location = {}".format(MOT_distance))
 ax1.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
@@ -154,10 +188,13 @@ ax1.tick_params(axis="y", labelcolor="tab:red")
 
 ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 ax2.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
-ax2.plot(z, zprime_total*100, label="total gradient", color="royalblue")
-ax2.plot(z, zprime_lc*100, label="lc gradient", color="cornflowerblue")
-ax2.plot(z, zprime_hc*100, label="hc gradient", color="lightsteelblue")
-ax2.set_ylim(-2.5, 1)
+ax2.plot(position, obs_zprime_total, label="total gradient", color="royalblue")
+ax2.plot(position, obs_zprime_lc, label="lc gradient", color="cornflowerblue")
+ax2.plot(position, obs_zprime_hc, label="hc gradient", color="lightsteelblue")
+ax2.plot(z, np.gradient(total_field_total, z)*0.01, label="np.grad with z")
+
+ax2.plot(z, y, linestyle="--", color="tab:blue")
+ax2.set_ylim(-5, 1)
 ax2.tick_params(axis="y", labelcolor="tab:blue")
 
 ax1.legend(loc="lower left")
@@ -166,174 +203,214 @@ ax1.set_title("Magnetic field and gradient at MOT position (no compensation)")
 fig1.set_size_inches(12, 8)
 fig1.tight_layout()
 fig1.savefig(os.path.join(file_path, "gradient_no_comp.pdf"), 
-             bbox_inches="tight")
+              bbox_inches="tight")
 
 
+# Plot the B field and gradient on the same figure
+fig3, ax3 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
 
-# Now, we start adding in compensation coils. These coils will be rectangular
-# and will be used to zero the residual B field and gradient at the MOT.
-# The locations of these coils are constrained by the physical limits of the 
-# experiment design. 
-# We will reference the compensation coils off of the MOT location. 
-# Absolute minimum clearance in the vertical axis is 170mm
-
-coil1_hc = coil.B_total_rect_coil(high_current, 135 / 1000, 
-                                  (500 / 2) / 1000, 
-                                  MOT_distance - (65 / 1000), z)
-coil2_hc = coil.B_total_single_coil(-1 * high_current, 
-                                    65 / 1000 + parameters.wire_width / 2, 
-                                    MOT_distance + (110 / 1000) + parameters.wire_width / 2, z)
-
-# TODO: try 2 on pump tower side and still only 1 on ZS side 
-
-
-
-position1 = 0
-position2 = position1 + parameters.wire_height
-
-coil1_lc = coil.B_total_rect_coil(low_current * 0, 160 / 1000, 
-                                  (450 / 2) / 1000, 
-                                  MOT_distance - (65 / 1000), z)
-coil2_lc = coil.B_total_single_coil(-1 * low_current * 0, 
-                                    60 / 1000 + parameters.wire_width / 2, 
-                                    MOT_distance + (113 / 1000) + parameters.wire_width / 2, z)
-
-
-comp_lc = coil2_lc + coil1_lc
-B_field = total_field_total + comp_lc
-B_field_lc = total_field_lc + comp_lc
-
-
-comp_hc = coil2_hc + coil1_hc
-B_field = total_field_total + comp_hc
-B_field_hc = total_field_hc + comp_hc
-
-zprime_comp = np.gradient(B_field)
-zprime_comp_lc = np.gradient(B_field_lc)
-zprime_comp_hc = np.gradient(B_field_hc)
-
-
-
-# Plot of total B field
-fig2, ax2 = plt.subplots()
-
-ax2.plot(z, y, label="ideal B field", color="tab:orange")
-ax2.plot(z, total_field_total, label="calculated B field (no comp)", 
+ax3[0].plot(z, y, label="ideal B field", color="tab:orange")
+ax3[0].plot(z, total_field_total, label="calculated B field total", 
         color="royalblue")
-ax2.plot(z, total_field_lc, label="calculated B field lc (no comp)", 
+ax3[0].plot(z, total_field_lc, label="calculated B field lc", 
         color="cornflowerblue")
-ax2.plot(z, total_field_hc, label="calculated B field hc (no comp)", 
-          color="lightsteelblue")
+ax3[0].plot(z, total_field_hc, label="calculated B field hc", 
+        color="lightsteelblue")
+ax3[0].plot(position, obs_total_B_field, marker=".", color="indigo", 
+        label="observed total B field")
+ax3[0].plot(position, obs_lc_B_field, marker=".", color="darkviolet", 
+        label="observed lc B field")
+ax3[0].plot(position, obs_hc_B_field, marker=".", color="plum", 
+        label="observed hc B field")
+ax3[0].axvline(x=MOT_distance, linestyle="--", color="k", 
+           label="MOT location = {}".format(MOT_distance))
+ax3[0].set_ylabel("B field (Gauss)")
+ax3[0].set_ylim(-2, 10)
+ax3[0].legend()
 
-ax2.plot(z, B_field, label="calculated B field", color="brown")
-ax2.plot(z, coil1_hc, label="hc comp coil 1", color="green")
-ax2.plot(z, coil2_hc, label="hc comp coil 2", color="red")
+ax3[1].plot(z, y, label="ideal B field", color="tab:orange")
+ax3[1].plot(z, zprime_total, label="calculated total gradient", color="royalblue")
+ax3[1].plot(z, zprime_lc, label="calculated lc gradient", color="cornflowerblue")
+ax3[1].plot(z, zprime_hc, label="claculated hc gradient", color="lightsteelblue")
+ax3[1].plot(position, obs_zprime_total, label="observed total gradient", color="indigo")
+ax3[1].plot(position, obs_zprime_lc, label="observed lc gradient", color="darkviolet")
+ax3[1].plot(position, obs_zprime_hc, label="observed hc gradient", color="plum")
+ax3[1].axvline(x=MOT_distance, linestyle="--", color="k", 
+           label="MOT location = {}".format(MOT_distance))
+ax3[1].set_ylabel("Gradient (Gauss/cm)")
+ax3[1].set_xlabel("Position (m)")
+ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+ax3[1].set_ylim(-5, 2)
+ax3[1].legend()
 
-ax2.axvline(x=MOT_distance, linestyle="--", color="k", 
-            label="MOT location = {}".format(MOT_distance))
-ax2.set_title("Zeeman slower magnetic field (no compensation)")
-ax2.set_xlabel("Position (m)")
-ax2.set_ylabel("B field (Gauss)")
-ax2.legend()
-
-fig2.set_size_inches(12, 8)
-fig2.savefig(os.path.join(file_path, "total_field_comp.pdf"), 
-              bbox_inches="tight")
-
-
-
-# Zoomed in plot of B field and gradient at MOT
-fig3, ax3 = plt.subplots()
-
-ax3.set_xlabel("Position (m)")
-ax3.set_ylabel("B field (Gauss)", color="tab:red")
-ax3.plot(z, total_field_total, label="B field total (no comp)", color="indianred")
-ax3.plot(z, total_field_lc, label="B field lc (no comp)", color="lightcoral")
-ax3.plot(z, total_field_hc, label="B field hc (no comp)", color="rosybrown")
-
-ax3.plot(z, B_field, label="calculated B field", color="brown")
-ax3.plot(z, B_field_hc, label="B field hc", color="rosybrown")
-ax3.plot(z, comp_hc, label="hc comp coils", color="orange")
-# ax3.plot(z, coil2_hc, label="hc comp coil 2", color="orange")
-
-ax3.plot(z, y, linestyle="--", color="k")
-ax3.axvline(x=MOT_distance, linestyle="--", color="k", 
-            label="MOT location = {}".format(MOT_distance))
-ax3.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
-ax3.set_ylim(-10, 10)
-ax3.tick_params(axis="y", labelcolor="tab:red")
-
-ax4 = ax3.twinx()  # instantiate a second axes that shares the same x-axis
-ax4.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
-ax4.plot(z, zprime_total*100, label="total gradient (no comp)", color="royalblue")
-ax4.plot(z, zprime_lc*100, label="lc gradient (no comp)", color="cornflowerblue")
-ax4.plot(z, zprime_hc*100, label="hc gradient (no comp)", color="lightsteelblue")
-
-ax4.plot(z, zprime_comp*100, label="total gradient", color="purple")
-# ax4.plot(z, zprime_comp_lc*100, label="lc gradient", color="cornflowerblue")
-ax4.plot(z, zprime_comp_hc*100, label="hc gradient", color="lightsteelblue")
-
-ax4.set_ylim(-5, 5)
-ax4.tick_params(axis="y", labelcolor="tab:blue")
-
-ax3.legend(loc="lower left")
-ax4.legend(loc="lower right")
-ax3.set_title("Magnetic field and gradient at MOT position (no compensation)")
-fig3.set_size_inches(12, 8)
-fig3.tight_layout()
-fig3.savefig(os.path.join(file_path, "gradient_comp.pdf"), 
+fig3.set_size_inches(24, 16)
+fig3.savefig(os.path.join(file_path, "field_and_gradient.pdf"), 
              bbox_inches="tight")
 
+# # Now, we start adding in compensation coils. These coils will be rectangular
+# # and will be used to zero the residual B field and gradient at the MOT.
+# # The locations of these coils are constrained by the physical limits of the 
+# # experiment design. 
+# # We will reference the compensation coils off of the MOT location. 
+# # Absolute minimum clearance in the vertical axis is 170mm
+
+# coil1_hc = coil.B_total_rect_coil(high_current, 135 / 1000, 
+#                                   (500 / 2) / 1000, 
+#                                   MOT_distance - (65 / 1000), z)
+# coil2_hc = coil.B_total_single_coil(-1 * high_current, 
+#                                     65 / 1000 + parameters.wire_width / 2, 
+#                                     MOT_distance + (110 / 1000) + parameters.wire_width / 2, z)
+
+# # TODO: try 2 on pump tower side and still only 1 on ZS side 
 
 
-# Zoomed in plot of B field and gradient at MOT
-# Cleaner plot 
-fig5, ax5 = plt.subplots()
 
-ax5.set_xlabel("Position (m)")
-ax5.set_ylabel("B field (Gauss)", color="tab:red")
-ax4 = ax5.twinx()
-ax4.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")
-ax5.plot(z, y, linestyle="--", color="k")
-ax5.axvline(x=MOT_distance, linestyle="--", color="k", 
-            label="MOT location = {}".format(MOT_distance))
+# position1 = 0
+# position2 = position1 + parameters.wire_height
 
-
-# hc set
-# ax5.plot(z, total_field_hc, label="B field hc (no comp)", color="rosybrown")
-# ax4.plot(z, zprime_hc*100, label="hc gradient (no comp)", color="lightsteelblue")
-ax5.plot(z, B_field_hc , label="B field hc", color="purple")
-ax5.plot(z, coil1_hc , label="coil 1 hc", color="salmon")
-ax5.plot(z, coil2_hc , label="coil 2 hc", color="red")
-ax4.plot(z, zprime_comp_hc*100, label="hc gradient", color="blue")
+# coil1_lc = coil.B_total_rect_coil(low_current * 0, 160 / 1000, 
+#                                   (450 / 2) / 1000, 
+#                                   MOT_distance - (65 / 1000), z)
+# coil2_lc = coil.B_total_single_coil(-1 * low_current * 0, 
+#                                     60 / 1000 + parameters.wire_width / 2, 
+#                                     MOT_distance + (113 / 1000) + parameters.wire_width / 2, z)
 
 
-# # lc set
-# # ax5.plot(z, total_field_lc, label="B field lc (no comp)", color="rosybrown")
-# # ax4.plot(z, zprime_lc*100, label="lc gradient (no comp)", color="cornflowerblue")
-# ax5.plot(z, B_field_lc , label="B field lc", color="purple")
-# ax5.plot(z, coil1_lc , label="coil 1 lc", color="salmon")
-# ax5.plot(z, coil2_lc , label="coil 2 lc", color="red")
-# ax4.plot(z, zprime_comp_lc*100, label="lc gradient", color="cornflowerblue")
+# comp_lc = coil2_lc + coil1_lc
+# B_field = total_field_total + comp_lc
+# B_field_lc = total_field_lc + comp_lc
 
 
-# # total set
-# ax5.plot(z, total_field_total, label="B field total (no comp)", color="indianred")
+# comp_hc = coil2_hc + coil1_hc
+# B_field = total_field_total + comp_hc
+# B_field_hc = total_field_hc + comp_hc
+
+# zprime_comp = np.gradient(B_field)
+# zprime_comp_lc = np.gradient(B_field_lc)
+# zprime_comp_hc = np.gradient(B_field_hc)
+
+
+
+# # Plot of total B field
+# fig2, ax2 = plt.subplots()
+
+# ax2.plot(z, y, label="ideal B field", color="tab:orange")
+# ax2.plot(z, total_field_total, label="calculated B field (no comp)", 
+#         color="royalblue")
+# ax2.plot(z, total_field_lc, label="calculated B field lc (no comp)", 
+#         color="cornflowerblue")
+# ax2.plot(z, total_field_hc, label="calculated B field hc (no comp)", 
+#           color="lightsteelblue")
+
+# ax2.plot(z, B_field, label="calculated B field", color="brown")
+# ax2.plot(z, coil1_hc, label="hc comp coil 1", color="green")
+# ax2.plot(z, coil2_hc, label="hc comp coil 2", color="red")
+
+# ax2.axvline(x=MOT_distance, linestyle="--", color="k", 
+#             label="MOT location = {}".format(MOT_distance))
+# ax2.set_title("Zeeman slower magnetic field (no compensation)")
+# ax2.set_xlabel("Position (m)")
+# ax2.set_ylabel("B field (Gauss)")
+# ax2.legend()
+
+# fig2.set_size_inches(12, 8)
+# fig2.savefig(os.path.join(file_path, "total_field_comp.pdf"), 
+#               bbox_inches="tight")
+
+
+
+# # Zoomed in plot of B field and gradient at MOT
+# fig3, ax3 = plt.subplots()
+
+# ax3.set_xlabel("Position (m)")
+# ax3.set_ylabel("B field (Gauss)", color="tab:red")
+# ax3.plot(z, total_field_total, label="B field total (no comp)", color="indianred")
+# ax3.plot(z, total_field_lc, label="B field lc (no comp)", color="lightcoral")
+# ax3.plot(z, total_field_hc, label="B field hc (no comp)", color="rosybrown")
+
+# ax3.plot(z, B_field, label="calculated B field", color="brown")
+# ax3.plot(z, B_field_hc, label="B field hc", color="rosybrown")
+# ax3.plot(z, comp_hc, label="hc comp coils", color="orange")
+# # ax3.plot(z, coil2_hc, label="hc comp coil 2", color="orange")
+
+# ax3.plot(z, y, linestyle="--", color="k")
+# ax3.axvline(x=MOT_distance, linestyle="--", color="k", 
+#             label="MOT location = {}".format(MOT_distance))
+# ax3.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+# ax3.set_ylim(-10, 10)
+# ax3.tick_params(axis="y", labelcolor="tab:red")
+
+# ax4 = ax3.twinx()  # instantiate a second axes that shares the same x-axis
+# ax4.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")  # we already handled the x-label with ax1
 # ax4.plot(z, zprime_total*100, label="total gradient (no comp)", color="royalblue")
+# ax4.plot(z, zprime_lc*100, label="lc gradient (no comp)", color="cornflowerblue")
+# ax4.plot(z, zprime_hc*100, label="hc gradient (no comp)", color="lightsteelblue")
+
+# ax4.plot(z, zprime_comp*100, label="total gradient", color="purple")
+# # ax4.plot(z, zprime_comp_lc*100, label="lc gradient", color="cornflowerblue")
+# ax4.plot(z, zprime_comp_hc*100, label="hc gradient", color="lightsteelblue")
+
+# ax4.set_ylim(-5, 5)
+# ax4.tick_params(axis="y", labelcolor="tab:blue")
+
+# ax3.legend(loc="lower left")
+# ax4.legend(loc="lower right")
+# ax3.set_title("Magnetic field and gradient at MOT position (no compensation)")
+# fig3.set_size_inches(12, 8)
+# fig3.tight_layout()
+# fig3.savefig(os.path.join(file_path, "gradient_comp.pdf"), 
+#              bbox_inches="tight")
+
+
+
+# # Zoomed in plot of B field and gradient at MOT
+# # Cleaner plot 
+# fig5, ax5 = plt.subplots()
+
+# ax5.set_xlabel("Position (m)")
+# ax5.set_ylabel("B field (Gauss)", color="tab:red")
+# ax4 = ax5.twinx()
+# ax4.set_ylabel("Gradient total (Gauss/cm)", color="tab:blue")
+# ax5.plot(z, y, linestyle="--", color="k")
+# ax5.axvline(x=MOT_distance, linestyle="--", color="k", 
+#             label="MOT location = {}".format(MOT_distance))
+
+
+# # hc set
+# # ax5.plot(z, total_field_hc, label="B field hc (no comp)", color="rosybrown")
+# # ax4.plot(z, zprime_hc*100, label="hc gradient (no comp)", color="lightsteelblue")
+# ax5.plot(z, B_field_hc , label="B field hc", color="purple")
+# ax5.plot(z, coil1_hc , label="coil 1 hc", color="salmon")
+# ax5.plot(z, coil2_hc , label="coil 2 hc", color="red")
+# ax4.plot(z, zprime_comp_hc*100, label="hc gradient", color="blue")
+
+
+# # # lc set
+# # # ax5.plot(z, total_field_lc, label="B field lc (no comp)", color="rosybrown")
+# # # ax4.plot(z, zprime_lc*100, label="lc gradient (no comp)", color="cornflowerblue")
+# # ax5.plot(z, B_field_lc , label="B field lc", color="purple")
+# # ax5.plot(z, coil1_lc , label="coil 1 lc", color="salmon")
+# # ax5.plot(z, coil2_lc , label="coil 2 lc", color="red")
+# # ax4.plot(z, zprime_comp_lc*100, label="lc gradient", color="cornflowerblue")
+
+
+# # # total set
+# # ax5.plot(z, total_field_total, label="B field total (no comp)", color="indianred")
+# # ax4.plot(z, zprime_total*100, label="total gradient (no comp)", color="royalblue")
 
 
 
 
-ax5.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
-ax5.set_ylim(-10, 10)
-ax5.tick_params(axis="y", labelcolor="tab:red")
-ax4.set_ylim(-5, 5)
-ax4.tick_params(axis="y", labelcolor="tab:blue")
+# ax5.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+# ax5.set_ylim(-10, 10)
+# ax5.tick_params(axis="y", labelcolor="tab:red")
+# ax4.set_ylim(-5, 5)
+# ax4.tick_params(axis="y", labelcolor="tab:blue")
 
-ax5.legend(loc="lower left")
-ax4.legend(loc="lower right")
-ax5.set_title("Magnetic field and gradient at MOT position (no compensation)")
-fig5.set_size_inches(12, 8)
-fig5.tight_layout()
-fig5.savefig(os.path.join(file_path, "gradient_comp_clean.pdf"), 
-              bbox_inches="tight")
+# ax5.legend(loc="lower left")
+# ax4.legend(loc="lower right")
+# ax5.set_title("Magnetic field and gradient at MOT position (no compensation)")
+# fig5.set_size_inches(12, 8)
+# fig5.tight_layout()
+# fig5.savefig(os.path.join(file_path, "gradient_comp_clean.pdf"), 
+#               bbox_inches="tight")
