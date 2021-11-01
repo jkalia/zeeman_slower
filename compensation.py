@@ -239,18 +239,18 @@ fig1.savefig(os.path.join(file_path, "gradient_no_comp_v2.pdf"),
               bbox_inches="tight")
 
 
-# # Plot the B field and gradient on the same figure
-# fig3, ax3 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+# Plot the B field and gradient on the same figure
+fig3, ax3 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
 
-# ax3[0].plot(z, total_field_total, label="calculated B field total", 
-#         color="royalblue")
-# ax3[0].plot(z, total_field_lc, label="calculated B field lc", 
-#         color="cornflowerblue")
-# ax3[0].plot(z, total_field_hc, label="calculated B field hc", 
-#         color="lightsteelblue")
-# ax3[1].plot(z, zprime_total, label="calculated total gradient", color="royalblue")
-# ax3[1].plot(z, zprime_lc, label="calculated lc gradient", color="cornflowerblue")
-# ax3[1].plot(z, zprime_hc, label="calculated hc gradient", color="lightsteelblue")
+ax3[0].plot(z, total_field_total, label="calculated B field total", 
+        color="royalblue")
+ax3[0].plot(z, total_field_lc, label="calculated B field lc", 
+        color="cornflowerblue")
+ax3[0].plot(z, total_field_hc, label="calculated B field hc", 
+        color="lightsteelblue")
+ax3[1].plot(z, zprime_total, label="calculated total gradient", color="royalblue")
+ax3[1].plot(z, zprime_lc, label="calculated lc gradient", color="cornflowerblue")
+ax3[1].plot(z, zprime_hc, label="calculated hc gradient", color="lightsteelblue")
 
 # ax3[0].plot(z, y, label="ideal B field", color="tab:orange")
 # ax3[0].plot(position, obs_total_B_field, marker=".", color="indigo", 
@@ -259,22 +259,22 @@ fig1.savefig(os.path.join(file_path, "gradient_no_comp_v2.pdf"),
 #         label="observed lc B field (no comp)")
 # ax3[0].plot(position, obs_hc_B_field, marker=".", color="plum", 
 #         label="observed hc B field (no comp)")
-# ax3[0].axvline(x=MOT_distance, linestyle="--", color="k", 
-#            label="MOT location = {}".format(MOT_distance))
-# ax3[0].set_ylabel("B field (Gauss)")
-# ax3[0].set_ylim(-10, 10)
+ax3[0].axvline(x=MOT_distance, linestyle="--", color="k", 
+            label="MOT location = {}".format(MOT_distance))
+ax3[0].set_ylabel("B field (Gauss)")
+ax3[0].set_ylim(-10, 10)
 
 
-# ax3[1].plot(z, y, label="ideal B field", color="tab:orange")
+ax3[1].plot(z, y, label="ideal B field", color="tab:orange")
 # ax3[1].plot(position, obs_zprime_total, label="observed total gradient (no comp)", color="indigo")
 # ax3[1].plot(position, obs_zprime_lc, label="observed lc gradient (no comp)", color="darkviolet")
 # ax3[1].plot(position, obs_zprime_hc, label="observed hc gradient (no comp)", color="plum")
-# ax3[1].axvline(x=MOT_distance, linestyle="--", color="k", 
-#            label="MOT location = {}".format(MOT_distance))
-# ax3[1].set_ylabel("Gradient (Gauss/cm)")
-# ax3[1].set_xlabel("Position (m)")
-# ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
-# ax3[1].set_ylim(-5, 2)
+ax3[1].axvline(x=MOT_distance, linestyle="--", color="k", 
+            label="MOT location = {}".format(MOT_distance))
+ax3[1].set_ylabel("Gradient (Gauss/cm)")
+ax3[1].set_xlabel("Position (m)")
+ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+ax3[1].set_ylim(-5, 2)
 
 
 
@@ -349,11 +349,11 @@ fig1.savefig(os.path.join(file_path, "gradient_no_comp_v2.pdf"),
 
 
 
-# ax3[0].legend()
-# ax3[1].legend()
-# fig3.set_size_inches(24, 16)
-# fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation.pdf"), 
-#              bbox_inches="tight")
+ax3[0].legend()
+ax3[1].legend()
+fig3.set_size_inches(24, 16)
+fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation_v2.pdf"), 
+              bbox_inches="tight")
 
 
 # # Plot of total B field
