@@ -56,7 +56,38 @@ coil_winding_hc = [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
                    0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 
                    0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 
                    0., 0., 0., 0., 0., 0., 0., 0., 2., 2., 2., 2., 2., 2.]
-sections = [62, 98, 112]
+# sections = [62, 98, 112]
+sections = [62, 98, 112, 112]
+# current_for_coils = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#                      30.8086634 ,  160        ,  160        ,  160        , 
+#                      160        ,  160        ,  160]
 
 current_for_coils = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
@@ -86,11 +117,11 @@ current_for_coils = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
                      30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-                     30.8086634 ,  160        ,  160        ,  160        , 
-                     160        ,  160        ,  160]
+                     30.8086634 ,  195        ,  195        ,  195        , 
+                     195        ,  195        ,  195]
 
-low_current = -1 * current_for_coils[0]
-high_current = -1 * current_for_coils[-1]
+low_current_expected = -1 * current_for_coils[0]
+high_current_expected = -1 * current_for_coils[-1]
 
 slower_length = (len(coil_winding_total) * parameters.wire_width 
                  + parameters.wire_width * 1.5)
@@ -128,6 +159,8 @@ obs_zprime_total = np.gradient(obs_total_B_field, position) * 0.01
 obs_zprime_lc = np.gradient(obs_lc_B_field, position) * 0.01
 obs_zprime_hc = np.gradient(obs_hc_B_field, position) * 0.01
 
+low_current_observed = -1*30.81
+high_current_observed = -1*195
 
 ###############
 # Ideal data
@@ -163,7 +196,7 @@ ax.set_ylabel("B field (Gauss)")
 ax.legend()
 
 fig.set_size_inches(12, 8)
-fig.savefig(os.path.join(file_path, "total_field_no_comp.pdf"), 
+fig.savefig(os.path.join(file_path, "total_field_no_comp_v2.pdf"), 
             bbox_inches="tight")
 
 
@@ -183,7 +216,7 @@ ax1.plot(z, y, linestyle="--", color="tab:red")
 ax1.axvline(x=MOT_distance, linestyle="--", color="k", 
             label="MOT location = {}".format(MOT_distance))
 ax1.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
-ax1.set_ylim(-2, 8)
+ax1.set_ylim(-2, 10)
 ax1.tick_params(axis="y", labelcolor="tab:red")
 
 ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
@@ -202,64 +235,63 @@ ax2.legend(loc="lower right")
 ax1.set_title("Magnetic field and gradient at MOT position (no compensation)")
 fig1.set_size_inches(12, 8)
 fig1.tight_layout()
-fig1.savefig(os.path.join(file_path, "gradient_no_comp.pdf"), 
+fig1.savefig(os.path.join(file_path, "gradient_no_comp_v2.pdf"), 
               bbox_inches="tight")
 
 
-# Plot the B field and gradient on the same figure
-fig3, ax3 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
+# # Plot the B field and gradient on the same figure
+# fig3, ax3 = plt.subplots(2, sharex=True, gridspec_kw={'hspace': 0})
 
-ax3[0].plot(z, y, label="ideal B field", color="tab:orange")
-ax3[0].plot(z, total_field_total, label="calculated B field total", 
-        color="royalblue")
-ax3[0].plot(z, total_field_lc, label="calculated B field lc", 
-        color="cornflowerblue")
-ax3[0].plot(z, total_field_hc, label="calculated B field hc", 
-        color="lightsteelblue")
-ax3[0].plot(position, obs_total_B_field, marker=".", color="indigo", 
-        label="observed total B field")
-ax3[0].plot(position, obs_lc_B_field, marker=".", color="darkviolet", 
-        label="observed lc B field")
-ax3[0].plot(position, obs_hc_B_field, marker=".", color="plum", 
-        label="observed hc B field")
-ax3[0].axvline(x=MOT_distance, linestyle="--", color="k", 
-           label="MOT location = {}".format(MOT_distance))
-ax3[0].set_ylabel("B field (Gauss)")
-ax3[0].set_ylim(-2, 10)
-ax3[0].legend()
+# ax3[0].plot(z, total_field_total, label="calculated B field total", 
+#         color="royalblue")
+# ax3[0].plot(z, total_field_lc, label="calculated B field lc", 
+#         color="cornflowerblue")
+# ax3[0].plot(z, total_field_hc, label="calculated B field hc", 
+#         color="lightsteelblue")
+# ax3[1].plot(z, zprime_total, label="calculated total gradient", color="royalblue")
+# ax3[1].plot(z, zprime_lc, label="calculated lc gradient", color="cornflowerblue")
+# ax3[1].plot(z, zprime_hc, label="calculated hc gradient", color="lightsteelblue")
 
-ax3[1].plot(z, y, label="ideal B field", color="tab:orange")
-ax3[1].plot(z, zprime_total, label="calculated total gradient", color="royalblue")
-ax3[1].plot(z, zprime_lc, label="calculated lc gradient", color="cornflowerblue")
-ax3[1].plot(z, zprime_hc, label="claculated hc gradient", color="lightsteelblue")
-ax3[1].plot(position, obs_zprime_total, label="observed total gradient", color="indigo")
-ax3[1].plot(position, obs_zprime_lc, label="observed lc gradient", color="darkviolet")
-ax3[1].plot(position, obs_zprime_hc, label="observed hc gradient", color="plum")
-ax3[1].axvline(x=MOT_distance, linestyle="--", color="k", 
-           label="MOT location = {}".format(MOT_distance))
-ax3[1].set_ylabel("Gradient (Gauss/cm)")
-ax3[1].set_xlabel("Position (m)")
-ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
-ax3[1].set_ylim(-5, 2)
-ax3[1].legend()
+# ax3[0].plot(z, y, label="ideal B field", color="tab:orange")
+# ax3[0].plot(position, obs_total_B_field, marker=".", color="indigo", 
+#         label="observed total B field (no comp)")
+# ax3[0].plot(position, obs_lc_B_field, marker=".", color="darkviolet", 
+#         label="observed lc B field (no comp)")
+# ax3[0].plot(position, obs_hc_B_field, marker=".", color="plum", 
+#         label="observed hc B field (no comp)")
+# ax3[0].axvline(x=MOT_distance, linestyle="--", color="k", 
+#            label="MOT location = {}".format(MOT_distance))
+# ax3[0].set_ylabel("B field (Gauss)")
+# ax3[0].set_ylim(-10, 10)
 
-fig3.set_size_inches(24, 16)
-fig3.savefig(os.path.join(file_path, "field_and_gradient.pdf"), 
-             bbox_inches="tight")
 
-# # Now, we start adding in compensation coils. These coils will be rectangular
-# # and will be used to zero the residual B field and gradient at the MOT.
-# # The locations of these coils are constrained by the physical limits of the 
-# # experiment design. 
-# # We will reference the compensation coils off of the MOT location. 
-# # Absolute minimum clearance in the vertical axis is 170mm
+# ax3[1].plot(z, y, label="ideal B field", color="tab:orange")
+# ax3[1].plot(position, obs_zprime_total, label="observed total gradient (no comp)", color="indigo")
+# ax3[1].plot(position, obs_zprime_lc, label="observed lc gradient (no comp)", color="darkviolet")
+# ax3[1].plot(position, obs_zprime_hc, label="observed hc gradient (no comp)", color="plum")
+# ax3[1].axvline(x=MOT_distance, linestyle="--", color="k", 
+#            label="MOT location = {}".format(MOT_distance))
+# ax3[1].set_ylabel("Gradient (Gauss/cm)")
+# ax3[1].set_xlabel("Position (m)")
+# ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+# ax3[1].set_ylim(-5, 2)
 
-# coil1_hc = coil.B_total_rect_coil(high_current, 135 / 1000, 
-#                                   (500 / 2) / 1000, 
-#                                   MOT_distance - (65 / 1000), z)
-# coil2_hc = coil.B_total_single_coil(-1 * high_current, 
-#                                     65 / 1000 + parameters.wire_width / 2, 
-#                                     MOT_distance + (110 / 1000) + parameters.wire_width / 2, z)
+
+
+
+# Now, we start adding in compensation coils. These coils will be rectangular
+# and will be used to zero the residual B field and gradient at the MOT.
+# The locations of these coils are constrained by the physical limits of the 
+# experiment design. 
+# We will reference the compensation coils off of the MOT location. 
+# We assume the coils are centered on the MOT in the z direction
+# Absolute minimum clearance in the vertical axis is 170mm
+
+# coil1_hc = coil.B_total_rect_coil(high_current_observed, 120 / 1000, 85 / 1000, 
+#                                   MOT_distance - (60 / 1000), position)
+# coil2_hc = coil.B_total_rect_coil(-1 * high_current_observed, 120 / 1000, 85/1000,
+#                                     MOT_distance + (60 / 1000), position)
+
 
 # # TODO: try 2 on pump tower side and still only 1 on ZS side 
 
@@ -268,27 +300,60 @@ fig3.savefig(os.path.join(file_path, "field_and_gradient.pdf"),
 # position1 = 0
 # position2 = position1 + parameters.wire_height
 
-# coil1_lc = coil.B_total_rect_coil(low_current * 0, 160 / 1000, 
-#                                   (450 / 2) / 1000, 
-#                                   MOT_distance - (65 / 1000), z)
-# coil2_lc = coil.B_total_single_coil(-1 * low_current * 0, 
-#                                     60 / 1000 + parameters.wire_width / 2, 
-#                                     MOT_distance + (113 / 1000) + parameters.wire_width / 2, z)
+
+
+# coil1_lc = (coil.B_total_rect_coil(low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance - (36 / 1000), position) + 
+#             coil.B_total_rect_coil(low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance - ((36+3.6) / 1000), position) +
+#             coil.B_total_rect_coil(low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance - ((36+3.6*2) / 1000), position) + 
+#             coil.B_total_rect_coil(low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance - ((36+3.6*3) / 1000), position) +
+#             coil.B_total_rect_coil(low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance - ((36+3.6*4) / 1000), position) +
+#             coil.B_total_rect_coil(low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance - ((36+3.6*5) / 1000), position))
+
+
+# coil2_lc = (coil.B_total_rect_coil(-1*low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance + (42 / 1000), position) + 
+#             coil.B_total_rect_coil(-1*low_current_observed, 115 / 1000, 85 / 1000, 
+#                                   MOT_distance + ((42+3.6) / 1000), position))
+
+
 
 
 # comp_lc = coil2_lc + coil1_lc
-# B_field = total_field_total + comp_lc
-# B_field_lc = total_field_lc + comp_lc
-
+# B_field_lc = obs_lc_B_field + comp_lc
 
 # comp_hc = coil2_hc + coil1_hc
-# B_field = total_field_total + comp_hc
-# B_field_hc = total_field_hc + comp_hc
+# B_field_hc = obs_hc_B_field + comp_hc
 
-# zprime_comp = np.gradient(B_field)
-# zprime_comp_lc = np.gradient(B_field_lc)
-# zprime_comp_hc = np.gradient(B_field_hc)
+# B_field = obs_total_B_field + comp_hc + comp_lc
 
+# zprime_comp = np.gradient(B_field, position) * 0.01
+# zprime_comp_lc = np.gradient(B_field_lc, position) * 0.01
+# zprime_comp_hc = np.gradient(B_field_hc, position) * 0.01
+
+# ax3[0].plot(position, B_field, label="total B field", color="brown")
+
+# ax3[0].plot(position, B_field_hc, label="B field hc", color="rosybrown")
+# ax3[0].plot(position, comp_hc, label="hc comp coils", color="orange")
+# ax3[0].plot(position, B_field_lc, label="B field lc", color="darkgreen")
+# ax3[0].plot(position, comp_lc, label="lc comp coils", color="green")
+
+# ax3[1].plot(position, zprime_comp, label="total gradient", color="brown")
+# ax3[1].plot(position, zprime_comp_hc, label="hc gradient", color="rosybrown")
+# ax3[1].plot(position, zprime_comp_lc, label="lc gradient", color="darkgreen")
+
+
+
+# ax3[0].legend()
+# ax3[1].legend()
+# fig3.set_size_inches(24, 16)
+# fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation.pdf"), 
+#              bbox_inches="tight")
 
 
 # # Plot of total B field
