@@ -251,35 +251,15 @@ def calculate_section_length(coil_winding, start_point, end_point):
 # Gives the on-axis magnetic field of a rectangular coil
 # The total length and width are given by 2 * lx and 2 * ly
 def B_z_rect_coil(current, lx, ly, z_location):
-    return lambda z : ((scipy.constants.mu_0 * current) / (np.pi * 4) * ( 
-        lx / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-              * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) - ly)) 
-        + ly / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) - lx)) 
-        + lx / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) - ly)) 
-        - ly / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) + lx)) 
-        - lx / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) + ly)) 
-        + ly / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) - lx)) 
-        - lx / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) + ly)) 
-        - ly / (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) 
-                * (np.sqrt(lx**2 + ly**2 + (z_location - z)**2) + lx))))
+    return lambda z : ((scipy.constants.mu_0*current)/(np.pi*4) *
+                       (1/(np.sqrt(lx**2+ly**2+(z_location-z)**2))) * 
+                       (2*lx/(np.sqrt(lx**2+ly**2+(z_location-z)**2)-ly) + 
+                        2*ly/(np.sqrt(lx**2+ly**2+(z_location-z)**2)-lx) - 
+                        2*ly/(np.sqrt(lx**2+ly**2+(z_location-z)**2)+lx) -
+                        2*lx/(np.sqrt(lx**2+ly**2+(z_location-z)**2)+ly)))
 
 
 def B_total_rect_coil(current, lx, ly, z_location, discretization):
     total_B_field = B_z_rect_coil(current, lx, ly, z_location)
     return total_B_field(discretization) * 10**4
     
-
-
-
-
-
-
-
-
-

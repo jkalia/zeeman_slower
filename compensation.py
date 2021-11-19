@@ -276,7 +276,7 @@ ax3[1].set_xlabel("Position (m)")
 ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
 ax3[1].set_ylim(-5, 2)
 
-
+ax3[0].plot(z, 7.1 - (1.7/0.01)*(z-0.5348), color="r")
 
 
 # Now, we start adding in compensation coils. These coils will be rectangular
@@ -324,7 +324,6 @@ ax3[1].set_ylim(-5, 2)
 
 
 
-
 # comp_lc = coil2_lc + coil1_lc
 # B_field_lc = obs_lc_B_field + comp_lc
 
@@ -349,6 +348,12 @@ ax3[1].set_ylim(-5, 2)
 # ax3[1].plot(position, zprime_comp_lc, label="lc gradient", color="darkgreen")
 
 
+
+ax3[0].legend()
+ax3[1].legend()
+fig3.set_size_inches(24, 16)
+fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation_v2.pdf"), 
+              bbox_inches="tight")
 
 
 # # Plot of total B field
