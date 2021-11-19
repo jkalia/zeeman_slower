@@ -178,11 +178,11 @@ ax.plot(z, total_field_lc, label="calculated B field lc",
         color="cornflowerblue")
 ax.plot(z, total_field_hc, label="calculated B field hc", 
         color="lightsteelblue")
-ax.plot(position, obs_total_B_field, marker=".", color="indigo", 
+ax.plot(position, obs_total_B_field, marker=".", color="indigo", linestyle="none",
         label="observed total B field")
-ax.plot(position, obs_lc_B_field, marker=".", color="darkviolet", 
+ax.plot(position, obs_lc_B_field, marker=".", color="darkviolet", linestyle="none",
         label="observed lc B field")
-ax.plot(position, obs_hc_B_field, marker=".", color="plum", 
+ax.plot(position, obs_hc_B_field, marker=".", color="plum", linestyle="none",
         label="observed hc B field")
 
 
