@@ -131,6 +131,9 @@ z = np.linspace(0, MOT_distance + .1, 10000)
 total_field_total = winding.calculate_B_field_coil_gap(coil_winding_total, 
                                                        current_for_coils, z, 
                                                        sections)
+print(winding.calculate_B_field_coil_gap(coil_winding_total, 
+                                                       current_for_coils, np.array([MOT_distance]), 
+                                                       sections))
 total_field_lc = winding.calculate_B_field_coil_gap(coil_winding_lc, 
                                                     current_for_coils, z, 
                                                     sections)
@@ -276,7 +279,8 @@ ax3[1].set_xlabel("Position (m)")
 ax3[1].set_xlim(MOT_distance-0.02, MOT_distance+0.02)
 ax3[1].set_ylim(-5, 2)
 
-ax3[0].plot(z, 7.1 - (1.7/0.01)*(z-0.5348), color="r")
+ax3[0].plot(z,(7.14 - (1.7/0.01)*(z-MOT_distance)), color="r")
+
 
 
 # Now, we start adding in compensation coils. These coils will be rectangular
