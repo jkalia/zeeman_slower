@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     25840,        619]
-NotebookOptionsPosition[     25112,        599]
-NotebookOutlinePosition[     25561,        616]
-CellTagsIndexPosition[     25518,        613]
+NotebookDataLength[     59147,       1363]
+NotebookOptionsPosition[     58185,       1339]
+NotebookOutlinePosition[     58634,       1356]
+CellTagsIndexPosition[     58591,       1353]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -62,7 +62,7 @@ Cell[BoxData[{
  CellChangeTimes->{{3.844855953857387*^9, 3.844855965895068*^9}, {
   3.8463439560740695`*^9, 3.8463439707576275`*^9}, {3.846597775641958*^9, 
   3.8465977761452312`*^9}, {3.846597816643967*^9, 3.8465979279264345`*^9}},
- CellLabel->"In[11]:=",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
+ CellLabel->"In[43]:=",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
 
 Cell[BoxData[
  RowBox[{
@@ -202,8 +202,9 @@ Cell[BoxData[
    3.8463357820783834`*^9}, {3.8463363593687143`*^9, 
    3.8463363602122617`*^9}, {3.846336516059555*^9, 3.846336519372054*^9}, {
    3.8463379599616127`*^9, 3.846337991865523*^9}, {3.8465864047587404`*^9, 
-   3.8465864593131638`*^9}},ExpressionUUID->"c5401a69-3ae2-4f27-bee0-\
-49071fa7b8c6"],
+   3.8465864593131638`*^9}, {3.846685834924716*^9, 3.8466858747871847`*^9}, {
+   3.8466925178777037`*^9, 3.8466925189399166`*^9}},
+ CellLabel->"In[47]:=",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
 
 Cell[CellGroupData[{
 
@@ -216,6 +217,49 @@ Cell[BoxData[
   RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"Show", "[", "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ResourceFunction", "[", "\"\<TangentLine\>\"", "]"}], "[", 
+        RowBox[{
+         RowBox[{"y", "==", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"Brect", "[", 
+              RowBox[{
+               RowBox[{"z", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", 
+               RowBox[{"pos1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", "turns1", ",", 
+               RowBox[{"lx1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", 
+               RowBox[{"ly1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", "curr1"}], "]"}], "+", 
+             RowBox[{"Brect", "[", 
+              RowBox[{
+               RowBox[{"z", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", 
+               RowBox[{"pos2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", "turns2", ",", 
+               RowBox[{"lx2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", 
+               RowBox[{"ly2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], ",", 
+               RowBox[{
+                RowBox[{"-", "1"}], "*", "curr2"}]}], "]"}]}], ")"}], "*", 
+           SuperscriptBox["10", "4"]}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"z", ",", "0"}], "}"}], ",", "y", ",", "\"\<Plot\>\""}], 
+        "]"}], ","}], "*)"}], "\[IndentingNewLine]", 
      RowBox[{"Plot", "[", 
       RowBox[{
        RowBox[{"{", 
@@ -294,7 +338,7 @@ Cell[BoxData[
                  SuperscriptBox["10", 
                   RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]], " ", 
            SuperscriptBox["curr1", "2"]}], "]"}], "<>", 
-         "\"\< W, \[CapitalDelta]Temp/min = \>\"", "<>", 
+         "\"\< W \n\[CapitalDelta]Temp/min = \>\"", "<>", 
          RowBox[{"ToString", "[", 
           RowBox[{
            RowBox[{
@@ -335,7 +379,27 @@ Cell[BoxData[
                   SuperscriptBox["10", 
                    RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"], "*", 
               "volumetricheatcapacity"}], ")"}]}], "*", "60"}], "]"}], "<>", 
-         "\"\< K/min\nPower dissapation (coil 2) = \>\"", "<>", 
+         "\"\< K/min \nVoltage = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"curr1", " ", "*", " ", "\[Rho]Cu", "*", 
+           FractionBox[
+            RowBox[{"turns1", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", "*", "lx1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], "+", 
+               RowBox[{"2", "*", "ly1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}]}], ")"}]}], 
+            RowBox[{"\[Pi]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{"wirediameter", "*", 
+                RowBox[{
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]]}], "]"}], 
+         "<>", "\"\<V\nPower dissapation (coil 2) = \>\"", "<>", 
          RowBox[{"ToString", "[", 
           RowBox[{"\[Rho]Cu", "*", 
            FractionBox[
@@ -356,7 +420,7 @@ Cell[BoxData[
                  SuperscriptBox["10", 
                   RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]], " ", 
            SuperscriptBox["curr2", "2"]}], "]"}], "<>", 
-         "\"\< W, \[CapitalDelta]Temp/min = \>\"", "<>", 
+         "\"\< W \n\[CapitalDelta]Temp/min = \>\"", "<>", 
          RowBox[{"ToString", "[", 
           RowBox[{
            RowBox[{
@@ -397,7 +461,27 @@ Cell[BoxData[
                   SuperscriptBox["10", 
                    RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"], "*", 
               "volumetricheatcapacity"}], ")"}]}], "*", "60"}], "]"}], "<>", 
-         "\"\< K/min\>\""}]}]}], "]"}], "]"}], ",", " ", 
+         "\"\< K/min \nVoltage = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"curr2", "*", " ", "\[Rho]Cu", "*", 
+           FractionBox[
+            RowBox[{"turns2", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", "*", "lx2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], "+", 
+               RowBox[{"2", "*", "ly2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}]}], ")"}]}], 
+            RowBox[{"\[Pi]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{"wirediameter", "*", 
+                RowBox[{
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]]}], "]"}], 
+         "<>", "\"\<V\>\""}]}]}], "]"}], "]"}], ",", " ", 
     "\[IndentingNewLine]", 
     RowBox[{"{", 
      RowBox[{
@@ -414,12 +498,12 @@ Cell[BoxData[
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"lx1", ",", "104"}], "}"}], ",", "100", ",", " ", "130"}], " ",
+       RowBox[{"lx1", ",", "105"}], "}"}], ",", "100", ",", " ", "130"}], " ",
       "}"}], ",", 
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"ly1", ",", "85"}], "}"}], ",", "85", ",", " ", "100"}], " ", 
+       RowBox[{"ly1", ",", "90"}], "}"}], ",", "85", ",", " ", "100"}], " ", 
      "}"}], ",", 
     RowBox[{"{", 
      RowBox[{
@@ -442,13 +526,12 @@ Cell[BoxData[
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"curr1", ",", "15"}], "}"}], ",", "1", ",", "50", ",", " ", 
-      "1"}], "}"}], ",", 
+       RowBox[{"curr1", ",", "15.3"}], "}"}], ",", "1", ",", "50"}], "}"}], 
+    ",", 
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"curr2", ",", "10"}], "}"}], ",", "1", ",", "50", ",", " ", 
-      "1"}], "}"}], ",", 
+       RowBox[{"curr2", ",", "10"}], "}"}], ",", "1", ",", "50"}], "}"}], ",", 
     RowBox[{"{", 
      RowBox[{
       RowBox[{"{", 
@@ -475,98 +558,200 @@ Cell[BoxData[
    3.8465991217655797`*^9}, {3.8465991618524265`*^9, 
    3.8465992252087803`*^9}, {3.846599260547079*^9, 3.8465992810515995`*^9}, {
    3.8465996578484807`*^9, 3.8465996603461027`*^9}, {3.846600058961231*^9, 
-   3.8466000594611473`*^9}},
- CellLabel->"In[25]:=",ExpressionUUID->"f8601065-646c-4fb9-8bed-f842df329c5e"],
+   3.8466000594611473`*^9}, {3.846608295957088*^9, 3.846608349768237*^9}, {
+   3.846608424486785*^9, 3.8466084563314643`*^9}, {3.8466085423620253`*^9, 
+   3.8466086490514355`*^9}, 3.8466158395714946`*^9, {3.846616379001423*^9, 
+   3.84661638779254*^9}, {3.846616509796522*^9, 3.8466165098744726`*^9}, {
+   3.846616545786991*^9, 3.8466165503346167`*^9}, {3.846692522217119*^9, 
+   3.8466925617013693`*^9}, {3.846693236575108*^9, 3.8466933096386776`*^9}, {
+   3.846693350368037*^9, 3.846693380029917*^9}},
+ CellLabel->"In[36]:=",ExpressionUUID->"f8601065-646c-4fb9-8bed-f842df329c5e"],
 
 Cell[BoxData[
  TagBox[
   StyleBox[
-   DynamicModuleBox[{$CellContext`curr1$$ = 15, $CellContext`curr2$$ = 
-    10, $CellContext`lx1$$ = 104, $CellContext`lx2$$ = 
-    105, $CellContext`ly1$$ = 85, $CellContext`ly2$$ = 
-    90, $CellContext`pos1$$ = -40, $CellContext`pos2$$ = 
-    60, $CellContext`turns1$$ = 15, $CellContext`turns2$$ = 
-    10, $CellContext`wirediameter$$ = 2.053, Typeset`show$$ = True, 
-    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
-    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
-    "\"untitled\"", Typeset`specs$$ = {{{
-       Hold[$CellContext`turns1$$], 15}, 1, 20, 1}, {{
-       Hold[$CellContext`pos1$$], -40}, -60, -36}, {{
-       Hold[$CellContext`lx1$$], 104}, 100, 130}, {{
-       Hold[$CellContext`ly1$$], 85}, 85, 100}, {{
-       Hold[$CellContext`turns2$$], 10}, 1, 20, 1}, {{
-       Hold[$CellContext`pos2$$], 60}, 36, 60}, {{
-       Hold[$CellContext`lx2$$], 105}, 100, 130}, {{
-       Hold[$CellContext`ly2$$], 90}, 85, 100}, {{
-       Hold[$CellContext`curr1$$], 15}, 1, 50, 1}, {{
-       Hold[$CellContext`curr2$$], 10}, 1, 50, 1}, {{
-       Hold[$CellContext`wirediameter$$], 2.053}, 1, 1000}}, 
-    Typeset`size$$ = {360., {101., 105.}}, Typeset`update$$ = 0, 
-    Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+   DynamicModuleBox[{
+    ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$ = 15.3, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$ = 10, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ = 105, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ = 105, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ = 90, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ = 90, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ = -40, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ = 60, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ = 15, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ = 10, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$ = 2.053, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$], 15}, 
+      1, 20, 1}, {{
+       Hold[
+       ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$], -40}, -60, \
+-36}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$], 105}, 
+      100, 130}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$], 90}, 85, 
+      100}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$], 10}, 
+      1, 20, 1}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$], 60}, 36,
+       60}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$], 105}, 
+      100, 130}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$], 90}, 85, 
+      100}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$], 15.3}, 
+      1, 50}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$], 10}, 1,
+       50}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$], 
+       2.053}, 1, 1000}}, Typeset`size$$ = {360., {155., 160.}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+    
     DynamicBox[Manipulate`ManipulateBoxes[
      1, StandardForm, 
-      "Variables" :> {$CellContext`curr1$$ = 15, $CellContext`curr2$$ = 
-        10, $CellContext`lx1$$ = 104, $CellContext`lx2$$ = 
-        105, $CellContext`ly1$$ = 85, $CellContext`ly2$$ = 
-        90, $CellContext`pos1$$ = -40, $CellContext`pos2$$ = 
-        60, $CellContext`turns1$$ = 15, $CellContext`turns2$$ = 
-        10, $CellContext`wirediameter$$ = 2.053}, "ControllerVariables" :> {},
-       "OtherVariables" :> {
+      "Variables" :> {
+       ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$ = 15.3, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$ = 10, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ = 105, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ = 105, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ = 90, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ = 90, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ = -40, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ = 60, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ = 15, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ = 10, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$ = 
+        2.053}, "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
         Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
          Typeset`skipInitDone$$}, "Body" :> Show[
-        Plot[{($CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos1$$ 
-             10^(-3), $CellContext`turns1$$, $CellContext`lx1$$ 
-             10^(-3), $CellContext`ly1$$ 
-             10^(-3), $CellContext`curr1$$] + \
-$CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$ 
-             10^(-3), $CellContext`turns2$$, $CellContext`lx2$$ 
-             10^(-3), $CellContext`ly2$$ 10^(-3), -$CellContext`curr2$$]) 
-          10^4, 7.14 - (1.7/10) $CellContext`z}, {$CellContext`z, -200, 200}, 
+        Plot[{(
+           ResourceFunctionHelpers`SuggestPlotRange`Private`Brect[
+            ResourceFunctionHelpers`SuggestPlotRange`Private`z 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$, 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$] + 
+           ResourceFunctionHelpers`SuggestPlotRange`Private`Brect[
+            ResourceFunctionHelpers`SuggestPlotRange`Private`z 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$, 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 10^(-3), -
+             ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$]) 10^4, 
+          7.14 - (1.7/10) 
+          ResourceFunctionHelpers`SuggestPlotRange`Private`z}, {
+         ResourceFunctionHelpers`SuggestPlotRange`Private`z, -200, 200}, 
          PlotRange -> {{-20, 20}, {0, 10}}, 
          AxesLabel -> {"Position (mm)", "B field (G)"}, PlotLabel -> 
          StringJoin["Power dissapation (coil 1) = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$^2], 
+           " W \n\[CapitalDelta]Temp/min = ", 
            
-           ToString[$CellContext`\[Rho]Cu ($CellContext`turns1$$ (
-              2 $CellContext`lx1$$ 10^(-3) + 2 $CellContext`ly1$$ 10^(-3))/(
-             Pi ($CellContext`wirediameter$$ (10^(-3)/
-                2))^2)) $CellContext`curr1$$^2], 
-           " W, \[CapitalDelta]Temp/min = ", 
+           ToString[((
+              ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+               ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+                 10^(-3) + 
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+                 10^(-3))/(
+               Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+              ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$^2)/(
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+               10^(-3)) 
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`\
+volumetricheatcapacity)) 60], " K/min \nVoltage = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$ 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2))], "V\nPower dissapation (coil 2) = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$^2], 
+           " W \n\[CapitalDelta]Temp/min = ", 
            
-           ToString[(($CellContext`\[Rho]Cu ($CellContext`turns1$$ (
-                2 $CellContext`lx1$$ 10^(-3) + 2 $CellContext`ly1$$ 10^(-3))/(
-               Pi ($CellContext`wirediameter$$ (10^(-3)/
-                  2))^2)) $CellContext`curr1$$^2)/($CellContext`turns1$$ (
-              2 $CellContext`lx1$$ 10^(-3) + 2 $CellContext`ly1$$ 10^(-3)) 
-             Pi ($CellContext`wirediameter$$ (10^(-3)/
-                2))^2 $CellContext`volumetricheatcapacity)) 60], 
-           " K/min\nPower dissapation (coil 2) = ", 
-           
-           ToString[$CellContext`\[Rho]Cu ($CellContext`turns2$$ (
-              2 $CellContext`lx2$$ 10^(-3) + 2 $CellContext`ly2$$ 10^(-3))/(
-             Pi ($CellContext`wirediameter$$ (10^(-3)/
-                2))^2)) $CellContext`curr2$$^2], 
-           " W, \[CapitalDelta]Temp/min = ", 
-           
-           ToString[(($CellContext`\[Rho]Cu ($CellContext`turns2$$ (
-                2 $CellContext`lx2$$ 10^(-3) + 2 $CellContext`ly2$$ 10^(-3))/(
-               Pi ($CellContext`wirediameter$$ (10^(-3)/
-                  2))^2)) $CellContext`curr2$$^2)/($CellContext`turns2$$ (
-              2 $CellContext`lx2$$ 10^(-3) + 2 $CellContext`ly2$$ 10^(-3)) 
-             Pi ($CellContext`wirediameter$$ (10^(-3)/
-                2))^2 $CellContext`volumetricheatcapacity)) 60], " K/min"]]], 
-      "Specifications" :> {{{$CellContext`turns1$$, 15}, 1, 20, 
-         1}, {{$CellContext`pos1$$, -40}, -60, -36}, {{$CellContext`lx1$$, 
-          104}, 100, 130}, {{$CellContext`ly1$$, 85}, 85, 
-         100}, {{$CellContext`turns2$$, 10}, 1, 20, 
-         1}, {{$CellContext`pos2$$, 60}, 36, 60}, {{$CellContext`lx2$$, 105}, 
-         100, 130}, {{$CellContext`ly2$$, 90}, 85, 
-         100}, {{$CellContext`curr1$$, 15}, 1, 50, 
-         1}, {{$CellContext`curr2$$, 10}, 1, 50, 
-         1}, {{$CellContext`wirediameter$$, 2.053}, 1, 1000}}, 
-      "Options" :> {}, "DefaultOptions" :> {}],
-     ImageSizeCache->{698., {179., 184.}},
+           ToString[((
+              ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+               ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+                 10^(-3) + 
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+                 10^(-3))/(
+               Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+              ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$^2)/(
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+               10^(-3)) 
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`\
+volumetricheatcapacity)) 60], " K/min \nVoltage = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$ 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2))], "V"]]], 
+      "Specifications" :> {{{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$, 15}, 1, 
+         20, 1}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$, -40}, -60, \
+-36}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$, 105}, 100, 
+         130}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$, 90}, 
+         85, 100}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$, 10}, 1, 
+         20, 1}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$, 60}, 36, 
+         60}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$, 105}, 
+         100, 130}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$, 90}, 85, 
+         100}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$, 
+          15.3}, 1, 50}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$, 10}, 1, 
+         50}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$\
+$, 2.053}, 1, 1000}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{698., {188., 194.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -577,24 +762,579 @@ $CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$
    Deployed->True,
    StripOnInput->False],
   Manipulate`InterpretManipulate[1]]], "Output",
- CellChangeTimes->{{3.8463419914907227`*^9, 3.8463420049973354`*^9}, 
-   3.846342043339986*^9, 3.8463421141317143`*^9, 3.846342156565567*^9, {
-   3.846342200465313*^9, 3.846342236493186*^9}, 3.846342761215782*^9, {
-   3.8463428094291573`*^9, 3.846342886475963*^9}, 3.8463430013876762`*^9, {
-   3.8463430441068172`*^9, 3.846343044886984*^9}, {3.8463430794326897`*^9, 
-   3.8463431084492483`*^9}, {3.846343420079235*^9, 3.8463434477958136`*^9}, 
-   3.8463440643756933`*^9, 3.84634410624174*^9, 3.846344144912443*^9, 
-   3.8463442484856567`*^9, {3.846344287043921*^9, 3.8463442912421446`*^9}, {
-   3.8463445403820567`*^9, 3.846344550147533*^9}, {3.846583627073636*^9, 
-   3.846583638445419*^9}, {3.8465854622859354`*^9, 3.8465855365482426`*^9}, {
-   3.8465872114303617`*^9, 3.8465872264039884`*^9}, {3.8465873766600504`*^9, 
-   3.8465873913047657`*^9}, {3.8465876287509575`*^9, 3.8465876397223983`*^9}, 
-   3.846598211773642*^9, {3.846598375021248*^9, 3.8465984041323013`*^9}, {
-   3.846599042718939*^9, 3.846599057260894*^9}, {3.8465991361254125`*^9, 
-   3.8465991647008157`*^9}, {3.8465992282538495`*^9, 3.84659923036827*^9}, {
-   3.8465992648379135`*^9, 3.846599284776332*^9}, {3.8465996613151436`*^9, 
-   3.8465996676928015`*^9}, {3.846600049840175*^9, 3.8466000604131*^9}},
- CellLabel->"Out[25]=",ExpressionUUID->"5e95b633-0b4f-48e2-942c-b910e8cca18d"]
+ CellChangeTimes->{3.8466934215295672`*^9},
+ CellLabel->"Out[36]=",ExpressionUUID->"e46c9e95-0394-4105-a98e-61908f824f74"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"Plot", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"Brect", "[", 
+             RowBox[{
+              RowBox[{"z", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", 
+              RowBox[{"pos1", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", "turns1", ",", 
+              RowBox[{"lx1", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", 
+              RowBox[{"ly1", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", "curr1"}], "]"}], "+", 
+            RowBox[{"Brect", "[", 
+             RowBox[{
+              RowBox[{"z", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", 
+              RowBox[{"pos2", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", "turns2", ",", 
+              RowBox[{"lx2", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", 
+              RowBox[{"ly2", "*", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "3"}]]}], ",", 
+              RowBox[{
+               RowBox[{"-", "1"}], "*", "curr2"}]}], "]"}]}], ")"}], "*", 
+          SuperscriptBox["10", "4"]}], ",", 
+         RowBox[{"7.14", "-", 
+          RowBox[{
+           FractionBox["1.7", "10"], "z"}]}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"z", ",", 
+         RowBox[{"-", "200"}], ",", "200"}], "}"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "20"}], ",", "20"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", "10"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"AxesLabel", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"\"\<Position (mm)\>\"", ",", "\"\<B field (G)\>\""}], 
+         "}"}]}], ",", 
+       RowBox[{"PlotLabel", "\[Rule]", 
+        RowBox[{"\"\<Power dissapation (coil 1) = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"\[Rho]Cu", "*", 
+           FractionBox[
+            RowBox[{"turns1", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", "*", "lx1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], "+", 
+               RowBox[{"2", "*", "ly1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}]}], ")"}]}], 
+            RowBox[{"\[Pi]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{"wirediameter", "*", 
+                RowBox[{
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]], " ", 
+           SuperscriptBox["curr1", "2"]}], "]"}], "<>", 
+         "\"\< W \n\[CapitalDelta]Temp/min = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"\[Rho]Cu", "*", 
+              FractionBox[
+               RowBox[{"turns1", "*", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"2", "*", "lx1", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], "+", 
+                  RowBox[{"2", "*", "ly1", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}]}], ")"}]}], 
+               RowBox[{"\[Pi]", 
+                SuperscriptBox[
+                 RowBox[{"(", 
+                  RowBox[{"wirediameter", "*", 
+                   RowBox[{
+                    SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]], " ", 
+              SuperscriptBox["curr1", "2"]}], ")"}], "/", 
+            RowBox[{"(", 
+             RowBox[{"turns1", "*", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"2", "*", "lx1", "*", 
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]]}], "+", 
+                RowBox[{"2", "*", "ly1", "*", 
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]]}]}], ")"}], "*", "\[Pi]", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{"wirediameter", "*", 
+                 RowBox[{
+                  SuperscriptBox["10", 
+                   RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"], "*", 
+              "volumetricheatcapacity"}], ")"}]}], "*", "60"}], "]"}], "<>", 
+         "\"\< K/min \nVoltage = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"curr1", " ", "*", " ", "\[Rho]Cu", "*", 
+           FractionBox[
+            RowBox[{"turns1", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", "*", "lx1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], "+", 
+               RowBox[{"2", "*", "ly1", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}]}], ")"}]}], 
+            RowBox[{"\[Pi]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{"wirediameter", "*", 
+                RowBox[{
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]]}], "]"}], 
+         "<>", "\"\<V\nPower dissapation (coil 2) = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"\[Rho]Cu", "*", 
+           FractionBox[
+            RowBox[{"turns2", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", "*", "lx2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], "+", 
+               RowBox[{"2", "*", "ly2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}]}], ")"}]}], 
+            RowBox[{"\[Pi]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{"wirediameter", "*", 
+                RowBox[{
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]], " ", 
+           SuperscriptBox["curr2", "2"]}], "]"}], "<>", 
+         "\"\< W \n\[CapitalDelta]Temp/min = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"\[Rho]Cu", "*", 
+              FractionBox[
+               RowBox[{"turns2", "*", 
+                RowBox[{"(", 
+                 RowBox[{
+                  RowBox[{"2", "*", "lx2", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], "+", 
+                  RowBox[{"2", "*", "ly2", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}]}], ")"}]}], 
+               RowBox[{"\[Pi]", 
+                SuperscriptBox[
+                 RowBox[{"(", 
+                  RowBox[{"wirediameter", "*", 
+                   RowBox[{
+                    SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]], " ", 
+              SuperscriptBox["curr2", "2"]}], ")"}], "/", 
+            RowBox[{"(", 
+             RowBox[{"turns2", "*", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"2", "*", "lx2", "*", 
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]]}], "+", 
+                RowBox[{"2", "*", "ly2", "*", 
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]]}]}], ")"}], "*", "\[Pi]", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{"wirediameter", "*", 
+                 RowBox[{
+                  SuperscriptBox["10", 
+                   RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"], "*", 
+              "volumetricheatcapacity"}], ")"}]}], "*", "60"}], "]"}], "<>", 
+         "\"\< K/min \nVoltage = \>\"", "<>", 
+         RowBox[{"ToString", "[", 
+          RowBox[{"curr2", "*", " ", "\[Rho]Cu", "*", 
+           FractionBox[
+            RowBox[{"turns2", "*", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"2", "*", "lx2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}], "+", 
+               RowBox[{"2", "*", "ly2", "*", 
+                SuperscriptBox["10", 
+                 RowBox[{"-", "3"}]]}]}], ")"}]}], 
+            RowBox[{"\[Pi]", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               RowBox[{"wirediameter", "*", 
+                RowBox[{
+                 SuperscriptBox["10", 
+                  RowBox[{"-", "3"}]], "/", "2"}]}], ")"}], "2"]}]]}], "]"}], 
+         "<>", "\"\<V\>\""}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Plot", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"D", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"Brect", "[", 
+                 RowBox[{
+                  RowBox[{"z", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", 
+                  RowBox[{"pos1", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", "turns1", ",", 
+                  RowBox[{"lx1", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", 
+                  RowBox[{"ly1", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", "curr1"}], "]"}], "+", 
+                RowBox[{"Brect", "[", 
+                 RowBox[{
+                  RowBox[{"z", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", 
+                  RowBox[{"pos2", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", "turns2", ",", 
+                  RowBox[{"lx2", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", 
+                  RowBox[{"ly2", "*", 
+                   SuperscriptBox["10", 
+                    RowBox[{"-", "3"}]]}], ",", 
+                  RowBox[{
+                   RowBox[{"-", "1"}], "*", "curr2"}]}], "]"}]}], ")"}], "*", 
+              
+              SuperscriptBox["10", "4"]}], ",", "z"}], "]"}], "/.", 
+           RowBox[{"z", "->", "0"}]}], ")"}], " ", "u"}], "+", "7.14"}], ",", 
+       
+       RowBox[{"{", 
+        RowBox[{"u", ",", 
+         RowBox[{"-", "20"}], ",", "20"}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", "Dashed", "}"}]}]}], "]"}]}], "]"}], ",", " ", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"turns1", ",", "15"}], "}"}], ",", "1", ",", " ", "20", ",", 
+     "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"pos1", ",", 
+       RowBox[{"-", "40"}]}], "}"}], ",", 
+     RowBox[{"-", "60"}], ",", " ", 
+     RowBox[{"-", "36"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"lx1", ",", "105"}], "}"}], ",", "100", ",", " ", "130"}], " ", 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ly1", ",", "90"}], "}"}], ",", "85", ",", " ", "100"}], " ", 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"turns2", ",", "10"}], "}"}], ",", "1", ",", " ", "20", ",", 
+     "1"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"pos2", ",", "60"}], "}"}], ",", "36", ",", "60"}], "}"}], ",", 
+   
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"lx2", ",", "105"}], "}"}], ",", "100", ",", "130"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ly2", ",", "90"}], "}"}], ",", "85", ",", "100"}], "}"}], ",", 
+   
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"curr1", ",", "15.3"}], "}"}], ",", "1", ",", "50"}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"curr2", ",", "10"}], "}"}], ",", "1", ",", "50"}], "}"}], ",", 
+   
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"wirediameter", ",", "2.053"}], "}"}], ",", "1", ",", "1000"}], 
+    "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.8466933606776004`*^9, 3.846693361916935*^9}, {
+  3.846693435606682*^9, 3.846693489551626*^9}, {3.8466935442377434`*^9, 
+  3.846693581683035*^9}},
+ CellLabel->"In[52]:=",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{
+    ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$ = 15.3, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$ = 10, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ = 105, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ = 105, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ = 90, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ = 90, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ = -40, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ = 60, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ = 15, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ = 10, 
+    ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$ = 2.053, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$], 15}, 
+      1, 20, 1}, {{
+       Hold[
+       ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$], -40}, -60, \
+-36}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$], 105}, 
+      100, 130}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$], 90}, 85, 
+      100}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$], 10}, 
+      1, 20, 1}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$], 60}, 36,
+       60}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$], 105}, 
+      100, 130}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$], 90}, 85, 
+      100}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$], 15.3}, 
+      1, 50}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$], 10}, 1,
+       50}, {{
+       Hold[ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$], 
+       2.053}, 1, 1000}}, Typeset`size$$ = {360., {155., 160.}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+    
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {
+       ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$ = 15.3, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$ = 10, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ = 105, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ = 105, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ = 90, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ = 90, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ = -40, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ = 60, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ = 15, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ = 10, 
+        ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$ = 
+        2.053}, "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[
+        Plot[{(
+           ResourceFunctionHelpers`SuggestPlotRange`Private`Brect[
+            ResourceFunctionHelpers`SuggestPlotRange`Private`z 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$, 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$] + 
+           ResourceFunctionHelpers`SuggestPlotRange`Private`Brect[
+            ResourceFunctionHelpers`SuggestPlotRange`Private`z 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$, 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 10^(-3), 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 10^(-3), -
+             ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$]) 10^4, 
+          7.14 - (1.7/10) 
+          ResourceFunctionHelpers`SuggestPlotRange`Private`z}, {
+         ResourceFunctionHelpers`SuggestPlotRange`Private`z, -200, 200}, 
+         PlotRange -> {{-20, 20}, {0, 10}}, 
+         AxesLabel -> {"Position (mm)", "B field (G)"}, PlotLabel -> 
+         StringJoin["Power dissapation (coil 1) = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$^2], 
+           " W \n\[CapitalDelta]Temp/min = ", 
+           
+           ToString[((
+              ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+               ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+                 10^(-3) + 
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+                 10^(-3))/(
+               Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+              ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$^2)/(
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+               10^(-3)) 
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`\
+volumetricheatcapacity)) 60], " K/min \nVoltage = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$ 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2))], "V\nPower dissapation (coil 2) = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$^2], 
+           " W \n\[CapitalDelta]Temp/min = ", 
+           
+           ToString[((
+              ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+               ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+                 10^(-3) + 
+                2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+                 10^(-3))/(
+               Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2)) 
+              ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$^2)/(
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+               10^(-3)) 
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2 
+             ResourceFunctionHelpers`SuggestPlotRange`Private`\
+volumetricheatcapacity)) 60], " K/min \nVoltage = ", 
+           ToString[
+           ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$ 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`\[Rho]Cu (
+             ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$ (
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+               10^(-3) + 
+              2 ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+               10^(-3))/(
+             Pi (ResourceFunctionHelpers`SuggestPlotRange`Private`\
+wirediameter$$ (10^(-3)/2))^2))], "V"]], 
+        Plot[ReplaceAll[
+            
+            D[(ResourceFunctionHelpers`SuggestPlotRange`Private`Brect[
+               ResourceFunctionHelpers`SuggestPlotRange`Private`z 10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$ 
+                10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$, 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$ 
+                10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$ 
+                10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$] + 
+              ResourceFunctionHelpers`SuggestPlotRange`Private`Brect[
+               ResourceFunctionHelpers`SuggestPlotRange`Private`z 10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$ 
+                10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$, 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$ 
+                10^(-3), 
+                ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$ 
+                10^(-3), -
+                ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$]) 
+             10^4, ResourceFunctionHelpers`SuggestPlotRange`Private`z], 
+            ResourceFunctionHelpers`SuggestPlotRange`Private`z -> 0] 
+          ResourceFunctionHelpers`SuggestPlotRange`Private`u + 7.14, {
+         ResourceFunctionHelpers`SuggestPlotRange`Private`u, -20, 20}, 
+         PlotStyle -> {Dashed}]], 
+      "Specifications" :> {{{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`turns1$$, 15}, 1, 
+         20, 1}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`pos1$$, -40}, -60, \
+-36}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`lx1$$, 105}, 100, 
+         130}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`ly1$$, 90}, 
+         85, 100}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`turns2$$, 10}, 1, 
+         20, 1}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`pos2$$, 60}, 36, 
+         60}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`lx2$$, 105}, 
+         100, 130}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`ly2$$, 90}, 85, 
+         100}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`curr1$$, 15.3}, 1, 
+         50}, {{ResourceFunctionHelpers`SuggestPlotRange`Private`curr2$$, 10},
+          1, 50}, {{
+         ResourceFunctionHelpers`SuggestPlotRange`Private`wirediameter$$, 
+          2.053}, 1, 1000}}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{698., {188., 194.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.8466933656854095`*^9, 3.846693428747744*^9, {3.8466934674204426`*^9, 
+   3.8466934900851145`*^9}, {3.846693547169468*^9, 3.846693582011758*^9}},
+ CellLabel->"Out[52]=",ExpressionUUID->"10062b08-d8b0-4085-80b9-ed50b8249c27"]
 }, Open  ]]
 },
 WindowSize->{1920, 997},
@@ -616,10 +1356,14 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 1506, 44, 112, "Input",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
-Cell[2067, 66, 5394, 139, 232, "Input",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
+Cell[2067, 66, 5518, 140, 232, "Input",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
 Cell[CellGroupData[{
-Cell[7486, 209, 10826, 269, 410, "Input",ExpressionUUID->"f8601065-646c-4fb9-8bed-f842df329c5e"],
-Cell[18315, 480, 6781, 116, 382, "Output",ExpressionUUID->"5e95b633-0b4f-48e2-942c-b910e8cca18d"]
+Cell[7610, 210, 14518, 357, 523, "Input",ExpressionUUID->"f8601065-646c-4fb9-8bed-f842df329c5e"],
+Cell[22131, 569, 10808, 196, 401, "Output",ExpressionUUID->"e46c9e95-0394-4105-a98e-61908f824f74"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[32976, 770, 12692, 338, 480, "Input",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
+Cell[45671, 1110, 12498, 226, 401, "Output",ExpressionUUID->"10062b08-d8b0-4085-80b9-ed50b8249c27"]
 }, Open  ]]
 }
 ]
