@@ -238,7 +238,7 @@ ax2.legend(loc="lower right")
 ax1.set_title("Magnetic field and gradient at MOT position (no compensation)")
 fig1.set_size_inches(12, 8)
 fig1.tight_layout()
-fig1.savefig(os.path.join(file_path, "gradient_no_comp_v2.pdf"), 
+fig1.savefig(os.path.join(file_path, "gradient_no_comp.pdf"), 
               bbox_inches="tight")
 
 
@@ -356,7 +356,7 @@ ax3[0].plot(z,(7.14 - (1.7/0.01)*(z-MOT_distance)), color="r")
 ax3[0].legend()
 ax3[1].legend()
 fig3.set_size_inches(24, 16)
-fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation_v2.pdf"), 
+fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation.pdf"), 
               bbox_inches="tight")
 
 
