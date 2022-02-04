@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     35866,        864]
-NotebookOptionsPosition[     34754,        837]
-NotebookOutlinePosition[     35141,        853]
-CellTagsIndexPosition[     35098,        850]
+NotebookDataLength[     35945,        866]
+NotebookOptionsPosition[     34773,        838]
+NotebookOutlinePosition[     35220,        855]
+CellTagsIndexPosition[     35177,        852]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -659,7 +659,7 @@ Cell[BoxData[
        Hold[$CellContext`ly2$$], 125}, 115, 150}, {{
        Hold[$CellContext`curr1$$], 95}, 1, 220}, {{
        Hold[$CellContext`curr2$$], 47}, 1, 80}}, Typeset`size$$ = {
-    360., {155., 160.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    261., {214., 218.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
     Typeset`skipInitDone$$ = True}, 
     DynamicBox[Manipulate`ManipulateBoxes[
      1, StandardForm, 
@@ -717,6 +717,7 @@ $CellContext`curr1$$^2)/(((($CellContext`turns1$$
            ToString[((($CellContext`\[Rho]Cu (($CellContext`turns2$$ 
                  2) (((2 $CellContext`lx2$$) 10^(-3) + (2 $CellContext`ly2$$) 
                    10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
+                  
                   10^(-2))^2)))) \
 $CellContext`curr2$$^2)/(((($CellContext`turns2$$ 
                 2) ((2 $CellContext`lx2$$) 10^(-3) + (2 $CellContext`ly2$$) 
@@ -749,7 +750,7 @@ $CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$
          150}, {{$CellContext`curr1$$, 95}, 1, 
          220}, {{$CellContext`curr2$$, 47}, 1, 80}}, "Options" :> {}, 
       "DefaultOptions" :> {}],
-     ImageSizeCache->{652., {185., 190.}},
+     ImageSizeCache->{567., {247., 252.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -838,8 +839,9 @@ Cell[BoxData["0.008532804265608528`"], "Output",
 WindowSize->{1904, 981},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 TaggingRules->Association["TryRealOnly" -> False],
-FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (April 8, 2019)",
-StyleDefinitions->"Default.nb"
+FrontEndVersion->"12.3 for Microsoft Windows (64-bit) (July 9, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"62dcd7ea-0e18-4da5-b151-291998801f76"
 ]
 (* End of Notebook Content *)
 
@@ -852,19 +854,19 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 1585, 47, 137, "Input",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
-Cell[2146, 69, 5517, 140, 259, "Input",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
+Cell[558, 20, 1585, 47, 112, "Input",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
+Cell[2146, 69, 5517, 140, 232, "Input",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
 Cell[CellGroupData[{
-Cell[7688, 213, 17497, 425, 701, "Input",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
-Cell[25188, 640, 7689, 136, 394, "Output",ExpressionUUID->"a91f2963-ea2d-45b7-8b25-efc32f7bce9f"]
+Cell[7688, 213, 17497, 425, 578, "Input",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
+Cell[25188, 640, 7708, 137, 518, "Output",ExpressionUUID->"a91f2963-ea2d-45b7-8b25-efc32f7bce9f"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[32914, 781, 513, 13, 33, "Input",ExpressionUUID->"4ae1b417-cc8b-4409-8a64-054026aa5016"],
-Cell[33430, 796, 178, 2, 69, "Output",ExpressionUUID->"9ea79f31-0448-4b09-a4eb-dcc28466d2e6"]
+Cell[32933, 782, 513, 13, 33, "Input",ExpressionUUID->"4ae1b417-cc8b-4409-8a64-054026aa5016"],
+Cell[33449, 797, 178, 2, 69, "Output",ExpressionUUID->"9ea79f31-0448-4b09-a4eb-dcc28466d2e6"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[33645, 803, 900, 27, 63, "Input",ExpressionUUID->"c73cff24-deef-49e1-9fbc-7549858a68b7"],
-Cell[34548, 832, 190, 2, 34, "Output",ExpressionUUID->"4465e78a-bd64-4a84-a246-c7a7400f7903"]
+Cell[33664, 804, 900, 27, 63, "Input",ExpressionUUID->"c73cff24-deef-49e1-9fbc-7549858a68b7"],
+Cell[34567, 833, 190, 2, 34, "Output",ExpressionUUID->"4465e78a-bd64-4a84-a246-c7a7400f7903"]
 }, Open  ]]
 }
 ]
