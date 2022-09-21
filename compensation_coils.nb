@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     35945,        866]
-NotebookOptionsPosition[     34773,        838]
-NotebookOutlinePosition[     35220,        855]
-CellTagsIndexPosition[     35177,        852]
+NotebookDataLength[     47791,       1138]
+NotebookOptionsPosition[     46449,       1107]
+NotebookOutlinePosition[     46837,       1123]
+CellTagsIndexPosition[     46794,       1120]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -53,8 +53,9 @@ Cell[BoxData[{
     SuperscriptBox["K", 
      RowBox[{"-", "1"}]]}], "*)"}]}], "\n", 
  RowBox[{
-  RowBox[{"volumetricheatcapacity", "=", 
-   RowBox[{"densityCu", "*", "specificheatcapacityCu"}]}], " ", ";", " ", 
+  RowBox[{
+   RowBox[{"volumetricheatcapacity", "=", 
+    RowBox[{"densityCu", "*", "specificheatcapacityCu"}]}], " ", ";"}], " ", 
   RowBox[{"(*", 
    RowBox[{"J", " ", 
     SuperscriptBox["m", 
@@ -207,7 +208,7 @@ Cell[BoxData[
    3.8463379599616127`*^9, 3.846337991865523*^9}, {3.8465864047587404`*^9, 
    3.8465864593131638`*^9}, {3.846685834924716*^9, 3.8466858747871847`*^9}, {
    3.8466925178777037`*^9, 3.8466925189399166`*^9}},
- CellLabel->"In[9]:=",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
+ CellLabel->"In[6]:=",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
 
 Cell[CellGroupData[{
 
@@ -276,7 +277,8 @@ Cell[BoxData[
              RowBox[{"-", "20"}], ",", "20"}], "}"}], ",", 
            RowBox[{"{", 
             RowBox[{"0", ",", "10"}], "}"}]}], "}"}]}], ",", 
-        RowBox[{"AxesLabel", "\[Rule]", 
+        RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+        RowBox[{"FrameLabel", "\[Rule]", 
          RowBox[{"{", 
           RowBox[{"\"\<Position (mm)\>\"", ",", "\"\<B field (G)\>\""}], 
           "}"}]}], ",", 
@@ -503,7 +505,8 @@ Cell[BoxData[
                   FractionBox["1", "16"], "*", "2.54", "*", 
                   SuperscriptBox["10", 
                    RowBox[{"-", "2"}]]}], ")"}], "2"]}], ")"}]]}], "]"}], 
-          "<>", "\"\< V\>\""}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+          "<>", "\"\< V\nResidual B field at MOT\>\""}]}]}], "]"}], ",", 
+      "\[IndentingNewLine]", 
       RowBox[{"Plot", "[", 
        RowBox[{
         RowBox[{
@@ -551,7 +554,8 @@ Cell[BoxData[
          RowBox[{"u", ",", 
           RowBox[{"-", "20"}], ",", "20"}], "}"}], ",", 
         RowBox[{"PlotStyle", "\[Rule]", 
-         RowBox[{"{", "Dashed", "}"}]}]}], "]"}]}], "]"}], ",", " ", 
+         RowBox[{"{", "Dashed", "}"}]}], ",", 
+        RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}]}], "]"}], ",", " ", 
     "\[IndentingNewLine]", 
     RowBox[{"{", 
      RowBox[{
@@ -635,14 +639,18 @@ Cell[BoxData[
    3.847188861662339*^9, 3.847188877349435*^9}, {3.847188943349048*^9, 
    3.847188971321726*^9}, {3.847883720733204*^9, 3.847883773809187*^9}, {
    3.847884176370518*^9, 3.847884176535503*^9}, {3.8478851351853466`*^9, 
-   3.8478851376080647`*^9}},
- CellLabel->"In[17]:=",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
+   3.8478851376080647`*^9}, {3.872770295686857*^9, 3.872770329376266*^9}, {
+   3.872770407008697*^9, 3.872770415346179*^9}, {3.8727704831729116`*^9, 
+   3.872770484295965*^9}, {3.872770559921588*^9, 3.872770583594407*^9}, {
+   3.8727707460119877`*^9, 3.8727707654077053`*^9}, {3.872770801032168*^9, 
+   3.87277080221487*^9}},
+ CellLabel->"In[24]:=",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
 
 Cell[BoxData[
  TagBox[
   StyleBox[
-   DynamicModuleBox[{$CellContext`curr1$$ = 118, $CellContext`curr2$$ = 
-    70., $CellContext`lx1$$ = 115, $CellContext`lx2$$ = 
+   DynamicModuleBox[{$CellContext`curr1$$ = 95, $CellContext`curr2$$ = 
+    47, $CellContext`lx1$$ = 115, $CellContext`lx2$$ = 
     115, $CellContext`ly1$$ = 125, $CellContext`ly2$$ = 
     125, $CellContext`pos1$$ = -55, $CellContext`pos2$$ = 
     55, $CellContext`turns1$$ = 4, $CellContext`turns2$$ = 4, Typeset`show$$ =
@@ -659,8 +667,13 @@ Cell[BoxData[
        Hold[$CellContext`ly2$$], 125}, 115, 150}, {{
        Hold[$CellContext`curr1$$], 95}, 1, 220}, {{
        Hold[$CellContext`curr2$$], 47}, 1, 80}}, Typeset`size$$ = {
-    261., {214., 218.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
-    Typeset`skipInitDone$$ = True}, 
+    360., {180., 184.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`turns1$15939$$ = 
+    0, $CellContext`pos1$15940$$ = 0, $CellContext`lx1$15941$$ = 
+    0, $CellContext`ly1$15942$$ = 0, $CellContext`turns2$15943$$ = 
+    0, $CellContext`pos2$15944$$ = 0, $CellContext`lx2$15945$$ = 
+    0, $CellContext`ly2$15946$$ = 0, $CellContext`curr1$15947$$ = 
+    0, $CellContext`curr2$15948$$ = 0}, 
     DynamicBox[Manipulate`ManipulateBoxes[
      1, StandardForm, 
       "Variables" :> {$CellContext`curr1$$ = 95, $CellContext`curr2$$ = 
@@ -668,7 +681,17 @@ Cell[BoxData[
         115, $CellContext`ly1$$ = 125, $CellContext`ly2$$ = 
         125, $CellContext`pos1$$ = -55, $CellContext`pos2$$ = 
         55, $CellContext`turns1$$ = 4, $CellContext`turns2$$ = 4}, 
-      "ControllerVariables" :> {}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`turns1$$, $CellContext`turns1$15939$$, 0], 
+        Hold[$CellContext`pos1$$, $CellContext`pos1$15940$$, 0], 
+        Hold[$CellContext`lx1$$, $CellContext`lx1$15941$$, 0], 
+        Hold[$CellContext`ly1$$, $CellContext`ly1$15942$$, 0], 
+        Hold[$CellContext`turns2$$, $CellContext`turns2$15943$$, 0], 
+        Hold[$CellContext`pos2$$, $CellContext`pos2$15944$$, 0], 
+        Hold[$CellContext`lx2$$, $CellContext`lx2$15945$$, 0], 
+        Hold[$CellContext`ly2$$, $CellContext`ly2$15946$$, 0], 
+        Hold[$CellContext`curr1$$, $CellContext`curr1$15947$$, 0], 
+        Hold[$CellContext`curr2$$, $CellContext`curr2$15948$$, 0]}, 
       "OtherVariables" :> {
        Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
         Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
@@ -682,54 +705,53 @@ $CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$
              10^(-3), $CellContext`turns2$$, $CellContext`lx2$$ 
              10^(-3), $CellContext`ly2$$ 10^(-3), -$CellContext`curr2$$]) 
           10^4, 7.14 - (1.7/10) $CellContext`z}, {$CellContext`z, -200, 200}, 
-         PlotRange -> {{-20, 20}, {0, 10}}, 
-         AxesLabel -> {"Position (mm)", "B field (G)"}, PlotLabel -> 
+         PlotRange -> {{-20, 20}, {0, 10}}, Frame -> True, 
+         FrameLabel -> {"Position (mm)", "B field (G)"}, PlotLabel -> 
          StringJoin["Coil 1: Power dissapation = ", 
            
-           ToString[($CellContext`\[Rho]Cu (($CellContext`turns1$$ 
-               2) (((2 $CellContext`lx1$$) 10^(-3) + (2 $CellContext`ly1$$) 
-                 10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-                10^(-2))^2)))) $CellContext`curr1$$^2], 
+           ToString[$CellContext`\[Rho]Cu ($CellContext`turns1$$ 
+             2 (2 $CellContext`lx1$$ 10^(-3) + 
+              2 $CellContext`ly1$$ 10^(-3))/(((1/8) 2.54 10^(-2))^2 - ((1/16) 
+              2.54 10^(-2))^2)) $CellContext`curr1$$^2], 
            " W \n\[CapitalDelta]Temp/min = ", 
            
-           ToString[((($CellContext`\[Rho]Cu (($CellContext`turns1$$ 
-                 2) (((2 $CellContext`lx1$$) 10^(-3) + (2 $CellContext`ly1$$) 
-                   10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-                  10^(-2))^2)))) \
-$CellContext`curr1$$^2)/(((($CellContext`turns1$$ 
-                2) ((2 $CellContext`lx1$$) 10^(-3) + (2 $CellContext`ly1$$) 
-                 10^(-3))) ((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-                10^(-2))^2)) $CellContext`volumetricheatcapacity)) 60], 
+           ToString[(($CellContext`\[Rho]Cu ($CellContext`turns1$$ 
+               2 (2 $CellContext`lx1$$ 10^(-3) + 
+                2 $CellContext`ly1$$ 10^(-3))/(((1/8) 2.54 10^(-2))^2 - ((1/
+                 16) 2.54 
+                10^(-2))^2)) $CellContext`curr1$$^2)/($CellContext`turns1$$ 
+             2 (2 $CellContext`lx1$$ 10^(-3) + 
+              2 $CellContext`ly1$$ 10^(-3)) (((1/8) 2.54 10^(-2))^2 - ((1/16) 
+               2.54 10^(-2))^2) $CellContext`volumetricheatcapacity)) 60], 
            " K/min \nVoltage = ", 
            
-           ToString[($CellContext`curr1$$ $CellContext`\[Rho]Cu) \
-(($CellContext`turns1$$ 
-              2) (((2 $CellContext`lx1$$) 10^(-3) + (2 $CellContext`ly1$$) 
-                10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-               10^(-2))^2)))], " V\nCoil 2: Power dissapation = ", 
+           ToString[$CellContext`curr1$$ $CellContext`\[Rho]Cu \
+($CellContext`turns1$$ 
+             2 (2 $CellContext`lx1$$ 10^(-3) + 
+              2 $CellContext`ly1$$ 10^(-3))/(((1/8) 2.54 10^(-2))^2 - ((1/16) 
+              2.54 10^(-2))^2))], " V\nCoil 2: Power dissapation = ", 
            
-           ToString[($CellContext`\[Rho]Cu (($CellContext`turns2$$ 
-               2) (((2 $CellContext`lx2$$) 10^(-3) + (2 $CellContext`ly2$$) 
-                 10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-                10^(-2))^2)))) $CellContext`curr2$$^2], 
+           ToString[$CellContext`\[Rho]Cu ($CellContext`turns2$$ 
+             2 (2 $CellContext`lx2$$ 10^(-3) + 
+              2 $CellContext`ly2$$ 10^(-3))/(((1/8) 2.54 10^(-2))^2 - ((1/16) 
+              2.54 10^(-2))^2)) $CellContext`curr2$$^2], 
            " W \n\[CapitalDelta]Temp/min = ", 
            
-           ToString[((($CellContext`\[Rho]Cu (($CellContext`turns2$$ 
-                 2) (((2 $CellContext`lx2$$) 10^(-3) + (2 $CellContext`ly2$$) 
-                   10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-                  
-                  10^(-2))^2)))) \
-$CellContext`curr2$$^2)/(((($CellContext`turns2$$ 
-                2) ((2 $CellContext`lx2$$) 10^(-3) + (2 $CellContext`ly2$$) 
-                 10^(-3))) ((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-                10^(-2))^2)) $CellContext`volumetricheatcapacity)) 60], 
+           ToString[(($CellContext`\[Rho]Cu ($CellContext`turns2$$ 
+               2 (2 $CellContext`lx2$$ 10^(-3) + 
+                2 $CellContext`ly2$$ 10^(-3))/(((1/8) 2.54 10^(-2))^2 - ((1/
+                 16) 2.54 
+                10^(-2))^2)) $CellContext`curr2$$^2)/($CellContext`turns2$$ 
+             2 (2 $CellContext`lx2$$ 10^(-3) + 
+              2 $CellContext`ly2$$ 10^(-3)) (((1/8) 2.54 10^(-2))^2 - ((1/16) 
+               2.54 10^(-2))^2) $CellContext`volumetricheatcapacity)) 60], 
            " K/min \nVoltage = ", 
            
-           ToString[($CellContext`curr2$$ $CellContext`\[Rho]Cu) \
-(($CellContext`turns2$$ 
-              2) (((2 $CellContext`lx2$$) 10^(-3) + (2 $CellContext`ly2$$) 
-                10^(-3))/((((1/8) 2.54) 10^(-2))^2 - (((1/16) 2.54) 
-               10^(-2))^2)))], " V"]], 
+           ToString[$CellContext`curr2$$ $CellContext`\[Rho]Cu \
+($CellContext`turns2$$ 
+             2 (2 $CellContext`lx2$$ 10^(-3) + 
+              2 $CellContext`ly2$$ 10^(-3))/(((1/8) 2.54 10^(-2))^2 - ((1/16) 
+              2.54 10^(-2))^2))], " V\nResidual B field at MOT"]], 
         Plot[ReplaceAll[
             
             D[($CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos1$$ 
@@ -740,8 +762,8 @@ $CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$
                 10^(-3), $CellContext`turns2$$, $CellContext`lx2$$ 
                 10^(-3), $CellContext`ly2$$ 10^(-3), -$CellContext`curr2$$]) 
              10^4, $CellContext`z], $CellContext`z -> 0] $CellContext`u + 
-         7.14, {$CellContext`u, -20, 20}, PlotStyle -> {Dashed}]], 
-      "Specifications" :> {{{$CellContext`turns1$$, 4}, 1, 20, 
+         7.14, {$CellContext`u, -20, 20}, PlotStyle -> {Dashed}, Frame -> 
+         True]], "Specifications" :> {{{$CellContext`turns1$$, 4}, 1, 20, 
          1}, {{$CellContext`pos1$$, -55}, -60, -20}, {{$CellContext`lx1$$, 
           115}, 100, 125}, {{$CellContext`ly1$$, 125}, 115, 
          150}, {{$CellContext`turns2$$, 4}, 1, 20, 
@@ -750,7 +772,7 @@ $CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$
          150}, {{$CellContext`curr1$$, 95}, 1, 
          220}, {{$CellContext`curr2$$, 47}, 1, 80}}, "Options" :> {}, 
       "DefaultOptions" :> {}],
-     ImageSizeCache->{567., {247., 252.}},
+     ImageSizeCache->{652., {209., 215.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -774,8 +796,10 @@ $CellContext`Brect[$CellContext`z 10^(-3), $CellContext`pos2$$
    3.8478844354657845`*^9, 3.847884436153432*^9}, {3.8478846976543694`*^9, 
    3.8478846986667104`*^9}, {3.8478850423118305`*^9, 3.847885051173706*^9}, {
    3.84788513837332*^9, 3.847885141060238*^9}, {3.8478852067734094`*^9, 
-   3.8478852093750277`*^9}},
- CellLabel->"Out[17]=",ExpressionUUID->"a91f2963-ea2d-45b7-8b25-efc32f7bce9f"]
+   3.8478852093750277`*^9}, 3.872770138348954*^9, {3.872770298114217*^9, 
+   3.872770330779174*^9}, 3.872770417156703*^9, 3.87277049776792*^9, {
+   3.872770566832451*^9, 3.8727705848864822`*^9}, 3.872770804340798*^9},
+ CellLabel->"Out[24]=",ExpressionUUID->"ff0553cb-535a-4ffd-be10-ff9c9cf91765"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -834,14 +858,258 @@ Cell[BoxData[
 Cell[BoxData["0.008532804265608528`"], "Output",
  CellChangeTimes->{3.847968591855522*^9, 3.849720601401601*^9},
  CellLabel->"Out[6]=",ExpressionUUID->"4465e78a-bd64-4a84-a246-c7a7400f7903"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Plot", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", " ", 
+       RowBox[{
+        RowBox[{"Brect", "[", 
+         RowBox[{
+          RowBox[{"z", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", 
+          RowBox[{"pos1", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", "turns1", ",", 
+          RowBox[{"lx1", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", 
+          RowBox[{"ly1", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", "curr1"}], "]"}], "+", " ", 
+        RowBox[{"Brect", "[", 
+         RowBox[{
+          RowBox[{"z", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", 
+          RowBox[{"pos2", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", "turns2", ",", 
+          RowBox[{"lx2", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", 
+          RowBox[{"ly2", "*", 
+           SuperscriptBox["10", 
+            RowBox[{"-", "3"}]]}], ",", 
+          RowBox[{
+           RowBox[{"-", "1"}], "*", "curr2"}]}], "]"}]}], ")"}], "*", 
+      SuperscriptBox["10", "4"]}], ",", 
+     RowBox[{"7.14", "-", 
+      RowBox[{
+       FractionBox["1.7", "10"], "z"}]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"z", ",", 
+     RowBox[{"-", "200"}], ",", "200"}], "}"}], ",", 
+   RowBox[{"PlotRange", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "20"}], ",", "20"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "10"}], "}"}]}], "}"}]}], ",", 
+   RowBox[{"PlotLabel", "\[Rule]", "\"\<Residual B field at MOT\>\""}], ",", 
+   RowBox[{"FrameLabel", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"\"\<Position (mm)\>\"", ",", "\"\<B field (G)\>\""}], "}"}]}], 
+   ",", 
+   RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.872770604800696*^9, 3.872770691178845*^9}},
+ CellLabel->"In[23]:=",ExpressionUUID->"b85dcd5e-c0e0-41d9-ad41-1c5dab1ada09"],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {}, {}, 
+    TagBox[
+     {RGBColor[0.880722, 0.611041, 0.142051], AbsoluteThickness[1.6], Opacity[
+      1.], LineBox[{{-16.82352941176471, 10.}, {-11.921558107665899`, 
+       9.166664878303202}, {-3.982435773483297, 7.81701408149216}, {
+       3.8007820663115055`, 6.493867048727044}, {12.244421942330757`, 
+       5.058448269803771}, {20.123994058656088`, 3.7189210100284646`}, {
+       28.66398821120586, 2.267122004095003}, {37.04807786936784, 
+       0.8418267622074671}, {42., 0.}}]},
+     Annotation[#, "Charting`Private`Tag$13434#2"]& ]}, {}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->{None, None},
+  AxesOrigin->{0, 0},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{
+     FormBox["\"B field (G)\"", TraditionalForm], None}, {
+     FormBox["\"Position (mm)\"", TraditionalForm], None}},
+  FrameTicks->FrontEndValueCache[{{Automatic, 
+      Charting`ScaledFrameTicks[{Identity, Identity}]}, {Automatic, 
+      Charting`ScaledFrameTicks[{Identity, Identity}]}}, {{Automatic, {{0., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {2., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {4., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {6., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {8., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {10., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {0.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {1., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {1.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {2.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {3., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {3.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {4.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {5., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {5.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {6.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {7., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {7.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {8.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {9., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {9.5, 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}}}, {Automatic, {{-20., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {-10., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {0., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {10., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {20., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.01, 0.}, {
+         AbsoluteThickness[0.1]}}, {-18., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-16., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-14., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-12., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-8., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-6., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-4., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {-2., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {2., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {4., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {6., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {8., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {12., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {14., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {16., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}, {18., 
+        FormBox[
+         TemplateBox[{0., 0.}, "Spacer2"], TraditionalForm], {0.005, 0.}, {
+         AbsoluteThickness[0.1]}}}}}],
+  GridLines->{None, None},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  ImagePadding->All,
+  Method->{
+   "DefaultBoundaryStyle" -> Automatic, 
+    "DefaultGraphicsInteraction" -> {
+     "Version" -> 1.2, "TrackMousePosition" -> {True, False}, 
+      "Effects" -> {
+       "Highlight" -> {"ratio" -> 2}, "HighlightPoint" -> {"ratio" -> 2}, 
+        "Droplines" -> {
+         "freeformCursorMode" -> True, 
+          "placement" -> {"x" -> "All", "y" -> "None"}}}}, "DefaultMeshStyle" -> 
+    AbsolutePointSize[6], "ScalingFunctions" -> None, 
+    "CoordinatesToolOptions" -> {"DisplayFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& ), "CopiedValueFunction" -> ({
+        (Identity[#]& )[
+         Part[#, 1]], 
+        (Identity[#]& )[
+         Part[#, 2]]}& )}},
+  PlotLabel->FormBox["\"Residual B field at MOT\"", TraditionalForm],
+  PlotRange->{{-20, 20}, {0, 10}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{0, 0}, {0, 0}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.8727706053174257`*^9, 3.872770691700054*^9}},
+ CellLabel->"Out[23]=",ExpressionUUID->"64035507-9dc6-4bf2-861d-89d51e7888a8"]
 }, Open  ]]
 },
-WindowSize->{1904, 981},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{1093, 847},
+WindowMargins->{{26, Automatic}, {Automatic, 0}},
 TaggingRules->Association["TryRealOnly" -> False],
-FrontEndVersion->"12.3 for Microsoft Windows (64-bit) (July 9, 2021)",
-StyleDefinitions->"Default.nb",
-ExpressionUUID->"62dcd7ea-0e18-4da5-b151-291998801f76"
+FrontEndVersion->"12.0 for Mac OS X x86 (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
 
@@ -854,19 +1122,23 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 1585, 47, 112, "Input",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
-Cell[2146, 69, 5517, 140, 232, "Input",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
+Cell[558, 20, 1600, 48, 137, "Input",ExpressionUUID->"92c97abf-9d6a-4b45-976b-ed585872b114"],
+Cell[2161, 70, 5517, 140, 325, "Input",ExpressionUUID->"c5401a69-3ae2-4f27-bee0-49071fa7b8c6"],
 Cell[CellGroupData[{
-Cell[7688, 213, 17497, 425, 578, "Input",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
-Cell[25188, 640, 7708, 137, 518, "Output",ExpressionUUID->"a91f2963-ea2d-45b7-8b25-efc32f7bce9f"]
+Cell[7703, 214, 17931, 432, 909, "Input",ExpressionUUID->"fe885eae-879f-41ee-a1f0-063d36a56d3b"],
+Cell[25637, 648, 8804, 153, 503, "Output",ExpressionUUID->"ff0553cb-535a-4ffd-be10-ff9c9cf91765"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[32933, 782, 513, 13, 33, "Input",ExpressionUUID->"4ae1b417-cc8b-4409-8a64-054026aa5016"],
-Cell[33449, 797, 178, 2, 69, "Output",ExpressionUUID->"9ea79f31-0448-4b09-a4eb-dcc28466d2e6"]
+Cell[34478, 806, 513, 13, 33, "Input",ExpressionUUID->"4ae1b417-cc8b-4409-8a64-054026aa5016"],
+Cell[34994, 821, 178, 2, 34, "Output",ExpressionUUID->"9ea79f31-0448-4b09-a4eb-dcc28466d2e6"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[33664, 804, 900, 27, 63, "Input",ExpressionUUID->"c73cff24-deef-49e1-9fbc-7549858a68b7"],
-Cell[34567, 833, 190, 2, 34, "Output",ExpressionUUID->"4465e78a-bd64-4a84-a246-c7a7400f7903"]
+Cell[35209, 828, 900, 27, 63, "Input",ExpressionUUID->"c73cff24-deef-49e1-9fbc-7549858a68b7"],
+Cell[36112, 857, 190, 2, 34, "Output",ExpressionUUID->"4465e78a-bd64-4a84-a246-c7a7400f7903"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[36339, 864, 2111, 60, 155, "Input",ExpressionUUID->"b85dcd5e-c0e0-41d9-ad41-1c5dab1ada09"],
+Cell[38453, 926, 7980, 178, 272, "Output",ExpressionUUID->"64035507-9dc6-4bf2-861d-89d51e7888a8"]
 }, Open  ]]
 }
 ]

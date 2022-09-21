@@ -425,33 +425,33 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # Run optimizer
 
 
-folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                               "zeeman_slower", "3.5mm", 
-                               "optimization_plots")
-iterations = 100000
-counter = 0
+# folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                                "zeeman_slower", "3.5mm", 
+#                                "optimization_plots")
+# iterations = 100000
+# counter = 0
 
-# Arrays which define the solenoid configuration for the low current section. 
-densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-             0.5, 0.25, 0]
+# # Arrays which define the solenoid configuration for the low current section. 
+# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+#              0.5, 0.25, 0]
 
-# Arrays which define the solenoid configuration for the high current section.
-fixed_densities = [2]
-fixed_lengths = [6]
-fixed_overlap = 0
+# # Arrays which define the solenoid configuration for the high current section.
+# fixed_densities = [2]
+# fixed_lengths = [6]
+# fixed_overlap = 0
 
-z = np.linspace(0, ideal.slower_length_val, 10000)
-y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+# z = np.linspace(0, ideal.slower_length_val, 10000)
+# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 
-guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
-          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
-          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
-         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
-         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
-          130.84645074]
-coils = guess[0:-2]
-current_guess = guess[-2::]
+# guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+#           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+#           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+#          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
+#          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
+#           130.84645074]
+# coils = guess[0:-2]
+# current_guess = guess[-2::]
 
     
 # rmse, li_deviation, av_li_deviation, flag, final = \
@@ -543,6 +543,11 @@ current_guess = guess[-2::]
 
 ###############################################################################
 # Unpickle run data
+
+# file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
+#                     "3.5mm", "optimization_plots",
+#                     "19sections_6hclength_2hcmaxdensity_0overlap", 
+#                     "data.pickle")
 
 # file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
 #                     "3.5mm", "optimization_plots",
@@ -712,47 +717,47 @@ current_guess = guess[-2::]
 # for this. 
 # eta = 0.486 if wire_width = wire_height = 0.0036
 
-# coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
-#        0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
-#        1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
-#        1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
-#        1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
-#        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
-#        2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
-#        3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
-#        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
-#        6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
-#        7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+       0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+       1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+       1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+       1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+       2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+       2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+       3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+       3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+       6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+       7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
 
-# current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 , 160, 160, 160, 160, 160, 160]
+current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 , 160, 160, 160, 160, 160, 160]
 
 
 ################################################################################
@@ -839,37 +844,41 @@ current_guess = guess[-2::]
 # Simulate motion of many atoms through ZS 
 
 # Plot simulations
-# fig, ax = plt.subplots()
+fig, ax = plt.subplots()
 
-# # Simulation of atom in ideal B field
-# t_ideal, z_ideal, v_ideal, a_ideal = \
-#   simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, 
-#                          optimized=False)
-# ax.plot(z_ideal, v_ideal, "k--", 
-#         label="ideal B field (v_initial = {:.0f})".format(
-#           ideal.initial_velocity_li)
-#         )
+# Make instances of each kind of atom
+li_atom = atom.Atom("Li")
 
-# # Simulation of atoms through calculated B field for different initial 
-# # velocities
-# for x in range(11, 9, -1):
-#     t, z, v, a = simulate.simulate_atom("Li", ideal.Isat_li_d2 * 2, 
-#                                         ideal.initial_velocity_li * (x/100 + .9), 
-#                                         coil_winding, current_for_coils)
-#     ax.plot(z, v, 
-#             label="v_initial = {:.0f}".format(
-#                 ideal.initial_velocity_li * (x/100 + .9)))
+# Simulation of atom in ideal B field
+t_ideal, z_ideal, v_ideal, a_ideal = \
+  simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, ideal.laser_detuning_li*1.04,
+                         optimized=False)
+ax.plot(z_ideal, v_ideal, "k--", 
+        label="ideal B field (v_initial = {:.0f})".format(
+          ideal.initial_velocity_li)
+        )
 
-# ax.set_xlabel("Position [m]")
-# ax.set_ylabel("Velocity [m/s]")
-# ax.set_title("Motion of Li atom in the Slower")
-# ax.legend()
+# Simulation of atoms through calculated B field for different initial 
+# velocities
+for x in range(11, 10, -1):
+    t, z, v, a = simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, 
+                                        ideal.initial_velocity_li * (x/100 + .9), ideal.laser_detuning_li*1.04, 
+                                        coil_winding=coil_winding_edited, current_for_coils=current_for_coils_edited)
+    ax.plot(z, v, 
+            label="v_initial = {:.0f}".format(
+                ideal.initial_velocity_li * (x/100 + .9)))
 
-# # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-# #                          "zeeman_slower", "figs", "debugging1.pdf")
-# # fig.savefig(file_path, bbox_inches="tight")
 
-# plt.show()
+ax.set_xlabel("Position [m]")
+ax.set_ylabel("Velocity [m/s]")
+ax.set_title("Motion of Li atom in the Slower")
+ax.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "debugging1.pdf")
+# fig.savefig(file_path, bbox_inches="tight")
+
+plt.show()
 
 
 
@@ -988,17 +997,17 @@ current_guess = guess[-2::]
 # for the optimized slower
 
 # Import data from 10/5/21 measurements
-file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                             "zeeman_slower", "data_10.5.21")
-position_full, background, lc, hc = \
-    np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
-                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                              "zeeman_slower", "data_10.5.21")
+# position_full, background, lc, hc = \
+#     np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
+#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
 
-l_current = 30.81
-h_current = 195
-position_full = ((position_full * .01) - 0.2516)
-data = (-1 * ((lc - background) * l_current / 2 
-              + (hc - background) * h_current / 2))
+# l_current = 30.81
+# h_current = 195
+# position_full = ((position_full * .01) - 0.2516)
+# data = (-1 * ((lc - background) * l_current / 2 
+#               + (hc - background) * h_current / 2))
 
 
 # # Lithium
