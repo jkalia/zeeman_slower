@@ -843,42 +843,42 @@ current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.808663
 ################################################################################
 # Simulate motion of many atoms through ZS 
 
-# Plot simulations
-fig, ax = plt.subplots()
+# # Plot simulations
+# fig, ax = plt.subplots()
 
-# Make instances of each kind of atom
-li_atom = atom.Atom("Li")
+# # Make instances of each kind of atom
+# li_atom = atom.Atom("Li")
 
-# Simulation of atom in ideal B field
-t_ideal, z_ideal, v_ideal, a_ideal = \
-  simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, ideal.laser_detuning_li*1.04,
-                         optimized=False)
-ax.plot(z_ideal, v_ideal, "k--", 
-        label="ideal B field (v_initial = {:.0f})".format(
-          ideal.initial_velocity_li)
-        )
+# # Simulation of atom in ideal B field
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, ideal.laser_detuning_li*1.04,
+#                           optimized=False)
+# ax.plot(z_ideal, v_ideal, "k--", 
+#         label="ideal B field (v_initial = {:.0f})".format(
+#           ideal.initial_velocity_li)
+#         )
 
-# Simulation of atoms through calculated B field for different initial 
-# velocities
-for x in range(11, 10, -1):
-    t, z, v, a = simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, 
-                                        ideal.initial_velocity_li * (x/100 + .9), ideal.laser_detuning_li*1.04, 
-                                        coil_winding=coil_winding_edited, current_for_coils=current_for_coils_edited)
-    ax.plot(z, v, 
-            label="v_initial = {:.0f}".format(
-                ideal.initial_velocity_li * (x/100 + .9)))
+# # Simulation of atoms through calculated B field for different initial 
+# # velocities
+# for x in range(11, 10, -1):
+#     t, z, v, a = simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, 
+#                                         ideal.initial_velocity_li * (x/100 + .9), ideal.laser_detuning_li*1.04, 
+#                                         coil_winding=coil_winding_edited, current_for_coils=current_for_coils_edited)
+#     ax.plot(z, v, 
+#             label="v_initial = {:.0f}".format(
+#                 ideal.initial_velocity_li * (x/100 + .9)))
 
 
-ax.set_xlabel("Position [m]")
-ax.set_ylabel("Velocity [m/s]")
-ax.set_title("Motion of Li atom in the Slower")
-ax.legend()
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Li atom in the Slower")
+# ax.legend()
 
-# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                          "zeeman_slower", "figs", "debugging1.pdf")
-# fig.savefig(file_path, bbox_inches="tight")
+# # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+# #                          "zeeman_slower", "figs", "debugging1.pdf")
+# # fig.savefig(file_path, bbox_inches="tight")
 
-plt.show()
+# plt.show()
 
 
 
@@ -994,20 +994,54 @@ plt.show()
 
 ################################################################################
 # Make heatmaps of detuning versus saturation for the final velocity of atoms
-# for the optimized slower
+# using the ZS and compensation coil data 
+
+# Value from compensation.py
+MOT_distance = 0.5348 
 
 # Import data from 10/5/21 measurements
-# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-#                              "zeeman_slower", "data_10.5.21")
-# position_full, background, lc, hc = \
-#     np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
-#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
+file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                              "zeeman_slower")
+position_full_ZS, background_ZS, lc, hc = \
+    np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
 
-# l_current = 30.81
-# h_current = 195
-# position_full = ((position_full * .01) - 0.2516)
-# data = (-1 * ((lc - background) * l_current / 2 
-#               + (hc - background) * h_current / 2))
+l_current = 30.81
+h_current = 195
+position_full_ZS = ((position_full_ZS * .01) - 0.2516)
+data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
+              + (hc - background_ZS) * h_current / 2))
+
+# plt.plot(position_full_ZS, data_ZS)
+# plt.show()
+
+# Import data from 2/3/22 measurements
+position1, position2, background1, coil1, background2, coil2 = \
+    np.genfromtxt(os.path.join(file_location, "data_02.03.22", "02.01.22_comp_coil_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+position1 = (position1*0.01)-0.061+MOT_distance-.055
+position2 = (position2*0.01)-0.061+MOT_distance-.055
+obs_coil_1 = -1*(coil1-background1)*95/5
+obs_coil_2 = np.flip((coil2-background2)*47/5)
+
+obs_total_comp = obs_coil_1 + -1*obs_coil_2
+
+plt.plot(position1, obs_total_comp)
+plt.show()
+
+# fig4, ax4 = plt.subplots()
+
+
+# ax4.plot(position1, obs_total_comp, marker=".", linestyle="none",
+#           label="observed compensation")
+# ax4.axvline(x=MOT_distance, linestyle="--", color="k", 
+#             label="MOT location = {}".format(MOT_distance))
+# ax4.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
+# ax4.set_ylim(-10, 10)
+# ax4.legend()
+# fig4.set_size_inches(12, 8)
+# fig4.savefig(os.path.join(file_path, "compensation.pdf"), 
+#               bbox_inches="tight")
 
 
 # # Lithium
@@ -1024,10 +1058,79 @@ plt.show()
 # for d, detuning in np.ndenumerate(li_detunings): 
 #     for s, saturation in np.ndenumerate(saturations): 
 #         v = simulate.simulate_atom(li_atom, saturation, 
-#                                    ideal.initial_velocity_li, detuning, 
-#                                    positions=position_full, data=data,
-#                                    optimized=False, observed=True, 
-#                                    full_output=False)
+#                                     ideal.initial_velocity_li, detuning, 
+#                                     positions=position_full, data=data,
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
+#         li_final_velocities[d][s] = v
+#         print("li_final_velocities: ", li_final_velocities)
+        
+# print("li_final_velocities: ", li_final_velocities)
+# save_data(li_final_velocities, 
+#           os.path.join(file_location, "li_final_velocities.pickle"))
+
+
+# # Erbium
+# shift = 100 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
+
+# er_atom = atom.Atom("Er")
+# er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
+#                           ideal.laser_detuning_er + shift / 4, 126)
+
+# # Initialize array for storing data
+# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
+
+# for d, detuning in np.ndenumerate(er_detunings):
+#     for s, saturation in np.ndenumerate(saturations):
+#         v = simulate.simulate_atom(er_atom, saturation, 
+#                                     ideal.initial_velocity_er, detuning, 
+#                                     positions=position_full, data=data, 
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
+#         er_final_velocities[d][s] = v 
+#         print("er_final_velocities: ", er_final_velocities)
+
+# print("er_final_velocities: ", er_final_velocities)
+# save_data(er_final_velocities, 
+#           os.path.join(file_location, "er_final_velocities_high_isat.pickle"))
+
+
+################################################################################
+# # Make heatmaps of detuning versus saturation for the final velocity of atoms
+# # for the optimized slower
+
+# # Import data from 10/5/21 measurements
+# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                               "zeeman_slower", "data_10.5.21")
+# position_full, background, lc, hc = \
+#     np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
+#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
+
+# l_current = 30.81
+# h_current = 195
+# position_full = ((position_full * .01) - 0.2516)
+# data = (-1 * ((lc - background) * l_current / 2 
+#               + (hc - background) * h_current / 2))
+
+# # Lithium
+# shift = 20 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
+
+# li_atom = atom.Atom("Li")
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 20)
+
+# # Initialize array for storing data
+# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
+
+# for d, detuning in np.ndenumerate(li_detunings): 
+#     for s, saturation in np.ndenumerate(saturations): 
+#         v = simulate.simulate_atom(li_atom, saturation, 
+#                                     ideal.initial_velocity_li, detuning, 
+#                                     positions=position_full, data=data,
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
 #         li_final_velocities[d][s] = v
 #         print("li_final_velocities: ", li_final_velocities)
         
