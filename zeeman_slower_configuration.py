@@ -1019,16 +1019,20 @@ B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_dist
     + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
 
 # Total field
-B_field_total = (data_ZS + B_field_comp)
+B_field_total = (data_ZS - B_field_comp)
 
+# plt.plot(position_full, B_field_total, label="measured")
+# plt.plot(position_full, ideal.get_ideal_B_field(ideal.ideal_B_field, position_full))
+# plt.legend()
+# plt.show()
 
 # Lithium
-shift = 20 * 10**6
+shift = 50 * 10**6
 saturations = np.arange(1, 5.2, 0.2)
 
 li_atom = atom.Atom("Li")
 li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                            ideal.laser_detuning_li + shift, 20)
+                            ideal.laser_detuning_li + shift, 51)
 
 # Initialize array for storing data
 li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
@@ -1053,7 +1057,7 @@ saturations = np.arange(1, 5.2, 0.2)
 
 er_atom = atom.Atom("Er")
 er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-                          ideal.laser_detuning_er + shift / 4, 101)
+                          ideal.laser_detuning_er + shift, 81)
 
 # Initialize array for storing data
 er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
@@ -1062,11 +1066,12 @@ for d, detuning in np.ndenumerate(er_detunings):
     for s, saturation in np.ndenumerate(saturations):
         v = simulate.simulate_atom(er_atom, saturation, 
                                     ideal.initial_velocity_er, detuning, 
-                                    positions=position_full, data=B_field_total, 
+                                    positions=position_full, data=B_field_total*10**(-4), 
                                     optimized=False, observed=True, 
                                     full_output=False)
         er_final_velocities[d][s] = v 
         print("er_final_velocities: ", er_final_velocities)
+
 
 print("er_final_velocities: ", er_final_velocities)
 save_data(er_final_velocities, 
@@ -1139,9 +1144,15 @@ save_data(er_final_velocities,
 # t_i, z_i, v_i, a_i = simulate.simulate_atom(er_atom, s, v_i_er, 
 #                                             laser_detuning_er, 
 #                                             optimized=False)
+
 # t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
 #                                     coil_winding=coil_winding,
 #                                     current_for_coils=current_for_coils)
+
+# t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
+#                                     positions=position_full, data=B_field_total*10**(-4),
+#                                     optimized=False, observed=True, 
+#                                     full_output=True)
 
 # v_ideal = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
 #                                   optimized=False, full_output=False)
