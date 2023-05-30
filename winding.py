@@ -12,7 +12,6 @@ import os
 import ideal_field as ideal
 import coil_configuration as coil 
 import parameters
-# import heatmap_script as heatmap
 import zeeman_slower_configuration as zs
 
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
