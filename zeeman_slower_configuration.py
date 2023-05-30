@@ -25,7 +25,6 @@ import coil_configuration as coil
 import solenoid_configuration as solenoid 
 import parameters
 import plotting
-# import heatmap_script as heatmap
 import simulate
 import atom 
 
@@ -717,47 +716,47 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # for this. 
 # eta = 0.486 if wire_width = wire_height = 0.0036
 
-coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
-       0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
-       1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
-       1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
-       1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
-       2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
-       2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
-       3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
-       3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
-       6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
-       7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+# coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+#        0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+#        1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+#        1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+#        1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+#        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+#        2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+#        3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+#        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+#        6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+#        7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
 
-current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-        30.8086634 , 160, 160, 160, 160, 160, 160]
+# current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 , 160, 160, 160, 160, 160, 160]
 
 
 ################################################################################
@@ -778,11 +777,11 @@ current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.808663
 #                                     current_for_coils=current_for_coils)
 
 # v_ideal = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
-#                                  optimized=False, full_output=False)
+#                                   optimized=False, full_output=False)
 # v_final = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li,
-#                                  coil_winding=coil_winding,
-#                                  current_for_coils=current_for_coils, 
-#                                  full_output=False)
+#                                   coil_winding=coil_winding,
+#                                   current_for_coils=current_for_coils, 
+#                                   full_output=False)
 # print("v_ideal: ", v_ideal)
 # print("v_final: ", v_final)
 
@@ -1074,97 +1073,6 @@ for d, detuning in np.ndenumerate(er_detunings):
 print("er_final_velocities: ", er_final_velocities)
 save_data(er_final_velocities, 
           os.path.join(file_location, "er_final_velocities_high_isat.pickle"))
-
-
-################################################################################
-# # Make heatmaps of detuning versus saturation for the final velocity of atoms
-# # for the optimized slower
-
-# # Import data from 10/5/21 measurements
-# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-#                               "zeeman_slower", "data_10.5.21")
-# position_full, background, lc, hc = \
-#     np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
-#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
-
-# l_current = 30.81
-# h_current = 195
-# position_full = ((position_full * .01) - 0.2516)
-# data = (-1 * ((lc - background) * l_current / 2 
-#               + (hc - background) * h_current / 2))
-
-# # Lithium
-# shift = 20 * 10**6
-# saturations = np.arange(1, 5.2, 0.2)
-
-# li_atom = atom.Atom("Li")
-# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-#                             ideal.laser_detuning_li + shift, 20)
-
-# # Initialize array for storing data
-# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
-
-# for d, detuning in np.ndenumerate(li_detunings): 
-#     for s, saturation in np.ndenumerate(saturations): 
-#         v = simulate.simulate_atom(li_atom, saturation, 
-#                                     ideal.initial_velocity_li, detuning, 
-#                                     positions=position_full, data=data,
-#                                     optimized=False, observed=True, 
-#                                     full_output=False)
-#         li_final_velocities[d][s] = v
-#         print("li_final_velocities: ", li_final_velocities)
-        
-# print("li_final_velocities: ", li_final_velocities)
-# save_data(li_final_velocities, 
-#           os.path.join(file_location, "li_final_velocities.pickle"))
-
-
-# # Erbium
-# shift = 100 * 10**6
-# saturations = np.arange(1, 5.2, 0.2)
-
-# er_atom = atom.Atom("Er")
-# er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-#                           ideal.laser_detuning_er + shift / 4, 126)
-
-# # Initialize array for storing data
-# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
-
-# for d, detuning in np.ndenumerate(er_detunings):
-#     for s, saturation in np.ndenumerate(saturations):
-#         v = simulate.simulate_atom(er_atom, saturation, 
-#                                     ideal.initial_velocity_er, detuning, 
-#                                     positions=position_full, data=data, 
-#                                     optimized=False, observed=True, 
-#                                     full_output=False)
-#         er_final_velocities[d][s] = v 
-#         print("er_final_velocities: ", er_final_velocities)
-
-# print("er_final_velocities: ", er_final_velocities)
-# save_data(er_final_velocities, 
-#           os.path.join(file_location, "er_final_velocities_high_isat.pickle"))
-
-
-################################################################################
-# Unpickle heatmap data
-
-# folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
-#                           "zeeman_slower", "figs")
-
-# li_file = os.path.join(folder_location, "li_final_velocities.pickle")
-# li_heatmap = retrieve_data(li_file)
-# print("li_final_velocities: ", li_heatmap)
-
-# er_file = os.path.join(folder_location, "er_final_velocities.pickle")
-# er_heatmap = retrieve_data(er_file)
-# print("er_final_velocities: ", er_heatmap)
-
-# er_file_high_isat = os.path.join(folder_location, "er_final_velocities_high_isat.pickle")
-# er_high_isat = retrieve_data(er_file_high_isat)
-# print("high isat: ", er_high_isat)
-
-
-
 
 
 ###############################################################################
