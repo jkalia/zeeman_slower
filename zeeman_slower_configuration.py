@@ -1019,7 +1019,7 @@ B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_dist
     + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
 
 # Total field
-B_field_total = data_ZS + B_field_comp
+B_field_total = (data_ZS + B_field_comp)
 
 
 # Lithium
@@ -1037,7 +1037,7 @@ for d, detuning in np.ndenumerate(li_detunings):
     for s, saturation in np.ndenumerate(saturations): 
         v = simulate.simulate_atom(li_atom, saturation, 
                                     ideal.initial_velocity_li, detuning, 
-                                    positions=position_full, data=B_field_total,
+                                    positions=position_full, data=B_field_total*10**(-4),
                                     optimized=False, observed=True, 
                                     full_output=False)
         li_final_velocities[d][s] = v
@@ -1046,7 +1046,6 @@ for d, detuning in np.ndenumerate(li_detunings):
 print("li_final_velocities: ", li_final_velocities)
 save_data(li_final_velocities, 
           os.path.join(file_location, "li_final_velocities.pickle"))
-
 
 # Erbium
 shift = 80 * 10**6
