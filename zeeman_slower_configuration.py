@@ -760,8 +760,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 
 ################################################################################
-# Plot motion of single atom through optimized slower winding
-
+# # Plot motion of single atom through optimized slower winding
 
 # # For lithium
 # li_atom = atom.Atom("Li")
@@ -788,7 +787,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # fig_li, ax_li = plt.subplots()
 
 # ax_li.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
-#            v_i_li))
+#             v_i_li))
 # ax_li.plot(z, v, label="v_initial = {:.0f}".format(v_i_li))
             
 # ax_li.set_xlabel("Position [m]")
@@ -797,7 +796,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # ax_li.legend()
 
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                          "zeeman_slower", "figs", "debugging_li.pdf")
+#                           "zeeman_slower", "figs", "debugging_li.pdf")
 # fig_li.savefig(file_path, bbox_inches="tight")
 
 
@@ -815,18 +814,18 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 #                                     current_for_coils=current_for_coils)
 
 # v_ideal = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
-#                                  optimized=False, full_output=False)
+#                                   optimized=False, full_output=False)
 # v_final = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
-#                                  coil_winding=coil_winding,
-#                                  current_for_coils=current_for_coils, 
-#                                  full_output=False)
+#                                   coil_winding=coil_winding,
+#                                   current_for_coils=current_for_coils, 
+#                                   full_output=False)
 # print("v_ideal: ", v_ideal)
 # print("v_final: ", v_final)
 
 # fig_er, ax_er = plt.subplots()
 
 # ax_er.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
-#            v_i_er))
+#             v_i_er))
 # ax_er.plot(z, v, label="v_initial = {:.0f}".format(v_i_er))
             
 # ax_er.set_xlabel("Position [m]")
@@ -835,7 +834,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # ax_er.legend()
 
 # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
-#                          "zeeman_slower", "figs", "debugging_er.pdf")
+#                           "zeeman_slower", "figs", "debugging_er.pdf")
 # fig_er.savefig(file_path, bbox_inches="tight")
 
 
@@ -993,7 +992,7 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 ################################################################################
 # Make heatmaps of detuning versus saturation for the final velocity of atoms
-# using the ZS and compensation coil data 
+# using the observed ZS and compensation coil data 
 
 # Value from compensation.py
 MOT_distance = 0.5348 
@@ -1073,3 +1072,250 @@ for d, detuning in np.ndenumerate(er_detunings):
 print("er_final_velocities: ", er_final_velocities)
 save_data(er_final_velocities, 
           os.path.join(file_location, "er_final_velocities_high_isat.pickle"))
+
+
+################################################################################
+# Working on this 
+# # Plot motion of single atom through observed ZS and comp coil data
+
+# # Value from compensation.py
+# MOT_distance = 0.5348 
+
+# # Import data from 10/5/21 measurements
+# # ZS real data
+# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                               "zeeman_slower")
+# position_full, background_ZS, lc, hc = \
+#     np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
+#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
+
+# l_current = 30.81
+# h_current = 195
+# position_full = ((position_full * .01) - 0.2516)
+# data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
+#               + (hc - background_ZS) * h_current / 2))
+
+
+# # Use simulation data for comp coils (did not take enough of the real data)
+# # Values from the Mathematica notebook
+# # ZS comp coil simulated data
+# B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
+#     + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
+
+# # Total field
+# B_field_total = data_ZS + B_field_comp
+
+# # For lithium
+# li_atom = atom.Atom("Li")
+# s = 2
+# v_i_li = ideal.initial_velocity_li
+# laser_detuning_li = ideal.laser_detuning_li
+
+# t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#                                     positions=position_full, data=B_field_total*10**(-4),
+#                                     optimized=False, observed=True, 
+#                                     full_output=True)
+
+# fig_li, ax_li = plt.subplots()
+
+# ax_li.plot(z, v)
+# ax_li.set_xlabel("Position [m]")
+# ax_li.set_ylabel("Velocity [m/s]")
+# ax_li.set_title("Motion of Li atom in the Slower")
+# ax_li.legend()
+
+# plt.show()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                           "zeeman_slower", "figs", "debugging_li.pdf")
+# fig_li.savefig(file_path, bbox_inches="tight")
+
+
+# # For erbium
+# er_atom = atom.Atom("Er")
+# s = 2
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# t_i, z_i, v_i, a_i = simulate.simulate_atom(er_atom, s, v_i_er, 
+#                                             laser_detuning_er, 
+#                                             optimized=False)
+# t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
+#                                     coil_winding=coil_winding,
+#                                     current_for_coils=current_for_coils)
+
+# v_ideal = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
+#                                   optimized=False, full_output=False)
+# v_final = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
+#                                   coil_winding=coil_winding,
+#                                   current_for_coils=current_for_coils, 
+#                                   full_output=False)
+# print("v_ideal: ", v_ideal)
+# print("v_final: ", v_final)
+
+# fig_er, ax_er = plt.subplots()
+
+# ax_er.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
+#             v_i_er))
+# ax_er.plot(z, v, label="v_initial = {:.0f}".format(v_i_er))
+            
+# ax_er.set_xlabel("Position [m]")
+# ax_er.set_ylabel("Velocity [m/s]")
+# ax_er.set_title("Motion of Er atom in the Slower")
+# ax_er.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                           "zeeman_slower", "figs", "debugging_er.pdf")
+# fig_er.savefig(file_path, bbox_inches="tight")
+
+
+################################################################################
+# Simulate motion of many atoms through ZS 
+
+# # Plot simulations
+# fig, ax = plt.subplots()
+
+# # Make instances of each kind of atom
+# li_atom = atom.Atom("Li")
+
+# # Simulation of atom in ideal B field
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#   simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, ideal.initial_velocity_li, ideal.laser_detuning_li*1.04,
+#                           optimized=False)
+# ax.plot(z_ideal, v_ideal, "k--", 
+#         label="ideal B field (v_initial = {:.0f})".format(
+#           ideal.initial_velocity_li)
+#         )
+
+# # Simulation of atoms through calculated B field for different initial 
+# # velocities
+# for x in range(11, 10, -1):
+#     t, z, v, a = simulate.simulate_atom(li_atom, ideal.Isat_li_d2 * 2, 
+#                                         ideal.initial_velocity_li * (x/100 + .9), ideal.laser_detuning_li*1.04, 
+#                                         coil_winding=coil_winding_edited, current_for_coils=current_for_coils_edited)
+#     ax.plot(z, v, 
+#             label="v_initial = {:.0f}".format(
+#                 ideal.initial_velocity_li * (x/100 + .9)))
+
+
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Li atom in the Slower")
+# ax.legend()
+
+# # file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+# #                          "zeeman_slower", "figs", "debugging1.pdf")
+# # fig.savefig(file_path, bbox_inches="tight")
+
+# plt.show()
+
+
+
+# Choose atom to simulate
+# if atom=="Er":
+#     laser_detuning = ideal.laser_detuning_er
+#     v_initial = ideal.initial_velocity_er
+#     v_final = ideal.final_velocity_er
+# else:
+#     laser_detuning = ideal.laser_detuning_li
+#     v_initial = ideal.initial_velocity_li
+#     v_final = ideal.final_velocity_li
+
+
+# Make instances of each kind of atom
+# li_atom = atom.Atom("Li")
+
+# s = 2
+# v_i_li = ideal.initial_velocity_li
+# laser_detuning_li = ideal.laser_detuning_li
+
+# er_atom = atom.Atom("Er")
+
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# s = 1
+
+# # Plot simulations
+# for x in range(-50, 51, 1):
+
+#     fig, ax = plt.subplots()
+
+#     laser_detuning_li = (ideal.laser_detuning_li 
+#                          + ideal.laser_detuning_li * x/100)
+#     print("laser_detuning_li: ", laser_detuning_li)
+
+#     for y in range(-1, 2, 1):
+
+#         v_i_li = (ideal.initial_velocity_li + y * 10)
+#         print("v_i_li: ", v_i_li)
+
+#         # Simulation of atom in ideal B field
+#         t_ideal, z_ideal, v_ideal, a_ideal = \
+#             simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#                                    optimized=False)
+
+#         # Simulation of atom through calculated B field 
+#         t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, 
+#                                             laser_detuning_li, coil_winding, 
+#                                             current_for_coils) 
+
+#         ax.plot(z_ideal, v_ideal, "--", 
+#                 label="ideal B field (v_i = {:.0f}, v_f = {:.0f})".format(
+#                                                                     v_i_li, 
+#                                                                     v[-1]))
+#         ax.plot(z, v, label="v_i = {:.0f}, v_f = {:.0f}".format(v_i_li, v[-1]))
+
+#     ax.set_xlabel("Position [m]")
+#     ax.set_ylabel("Velocity [m/s]")
+#     ax.set_title("Motion of Li atom in the Slower, \n" 
+#                  "detuning = {}".format(laser_detuning_li))
+#     ax.legend()
+
+#     file_name = "detuning_{:.2e}.pdf".format(laser_detuning_li)
+
+#     file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                              "zeeman_slower", "detuning", file_name)
+#     fig.savefig(file_path, bbox_inches="tight")
+
+
+
+
+
+# # v_i_li = ideal.initial_velocity_li 
+# # laser_detuning_li = ideal.laser_detuning_li * 1.01
+
+
+# er_atom = atom.Atom("Er")
+
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# s = 1
+
+# # Plot simulations
+# fig, ax = plt.subplots()
+    
+# # Simulation of atom in ideal B field
+# t_ideal, z_ideal, v_ideal, a_ideal = \
+#     simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
+#                                optimized=False)
+
+# # Simulation of atom through calculated B field 
+# t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
+#                                         coil_winding, current_for_coils) 
+
+# ax.plot(z_ideal, v_ideal, "k--", 
+#             label="ideal B field (v_i = {:.0f})".format(v_i_er))
+# ax.plot(z, v, label="v_i = {:.0f}".format(v_i_er))
+
+
+
+# ax.set_xlabel("Position [m]")
+# ax.set_ylabel("Velocity [m/s]")
+# ax.set_title("Motion of Er atom in the Slower \n detuning = {}, s = {}".format(laser_detuning_er, s))
+# ax.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                          "zeeman_slower", "figs", "er2.pdf")
+# fig.savefig(file_path, bbox_inches="tight")

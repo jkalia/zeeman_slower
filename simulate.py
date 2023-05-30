@@ -22,8 +22,8 @@ def intensity(z):
 # Simulates the motion of the atoms in the B field 
 def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0], 
                   current_for_coils=[0], positions=[0], data=[0], dt=1e-6, 
-                  z_max=1, max_steps=20000, 
-                  optimized=True, observed=False, full_output=True):
+                  z_max=1, max_steps=20000, optimized=True, observed=False, 
+                  full_output=True):
 
     v = v_initial
     z = -0.05
@@ -40,19 +40,19 @@ def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0],
 
             if optimized:
                 a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                                 laser_detuning, v, 
-                                 (coil.calculate_B_field_coil(coil_winding, 
+                                  laser_detuning, v, 
+                                  (coil.calculate_B_field_coil(coil_winding, 
                                                               current_for_coils, 
                                                               np.array([z]))[0] 
                                                               * 10**(-4)))
             elif observed:
                 a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                                 laser_detuning, v, 
-                                 np.interp(z, positions, data))
+                                  laser_detuning, v, 
+                                  np.interp(z, positions, data))
             else:
                 a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                                 laser_detuning, v, 
-                                 (ideal.get_ideal_B_field(ideal.ideal_B_field, 
+                                  laser_detuning, v, 
+                                  (ideal.get_ideal_B_field(ideal.ideal_B_field, 
                                                           np.array([z]))[0] 
                                                           * 10**(-4)))
 
@@ -75,15 +75,19 @@ def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0],
 
             if optimized:
                 a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                                 laser_detuning, v, 
-                                 (coil.calculate_B_field_coil(coil_winding, 
+                                  laser_detuning, v, 
+                                  (coil.calculate_B_field_coil(coil_winding, 
                                                               current_for_coils, 
                                                               np.array([z]))[0] 
                                                               * 10**(-4)))
+            elif observed:
+                a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
+                                  laser_detuning, v, 
+                                  np.interp(z, positions, data))
             else:
                 a = acceleration(atom.m, atom.linewidth, atom.k, atom.mu0, s, 
-                                 laser_detuning, v, 
-                                 (ideal.get_ideal_B_field(ideal.ideal_B_field, 
+                                  laser_detuning, v, 
+                                  (ideal.get_ideal_B_field(ideal.ideal_B_field, 
                                                           np.array([z]))[0] 
                                                           * 10**(-4)))
 
@@ -91,9 +95,7 @@ def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0],
             v -= a * dt 
 
             counter += 1
+            
+        print("v_final = {}, z = {}, counter = {}".format(v, z, counter))
 
         return v
-
-
-
-
