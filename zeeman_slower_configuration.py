@@ -716,47 +716,121 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # for this. 
 # eta = 0.486 if wire_width = wire_height = 0.0036
 
-# coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
-#        0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
-#        1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
-#        1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
-#        1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
-#        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
-#        2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
-#        3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
-#        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
-#        6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
-#        7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+        0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+        1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+        1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+        1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+        2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+        3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+        6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+        7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
 
-# current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
-#         30.8086634 , 160, 160, 160, 160, 160, 160]
+current_for_coils_edited = [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+        30.8086634 , 160, 160, 160, 160, 160, 160]
+
+################################################################################
+# Make heatmaps of detuning versus saturation for the final velocity of atoms
+# using the observed ZS and compensation coil data 
+
+# Value from compensation.py
+MOT_distance = 0.5348 
+
+# Import data from 10/5/21 measurements
+# ZS real data
+file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                              "zeeman_slower")
+position_full, background_ZS, lc, hc = \
+    np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+
+l_current = 30
+h_current = 120
+position_full = ((position_full * .01) - 0.2516)
+data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
+              + (hc - background_ZS) * h_current / 2))
+
+
+# Use simulation data for comp coils (did not take enough of the real data)
+# Values from the Mathematica notebook
+# ZS comp coil simulated data
+B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
+    + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
+
+# Total field
+B_field_total = (data_ZS - B_field_comp)
+
+plt.plot(position_full, B_field_total, label="measured")
+plt.plot(position_full, ideal.get_ideal_B_field(ideal.ideal_B_field, position_full), label="ideal, eta=0.486")
+plt.plot(position_full, ideal.get_ideal_B_field(ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, .45, 
+                                           ideal.initial_velocity_er, 5, ideal.mu0_er, 
+                                           ideal.laser_detuning_er)[1], position_full), label="capture velocity of 5 m/s, eta=0.45")
+plt.legend()
+plt.show()
+
+
+# # Lithium
+# shift = 50 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
+
+# li_atom = atom.Atom("Li")
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 51)
+
+# # Initialize array for storing data
+# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
+
+
+# v = simulate.simulate_atom(li_atom, saturation, 
+#                                     ideal.initial_velocity_li, detuning, 
+#                                     positions=position_full, data=B_field_total*10**(-4),
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
+
+
+# # Erbium
+# shift = 80 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
+
+# er_atom = atom.Atom("Er")
+# er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
+#                           ideal.laser_detuning_er + shift, 81)
+
+
+# v = simulate.simulate_atom(er_atom, saturation, 
+#                                     ideal.initial_velocity_er, detuning, 
+#                                     positions=position_full, data=B_field_total*10**(-4), 
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
 
 
 ################################################################################
@@ -990,41 +1064,41 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 # fig.savefig(file_path, bbox_inches="tight")
 
 
-################################################################################
-# Make heatmaps of detuning versus saturation for the final velocity of atoms
-# using the observed ZS and compensation coil data 
+# ################################################################################
+# # Make heatmaps of detuning versus saturation for the final velocity of atoms
+# # using the observed ZS and compensation coil data 
 
-# Value from compensation.py
-MOT_distance = 0.5348 
+# # Value from compensation.py
+# MOT_distance = 0.5348 
 
-# Import data from 10/5/21 measurements
-# ZS real data
-file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                              "zeeman_slower")
-position_full, background_ZS, lc, hc = \
-    np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
-                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+# # Import data from 10/5/21 measurements
+# # ZS real data
+# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                               "zeeman_slower")
+# position_full, background_ZS, lc, hc = \
+#     np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
+#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
 
-l_current = 30.81
-h_current = 195
-position_full = ((position_full * .01) - 0.2516)
-data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
-              + (hc - background_ZS) * h_current / 2))
+# l_current = 30.81
+# h_current = 195
+# position_full = ((position_full * .01) - 0.2516)
+# data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
+#               + (hc - background_ZS) * h_current / 2))
 
 
-# Use simulation data for comp coils (did not take enough of the real data)
-# Values from the Mathematica notebook
-# ZS comp coil simulated data
-B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
-    + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
+# # Use simulation data for comp coils (did not take enough of the real data)
+# # Values from the Mathematica notebook
+# # ZS comp coil simulated data
+# B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
+#     + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
 
-# Total field
-B_field_total = (data_ZS - B_field_comp)
+# # Total field
+# B_field_total = (data_ZS - B_field_comp)
 
-# plt.plot(position_full, B_field_total, label="measured")
-# plt.plot(position_full, ideal.get_ideal_B_field(ideal.ideal_B_field, position_full))
-# plt.legend()
-# plt.show()
+plt.plot(position_full, B_field_total, label="measured")
+plt.plot(position_full, ideal.get_ideal_B_field(ideal.ideal_B_field, position_full))
+plt.legend()
+plt.show()
 
 # Lithium
 shift = 50 * 10**6

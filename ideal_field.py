@@ -7,6 +7,7 @@
 
 import numpy as np 
 import scipy.constants 
+import matplotlib.pyplot as plt
 
 
 # Physical constants
@@ -67,8 +68,8 @@ def max_acceleration(k, linewidth, m):
 def slower_acceleration(max_acceleration, eta):
     return eta * max_acceleration
 
-def slower_length(capture_velocity, slower_acceleration):
-    return capture_velocity**2 / (2 * slower_acceleration)
+def slower_length(capture_velocity, final_velocity, slower_acceleration):
+    return (capture_velocity - final_velocity)**2 / (2 * slower_acceleration)
 
 def B0(capture_velocity, k, mu0):
     return hbar * k * capture_velocity / mu0
@@ -80,11 +81,11 @@ def B_field(B0, Bbias, slower_length):
     return lambda z : Bbias + B0 * np.sqrt(1 - z / slower_length)
 
 # Outputs in SI
-def get_slower_parameters(k, linewidth, m, eta, capture_velocity, mu0, 
+def get_slower_parameters(k, linewidth, m, eta, capture_velocity, final_velocity, mu0, 
                           laser_detuning):
     max_acceleration_val = max_acceleration(k, linewidth, m)
     slower_acceleration_val = slower_acceleration(max_acceleration_val, eta)
-    slower_length_val = slower_length(capture_velocity, slower_acceleration_val)
+    slower_length_val = slower_length(capture_velocity, final_velocity, slower_acceleration_val)
     B0_val = B0(capture_velocity, k, mu0)
     Bbias_val = Bbias(mu0, laser_detuning)
 
@@ -112,9 +113,18 @@ def get_ideal_B_field(ideal_B_field, discretization):
 
 # Obtain B field for increasing-field ZS 
 slower_parameters = get_slower_parameters(k_er, linewidth_er, m_er, eta_er, 
-                                          initial_velocity_er, mu0_er, 
+                                          initial_velocity_er, 0, mu0_er, 
                                           laser_detuning_er)
 slower_length_val = slower_parameters[0]
 ideal_B_field = slower_parameters[1] # function of z
 
-
+# z = np.linspace(0, .6, 100)
+# plt.plot(z, get_ideal_B_field(ideal_B_field, z), label="v_f=0, eta=0.486")
+# plt.plot(z, get_ideal_B_field(get_slower_parameters(k_er, linewidth_er, m_er, eta_er, 
+#                                           initial_velocity_er, 10, mu0_er, 
+#                                           laser_detuning_er)[1], z), label="v_f=10 m/s, eta=0.486", marker=".")
+# plt.plot(z, get_ideal_B_field(get_slower_parameters(k_er, linewidth_er, m_er, .51, 
+#                                           initial_velocity_er, 0, mu0_er, 
+#                                           laser_detuning_er)[1], z), label="v_f=0 m/s, eta=0.51")
+# plt.legend()
+# plt.plot()
