@@ -21,8 +21,8 @@ def intensity(z):
 
 # Simulates the motion of the atoms in the B field 
 def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0], 
-                  current_for_coils=[0], positions=[0], data=[0], dt=1e-6, 
-                  z_max=1, max_steps=20000, optimized=True, observed=False, 
+                  current_for_coils=[0], positions=[0], data=[0], dt=1e-7, 
+                  z_max=1, max_steps=200000, optimized=True, observed=False, 
                   full_output=True):
 
     v = v_initial
