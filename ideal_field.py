@@ -7,8 +7,6 @@
 
 import numpy as np 
 import scipy.constants 
-import matplotlib.pyplot as plt
-
 
 # Physical constants
 amu = scipy.constants.physical_constants["atomic mass constant"][0] # [kg]
@@ -117,14 +115,3 @@ slower_parameters = get_slower_parameters(k_er, linewidth_er, m_er, eta_er,
                                           laser_detuning_er)
 slower_length_val = slower_parameters[0]
 ideal_B_field = slower_parameters[1] # function of z
-
-# z = np.linspace(0, .6, 100)
-# plt.plot(z, get_ideal_B_field(ideal_B_field, z), label="v_f=0, eta=0.486")
-# plt.plot(z, get_ideal_B_field(get_slower_parameters(k_er, linewidth_er, m_er, eta_er, 
-#                                           initial_velocity_er, 10, mu0_er, 
-#                                           laser_detuning_er)[1], z), label="v_f=10 m/s, eta=0.486", marker=".")
-# plt.plot(z, get_ideal_B_field(get_slower_parameters(k_er, linewidth_er, m_er, .51, 
-#                                           initial_velocity_er, 0, mu0_er, 
-#                                           laser_detuning_er)[1], z), label="v_f=0 m/s, eta=0.51")
-# plt.legend()
-# plt.plot()

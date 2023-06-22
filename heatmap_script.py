@@ -10,7 +10,6 @@ matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
 
-
 ##############################################################################
 # Analyzing detuning versus saturation
 
