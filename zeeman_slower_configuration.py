@@ -1257,29 +1257,29 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 
 
 ##############################################################################
-# Test I(z) functionality
+# # Test I(z) functionality
 
-# Value from compensation.py
-MOT_distance = 0.5348 
+# # Value from compensation.py
+# MOT_distance = 0.5348 
 
-# Import data from 10/5/21 measurements
-# ZS real data
-file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-                              "zeeman_slower")
-position_full, background_ZS, lc, hc = \
-    np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
-                  dtype=float, delimiter=",", skip_header=1, unpack=True)
-position_full = ((position_full * .01) - 0.2516)
+# # Import data from 10/5/21 measurements
+# # ZS real data
+# file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+#                               "zeeman_slower")
+# position_full, background_ZS, lc, hc = \
+#     np.genfromtxt(os.path.join(file_location, "data_10.5.21", "10.5.21_ZS_testing_data.csv"), 
+#                   dtype=float, delimiter=",", skip_header=1, unpack=True)
+# position_full = ((position_full * .01) - 0.2516)
 
-# Use simulation data for comp coils (did not take enough of the real data)
-# Values from the Mathematica notebook
-# ZS comp coil simulated data
-B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
-    + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
+# # Use simulation data for comp coils (did not take enough of the real data)
+# # Values from the Mathematica notebook
+# # ZS comp coil simulated data
+# B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
+#     + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
 
-z = np.linspace(0, 1.3)
-plt.plot(z, simulate.intensity(2, z))
-plt.show()
+# z = np.linspace(0, 1.3)
+# plt.plot(z, simulate.intensity(2, z))
+# plt.show()
 
 ##############################################################################
 # HC vs LC heatmap, for fixed detuning and saturation
@@ -1303,7 +1303,7 @@ B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_dist
     + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
 
 # Parameters for heatmaps
-saturation = 2
+s_init = 2
 high_currents = np.linspace(120, 190, 141)
 low_currents = np.linspace(25, 35, 21)
 

@@ -15,14 +15,14 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
     return (ideal.hbar * k / m * linewidth / 2 
             * s / (1 + s + (2 * delta / linewidth)**2))
 
-def intensity(s_init, z):
+def saturation(s_init, z):
     waist_init = 0.00711 #m
     waist_size = 0.0045 + 0.00201544 * z
     return s_init * waist_init**2 / waist_size**2
  
 
 # Simulates the motion of the atoms in the B field 
-def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0], 
+def simulate_atom(atom, s_init, v_initial, laser_detuning, coil_winding=[0], 
                   current_for_coils=[0], positions=[0], data=[0], dt=1e-7, 
                   z_max=1, max_steps=200000, optimized=True, observed=False, 
                   full_output=True):
