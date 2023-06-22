@@ -40,7 +40,7 @@ for i, vfinal in np.ndenumerate(li_final_velocities):
         li_final_velocities[i[0]][i[1]] = 1000
 
 fig_li, ax_li = plt.subplots()
-im_li = ax_li.imshow(li_final_velocities)
+im_li = ax_li.imshow(li_final_velocities, vmin=-1000, vmax=1000)
 
 ax_li.set_xticks(np.arange(len(saturations)))
 ax_li.set_yticks(np.arange(len(li_detunings)))
@@ -51,7 +51,7 @@ ax_li.set_yticklabels(list(map(str, np.round(li_detunings*10**(-6), 0))), fontsi
 plt.setp(ax_li.get_xticklabels(), rotation=45, ha="right",
           rotation_mode="anchor")
 
-ax_li.set_title("Motion of Li atoms in ZS + comp coils (cutoff = 100 m/s, lc = 35.5 A, hc = 77.5 A)")
+ax_li.set_title("Motion of Li atoms in ZS + comp coils (cutoff = 100 m/s, lc = 35.5 A, hc = 75.5 A)")
 ax_li.set_ylabel("detuning (MHz)")
 ax_li.set_xlabel("saturation")
 
@@ -88,7 +88,7 @@ for i, vfinal in np.ndenumerate(er_final_velocities_high_isat):
         er_final_velocities_high_isat[i[0]][i[1]] = 1000
 
 fig_er, ax_er = plt.subplots()
-im_er = ax_er.imshow(er_final_velocities_high_isat)
+im_er = ax_er.imshow(er_final_velocities_high_isat, vmin=-1000, vmax=1000)
 
 
 ax_er.set_xticks(np.arange(len(saturations)))
