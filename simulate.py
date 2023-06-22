@@ -15,8 +15,11 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
     return (ideal.hbar * k / m * linewidth / 2 
             * s / (1 + s + (2 * delta / linewidth)**2))
 
-def intensity(z):
-    return 
+def intensity(s_init, z):
+    lens_position = 2.0447 - 0.7493 #m
+    waist_init = 0.00711 #m
+    waist_size = 0.00711 - 0.0711 * (lens_position-z)
+    return s_init * waist_init**2 / waist_size**2
  
 
 # Simulates the motion of the atoms in the B field 
