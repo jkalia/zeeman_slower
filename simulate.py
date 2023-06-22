@@ -16,9 +16,8 @@ def acceleration(m, linewidth, k, mu0, s, laser_detuning, v, B):
             * s / (1 + s + (2 * delta / linewidth)**2))
 
 def intensity(s_init, z):
-    lens_position = 2.0447 - 0.7493 #m
     waist_init = 0.00711 #m
-    waist_size = 0.00711 - 0.0711 * (lens_position-z)
+    waist_size = 0.0045 + 0.00201544 * z
     return s_init * waist_init**2 / waist_size**2
  
 
@@ -102,3 +101,4 @@ def simulate_atom(atom, s, v_initial, laser_detuning, coil_winding=[0],
         print("v_final = {}, z = {}, counter = {}".format(v, z, counter))
 
         return v
+
