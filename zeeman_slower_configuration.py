@@ -1113,7 +1113,7 @@ position_full, background_ZS, lc, hc = \
                   dtype=float, delimiter=",", skip_header=1, unpack=True)
 
 l_current = 35
-h_current = 70
+h_current = 68
 position_full = ((position_full * .01) - 0.2516)
 data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
               + (hc - background_ZS) * h_current / 2))
@@ -1128,13 +1128,13 @@ B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_dist
 # Total field
 B_field_total = (data_ZS - B_field_comp)
 
-# plt.plot(position_full, B_field_total)
-# plt.plot(position_full, 
-#          ideal.get_ideal_B_field(ideal.get_slower_parameters(ideal.k_er, 
-#                                                              ideal.linewidth_er, ideal.m_er, 0.486, 
-#                             ideal.initial_velocity_er, 0, ideal.mu0_er, 
-#                             ideal.laser_detuning_er)[1], position_full), color="r", linestyle="-")
-# plt.show()
+plt.plot(position_full, B_field_total)
+plt.plot(position_full, 
+          ideal.get_ideal_B_field(ideal.get_slower_parameters(ideal.k_er, 
+                                                              ideal.linewidth_er, ideal.m_er, 0.486, 
+                            ideal.initial_velocity_er, 5, ideal.mu0_er, 
+                            ideal.laser_detuning_er)[1], position_full), color="r", linestyle="-")
+plt.show()
 
 
 

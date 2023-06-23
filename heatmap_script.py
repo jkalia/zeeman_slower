@@ -18,7 +18,7 @@ matplotlib.rcParams['font.family'] = 'STIXGeneral'
 folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
                                 "zeeman_slower") 
 
-li_file_name = "li_final_velocities_hc=77.5A_lc=35.5A.pickle"
+li_file_name = "li_final_velocities_hc=68A_lc=35A.pickle"
 li_file = os.path.join(folder_location, li_file_name)
 li_final_velocities = pickle.load(open(li_file, "rb"))
 
@@ -51,13 +51,13 @@ ax_li.set_yticklabels(list(map(str, np.round(li_detunings*10**(-6), 0))), fontsi
 plt.setp(ax_li.get_xticklabels(), rotation=45, ha="right",
           rotation_mode="anchor")
 
-ax_li.set_title("Motion of Li atoms in ZS + comp coils (cutoff = 100 m/s, lc = 35.5 A, hc = 75.5 A)")
+ax_li.set_title("Motion of Li atoms in ZS + comp coils (cutoff = 100 m/s, lc = 35 A, hc = 68 A)")
 ax_li.set_ylabel("detuning (MHz)")
 ax_li.set_xlabel("saturation")
 
 fig_li.tight_layout()
 fig_li.savefig(os.path.join(folder_location, 
-                            "li_final_velocities_lc=35.5A_hc=77.5A.pdf"), 
+                            "li_final_velocities_lc=35A_hc=68A.pdf"), 
                 bbox_inches="tight")
 
 
@@ -66,7 +66,7 @@ fig_li.savefig(os.path.join(folder_location,
 folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
                                 "zeeman_slower") 
 
-er_file_name = "er_final_velocities_hc=77.5A_lc=35.5A.pickle"
+er_file_name = "er_final_velocities_hc=68A_lc=35A.pickle"
 er_file = os.path.join(folder_location, er_file_name)
 er_final_velocities_high_isat = pickle.load(open(er_file, "rb"))
 
@@ -100,13 +100,13 @@ ax_er.set_yticklabels(list(map(str, np.round(er_detunings*10**(-6), 0))), fontsi
 plt.setp(ax_er.get_xticklabels(), rotation=45, ha="right",
           rotation_mode="anchor")
 
-ax_er.set_title("Motion of Er atoms in ZS + comp coils (cutoff = 10 m/s, lc = 35.5 A, hc = 77.5 A)")
+ax_er.set_title("Motion of Er atoms in ZS + comp coils (cutoff = 10 m/s, lc = 35 A, hc = 68 A)")
 ax_er.set_ylabel("detuning (MHz)")
 ax_er.set_xlabel("saturation")
 
 fig_er.tight_layout()
 fig_er.savefig(os.path.join(folder_location, 
-                            "er_final_velocities_lc=35.5A_hc=77.5A.pdf"), 
+                            "er_final_velocities_lc=35A_hc=68A.pdf"), 
                 bbox_inches="tight")
 
 
