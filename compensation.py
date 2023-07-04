@@ -199,8 +199,8 @@ ax.set_ylabel("B field (Gauss)")
 ax.legend()
 
 fig.set_size_inches(12, 8)
-fig.savefig(os.path.join(file_path, "total_field_no_comp_v2.pdf"), 
-            bbox_inches="tight")
+# fig.savefig(os.path.join(file_path, "total_field_no_comp_v2.pdf"), 
+#             bbox_inches="tight")
 
 
 # Zoomed in plot of B field and gradient at MOT
@@ -238,8 +238,8 @@ ax2.legend(loc="lower right")
 ax1.set_title("Magnetic field and gradient at MOT position (no compensation)")
 fig1.set_size_inches(12, 8)
 fig1.tight_layout()
-fig1.savefig(os.path.join(file_path, "gradient_no_comp.pdf"), 
-              bbox_inches="tight")
+# fig1.savefig(os.path.join(file_path, "gradient_no_comp.pdf"), 
+#               bbox_inches="tight")
 
 
 # Plot the B field and gradient on the same figure
@@ -284,8 +284,8 @@ ax3[0].plot(z,(7.14 - (1.7/0.01)*(z-MOT_distance)), color="r",
 ax3[0].legend()
 ax3[1].legend()
 fig3.set_size_inches(24, 16)
-fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation.pdf"), 
-              bbox_inches="tight")
+# fig3.savefig(os.path.join(file_path, "field_and_gradient_compensation.pdf"), 
+#               bbox_inches="tight")
 
 
 ###############
@@ -317,8 +317,8 @@ ax4.set_xlim(MOT_distance-0.02, MOT_distance+0.02)
 ax4.set_ylim(-10, 10)
 ax4.legend()
 fig4.set_size_inches(12, 8)
-fig4.savefig(os.path.join(file_path, "compensation.pdf"), 
-              bbox_inches="tight")
+# fig4.savefig(os.path.join(file_path, "compensation.pdf"), 
+#               bbox_inches="tight")
 
 
 

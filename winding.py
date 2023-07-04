@@ -17,6 +17,8 @@ import zeeman_slower_configuration as zs
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
+MOT_distance = 0.5348 
+
 
 # This function calculates the total B field from the coil winding with the 
 # half gap in between sections, and works with partial integer values
@@ -75,99 +77,99 @@ def calculate_B_field_coil_gap(coil_winding, current_for_coils,
 #                                "zeeman_slower", "3.5mm", 
 #                                "optimization_plots")
 
-# # Arrays which define the solenoid configuration for the low current section. 
-# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-#              0.5, 0.25, 0]
+# Arrays which define the solenoid configuration for the low current section. 
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+              0.5, 0.25, 0]
 
-# # Arrays which define the solenoid configuration for the high current section.
-# fixed_densities = [2]
-# fixed_lengths = [6]
-# fixed_overlap = 0
+# Arrays which define the solenoid configuration for the high current section.
+fixed_densities = [2]
+fixed_lengths = [6]
+fixed_overlap = 0
 
-# final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
-#           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
-#           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
-#          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00, 
-#          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
-#           130.84645074]
+final = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00, 
+          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
+          130.84645074]
 
-# discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
-#         zs.discretize(fixed_lengths, fixed_overlap, ideal.eta_er)
+discretized_slower_adjusted, ideal_B_field_adjusted, z_long, num_coils = \
+        zs.discretize(fixed_lengths, fixed_overlap, ideal.eta_er)
 
-# z_result = np.linspace(0, ideal.slower_length_val+.1, 10000) 
-# y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
+z_result = np.linspace(0, MOT_distance+.1, 10000) 
+y_result = ideal.get_ideal_B_field(ideal.ideal_B_field, z_result)
 
-# coil_winding, current_for_coils = \
-#   coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
-#                                      fixed_lengths, np.round(final[0:-2]), 
-#                                      final[-2], final[-1])
-# total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
-#                                           z_result)
+coil_winding, current_for_coils = \
+  coil.give_coil_winding_and_current(num_coils, fixed_densities, densities, 
+                                      fixed_lengths, np.round(final[0:-2]), 
+                                      final[-2], final[-1])
+total_field = coil.calculate_B_field_coil(coil_winding, current_for_coils, 
+                                          z_result)
 
 
-# sections = [62, 98, 112]
-# total_field_gap = calculate_B_field_coil_gap(coil_winding, current_for_coils, 
-#                                              z_result, sections)
+sections = [0, 62, 98, 112]
+total_field_gap = calculate_B_field_coil_gap(coil_winding, current_for_coils, 
+                                              z_result, sections)
 
-# coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 
-#                        0.25, 0.25, 0.25, 0.25, 0.25, 0.5 , 0.5 , 0.5 , 
-#                        0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 1.  , 1.  , 
-#                        1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 
-#                        1.  , 1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 
-#                        1.25, 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 
-#                        1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  , 2.  , 
-#                        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 
-#                        3   , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 
-#                        2.5 , 3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 
-#                        3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 , 
-#                        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 
-#                        4.  , 4.  , 4.  , 6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 
-#                        4.5 , 7.  , 7.  , 7.  , 7.  , 7.  , 7.  , 7.  , 
-#                        2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
+coil_winding_edited = [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 
+                        0.25, 0.25, 0.25, 0.25, 0.25, 0.5 , 0.5 , 0.5 , 
+                        0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 1.  , 1.  , 
+                        1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 
+                        1.  , 1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 
+                        1.25, 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 
+                        1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  , 2.  , 
+                        2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 
+                        3   , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 
+                        2.5 , 3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 
+                        3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 , 
+                        3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 
+                        4.  , 4.  , 4.  , 6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 
+                        4.5 , 7.  , 7.  , 7.  , 7.  , 7.  , 7.  , 7.  , 
+                        2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
 
-# current_for_coils_edited = [30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 ,  30.8086634 , 
-#                             30.8086634 ,  30.8086634 ,  30.8086634 ,  
-#                             30.8086634 ,  30.8086634 , 160, 160, 160, 160, 
-#                             160, 160]
+current_for_coils_edited = [30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 , 160, 160, 160, 160, 
+                            160, 160]
 
-# total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, 
-#                                                 current_for_coils_edited, 
-#                                                 z_result, sections)
+total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, 
+                                                current_for_coils_edited, 
+                                                z_result, sections)
 
 
 # # Calculate the length of each section and additional metrics from the
@@ -179,17 +181,17 @@ def calculate_B_field_coil_gap(coil_winding, current_for_coils,
 # # Section 4: 113-118
 
 
-# section0 = coil_winding_edited[0:6]
-# section3 = coil_winding_edited[6:63]
-# section2 = coil_winding_edited[63:99]
-# section1 = coil_winding_edited[99:113]
-# section4 = coil_winding_edited[113:119]
+section0 = coil_winding_edited[0:6]
+section3 = coil_winding_edited[6:63]
+section2 = coil_winding_edited[63:99]
+section1 = coil_winding_edited[99:113]
+section4 = coil_winding_edited[113:119]
 
-# section0_current = current_for_coils_edited[0:6]
-# section3_current = current_for_coils_edited[6:63]
-# section2_current = current_for_coils_edited[63:99]
-# section1_current = current_for_coils_edited[99:113]
-# section4_current = current_for_coils_edited[113:119]
+section0_current = current_for_coils_edited[0:6]
+section3_current = current_for_coils_edited[6:63]
+section2_current = current_for_coils_edited[63:99]
+section1_current = current_for_coils_edited[99:113]
+section4_current = current_for_coils_edited[113:119]
 
 # s3_length = coil.calculate_section_length(coil_winding_edited, 6, 62)
 # s2_length = coil.calculate_section_length(coil_winding_edited, 63, 98)
@@ -261,22 +263,22 @@ def calculate_B_field_coil_gap(coil_winding, current_for_coils,
 
 
 
-# # fig, ax = plt.subplots()
+fig, ax = plt.subplots()
 
-# # ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--")
-# # ax.plot(z_result, total_field, label="coil winding", color="k", linestyle="-")
-# # ax.plot(z_result, total_field_gap, label="coil winding gapped", color="g", 
-# #         linestyle="-")
-# # ax.plot(z_result, total_field_edited, label="coil winding gapped edited", 
-# #         color="b", linestyle="-")
+ax.plot(z_result, y_result, label="ideal B field", color="m", linestyle="--")
+ax.plot(z_result, total_field, label="coil winding", color="k", linestyle="-")
+ax.plot(z_result, total_field_gap, label="coil winding gapped", color="g", 
+        linestyle="-")
+ax.plot(z_result, total_field_edited, label="coil winding gapped edited", 
+        color="b", linestyle="-")
 
-# # ax.set_xlabel("Position (m)")
-# # ax.set_ylabel("B field (G)")
-# # ax.legend()
+ax.set_xlabel("Position (m)")
+ax.set_ylabel("B field (G)")
+ax.legend()
 
-# # fig.set_size_inches(12, 8)
-# # fig.savefig(os.path.join(folder_location, "gapped_winding.pdf"), 
-# #             bbox_inches="tight")
+fig.set_size_inches(12, 8)
+# fig.savefig(os.path.join(folder_location, "gapped_winding.pdf"), 
+#             bbox_inches="tight")
 
 
 
@@ -328,26 +330,26 @@ def calculate_B_field_coil_gap(coil_winding, current_for_coils,
 
 # total_field_edited_lc = \
 #     calculate_B_field_coil_gap(section0+section3+section2+section1+section4, 
-#                                np.concatenate((section0_current, 
-#                                                np.multiply(section3_current,1),
-#                                                np.multiply(section2_current,1),
-#                                                np.multiply(section1_current,1),
-#                                                np.multiply(section4_current,0))), 
-#                                z_result, sections)
+#                                 np.concatenate((section0_current, 
+#                                                 np.multiply(section3_current,1),
+#                                                 np.multiply(section2_current,1),
+#                                                 np.multiply(section1_current,1),
+#                                                 np.multiply(section4_current,0))), 
+#                                 z_result, sections)
 # total_field_edited_hc = \
 #     calculate_B_field_coil_gap(section0+section3+section2+section1+section4, 
-#                                np.concatenate((section0_current, 
-#                                                np.multiply(section3_current,0),
-#                                                np.multiply(section2_current,0),
-#                                                np.multiply(section1_current,0),
-#                                                np.multiply(section4_current,1))), 
-#                                z_result, sections)
+#                                 np.concatenate((section0_current, 
+#                                                 np.multiply(section3_current,0),
+#                                                 np.multiply(section2_current,0),
+#                                                 np.multiply(section1_current,0),
+#                                                 np.multiply(section4_current,1))), 
+#                                 z_result, sections)
 # total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, 
 #                                                 current_for_coils_edited, 
 #                                                 z_result, sections)
 
 # file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-#                                "zeeman_slower", "data_10.5.21")
+#                                 "zeeman_slower", "data_10.5.21")
 # position, background, lc, hc = \
 #     np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
 #                   dtype=float, delimiter=",", skip_header=1, unpack=True)
@@ -409,3 +411,132 @@ def calculate_B_field_coil_gap(coil_winding, current_for_coils,
 
 # fig1.set_size_inches(12, 8)
 # fig1.savefig(os.path.join(os.path.join(file_location), "observed_data_deviations.pdf"), bbox_inches="tight")
+
+
+##############################################################################
+# Checking that the gapped winding is very close to the observed data
+
+current_for_coils_edited = [30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 ,  30.8086634 , 
+                            30.8086634 ,  30.8086634 ,  30.8086634 ,  
+                            30.8086634 ,  30.8086634 , 195, 195, 195, 195, 
+                            195, 195]
+
+
+total_field_edited_lc = \
+    calculate_B_field_coil_gap(section0+section3+section2+section1+section4, 
+                                np.concatenate((section0_current, 
+                                                np.multiply(section3_current,35/30.8086634),
+                                                np.multiply(section2_current,35/30.8086634),
+                                                np.multiply(section1_current,35/30.8086634),
+                                                np.multiply(section4_current,0))), 
+                                z_result, sections)
+total_field_edited_hc = \
+    calculate_B_field_coil_gap(section0+section3+section2+section1+section4, 
+                                np.concatenate((np.multiply(section0_current,0), 
+                                                np.multiply(section3_current,0),
+                                                np.multiply(section2_current,0),
+                                                np.multiply(section1_current,0),
+                                                np.multiply(section4_current, 65/160))), 
+                                z_result, sections)
+total_field_edited = calculate_B_field_coil_gap(coil_winding_edited, 
+                                                np.concatenate((np.multiply(section0_current,35/30.8086634), 
+                                                np.multiply(section3_current,35/30.8086634),
+                                                np.multiply(section2_current,35/30.8086634),
+                                                np.multiply(section1_current,35/30.8086634),
+                                                np.multiply(section4_current, 65/160))), 
+                                                z_result, sections)
+
+file_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                                "zeeman_slower", "data_10.5.21")
+position, background, lc, hc = \
+    np.genfromtxt(os.path.join(file_location, "10.5.21_ZS_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+
+
+fig, ax = plt.subplots()
+
+# ax.plot(z_result, y_result, label="ideal B field", color="k", linestyle="--")
+# ax.plot(z_result, total_field_edited_lc, label="expected lc B field", 
+#         color="red")
+# ax.plot(z_result, total_field_edited_hc, label="expected hc B field", 
+#         color="blue")
+ax.plot(z_result, total_field_edited, label="expected total B field", 
+        color="green")
+
+ax.plot(z_result,(5.82099102 - (1.2/0.01)*(z_result-MOT_distance)), color="r", 
+        label="to compensate")
+
+# ax.plot((position*.01)-0.2516, -1*(lc-background)*35/2, linestyle="None", 
+#         marker=".", color="r", label="observed lc B field")
+# ax.plot((position*.01)-0.2516, -1*(hc-background)*65/2, linestyle="None", 
+#         marker=".", color="b", label="observed hc B field")
+# ax.plot(((position*.01)-0.2516), 
+#         (-1*(lc-background)*35/2-1*(hc-background)*65/2), marker=".", 
+#         color="k", label="observed total B field")
+
+ax.axvline(x=MOT_distance, linestyle="--", color="k", 
+           label="MOT location = {}".format(MOT_distance))
+
+
+file_path = os.path.join("C:\\", "Users", "Lithium", "Documents", 
+                         "zeeman_slower", "data_02.03.22")
+
+position1, position2, background1, coil1, background2, coil2 = \
+    np.genfromtxt(os.path.join(file_path, "02.01.22_comp_coil_testing_data.csv"), 
+                  dtype=float, delimiter=",", skip_header=1, unpack=True)
+position1 = (position1*0.01)-0.061+MOT_distance-.055
+position2 = (position2*0.01)-0.061+MOT_distance-.055
+obs_coil_1 = -1*(coil1-background1)*70/5
+obs_coil_2 = np.flip((coil2-background2)*31/5)
+
+obs_total_comp = obs_coil_1 + -1*obs_coil_2
+ax.plot(position1, obs_total_comp, marker=".", linestyle="none",
+         label="observed compensation")
+
+
+plt.xlim(MOT_distance-0.02, MOT_distance+0.02)
+plt.ylim(4, 8)
+
+ax.set_xlabel("Position (m)") 
+ax.set_ylabel("B field (G)")
+ax.legend()
+
+fig.set_size_inches(12, 8)
+
+
+

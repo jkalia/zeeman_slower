@@ -41,7 +41,7 @@ def discretize(fixed_lengths, fixed_overlap, eta):
     
     slower_length_val, ideal_B_field = \
         ideal.get_slower_parameters(ideal.k_er, ideal.linewidth_er, ideal.m_er, 
-                                    eta, ideal.initial_velocity_er, 
+                                    eta, ideal.initial_velocity_er, 0, 
                                     ideal.mu0_er, ideal.laser_detuning_er)
 
     discretized_slower = \
@@ -1138,58 +1138,58 @@ plt.show()
 
 
 
-# Lithium
-shift = 50 * 10**6
-saturations = np.arange(1, 5.2, 0.2)
+# # Lithium
+# shift = 50 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
 
-li_atom = atom.Atom("Li")
-li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                            ideal.laser_detuning_li + shift, 51)
+# li_atom = atom.Atom("Li")
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 51)
 
-# Initialize array for storing data
-li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
+# # Initialize array for storing data
+# li_final_velocities = np.zeros((len(li_detunings), len(saturations)))
 
-for d, detuning in np.ndenumerate(li_detunings): 
-    for s, saturation in np.ndenumerate(saturations): 
-        v = simulate.simulate_atom(li_atom, saturation, 
-                                    ideal.initial_velocity_li, detuning, 
-                                    positions=position_full, data=B_field_total*10**(-4),
-                                    optimized=False, observed=True, 
-                                    full_output=False)
-        li_final_velocities[d][s] = v
-        print("li_final_velocities: ", li_final_velocities)
+# for d, detuning in np.ndenumerate(li_detunings): 
+#     for s, saturation in np.ndenumerate(saturations): 
+#         v = simulate.simulate_atom(li_atom, saturation, 
+#                                     ideal.initial_velocity_li, detuning, 
+#                                     positions=position_full, data=B_field_total*10**(-4),
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
+#         li_final_velocities[d][s] = v
+#         print("li_final_velocities: ", li_final_velocities)
         
-print("li_final_velocities: ", li_final_velocities)
-li_file_name = ("li_final_velocities_hc=" + str(h_current) + "A_lc=" + str(l_current) \
-               + "A.pickle")
-save_data(li_final_velocities, os.path.join(file_location, li_file_name))
+# print("li_final_velocities: ", li_final_velocities)
+# li_file_name = ("li_final_velocities_hc=" + str(h_current) + "A_lc=" + str(l_current) \
+#                + "A.pickle")
+# save_data(li_final_velocities, os.path.join(file_location, li_file_name))
 
-# Erbium
-shift = 80 * 10**6
-saturations = np.arange(1, 5.2, 0.2)
+# # Erbium
+# shift = 80 * 10**6
+# saturations = np.arange(1, 5.2, 0.2)
 
-er_atom = atom.Atom("Er")
-er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-                          ideal.laser_detuning_er + shift, 81)
+# er_atom = atom.Atom("Er")
+# er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
+#                           ideal.laser_detuning_er + shift, 81)
 
-# Initialize array for storing data
-er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
+# # Initialize array for storing data
+# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
 
-for d, detuning in np.ndenumerate(er_detunings):
-    for s, saturation in np.ndenumerate(saturations):
-        v = simulate.simulate_atom(er_atom, saturation, 
-                                    ideal.initial_velocity_er, detuning, 
-                                    positions=position_full, data=B_field_total*10**(-4), 
-                                    optimized=False, observed=True, 
-                                    full_output=False)
-        er_final_velocities[d][s] = v 
-        print("er_final_velocities: ", er_final_velocities)
+# for d, detuning in np.ndenumerate(er_detunings):
+#     for s, saturation in np.ndenumerate(saturations):
+#         v = simulate.simulate_atom(er_atom, saturation, 
+#                                     ideal.initial_velocity_er, detuning, 
+#                                     positions=position_full, data=B_field_total*10**(-4), 
+#                                     optimized=False, observed=True, 
+#                                     full_output=False)
+#         er_final_velocities[d][s] = v 
+#         print("er_final_velocities: ", er_final_velocities)
 
 
-print("er_final_velocities: ", er_final_velocities)
-er_file_name = ("er_final_velocities_hc=" + str(h_current) + "A_lc=" + str(l_current) \
-               + "A.pickle")
-save_data(er_final_velocities, os.path.join(file_location, er_file_name))
+# print("er_final_velocities: ", er_final_velocities)
+# er_file_name = ("er_final_velocities_hc=" + str(h_current) + "A_lc=" + str(l_current) \
+#                + "A.pickle")
+# save_data(er_final_velocities, os.path.join(file_location, er_file_name))
 
 
 ##############################################################################
