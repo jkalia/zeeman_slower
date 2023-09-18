@@ -1113,7 +1113,7 @@ position_full, background_ZS, lc, hc = \
                   dtype=float, delimiter=",", skip_header=1, unpack=True)
 
 l_current = 35
-h_current = 68
+h_current = 65.5
 position_full = ((position_full * .01) - 0.2516)
 data_ZS = (-1 * ((lc - background_ZS) * l_current / 2 
               + (hc - background_ZS) * h_current / 2))
@@ -1122,8 +1122,10 @@ data_ZS = (-1 * ((lc - background_ZS) * l_current / 2
 # Use simulation data for comp coils (did not take enough of the real data)
 # Values from the Mathematica notebook
 # ZS comp coil simulated data
-B_field_comp = coil.B_total_rect_coil(4*95, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
-    + coil.B_total_rect_coil(-4*47, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
+lc_current = 31
+hc_current = 67.5
+B_field_comp = coil.B_total_rect_coil(4*hc_current, 115*10**(-3), 125*10**(-3), MOT_distance - 0.055, position_full) \
+    + coil.B_total_rect_coil(-4*lc_current, 115*10**(-3), 125*10**(-3), MOT_distance + 0.055, position_full)
 
 # Total field
 B_field_total = (data_ZS - B_field_comp)
@@ -1164,32 +1166,32 @@ plt.show()
 #                + "A.pickle")
 # save_data(li_final_velocities, os.path.join(file_location, li_file_name))
 
-# # Erbium
-# shift = 80 * 10**6
-# saturations = np.arange(1, 5.2, 0.2)
+# Erbium
+shift = 100 * 10**6
+saturations = np.arange(1, 5.2, 0.2)
 
-# er_atom = atom.Atom("Er")
-# er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-#                           ideal.laser_detuning_er + shift, 81)
+er_atom = atom.Atom("Er")
+er_detunings = np.linspace(ideal.laser_detuning_er - .1*shift, 
+                          ideal.laser_detuning_er + .9*shift, 101)
 
-# # Initialize array for storing data
-# er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
+# Initialize array for storing data
+er_final_velocities = np.zeros((len(er_detunings), len(saturations)))
 
-# for d, detuning in np.ndenumerate(er_detunings):
-#     for s, saturation in np.ndenumerate(saturations):
-#         v = simulate.simulate_atom(er_atom, saturation, 
-#                                     ideal.initial_velocity_er, detuning, 
-#                                     positions=position_full, data=B_field_total*10**(-4), 
-#                                     optimized=False, observed=True, 
-#                                     full_output=False)
-#         er_final_velocities[d][s] = v 
-#         print("er_final_velocities: ", er_final_velocities)
+for d, detuning in np.ndenumerate(er_detunings):
+    for s, saturation in np.ndenumerate(saturations):
+        v = simulate.simulate_atom(er_atom, saturation, 
+                                    ideal.initial_velocity_er, detuning, 
+                                    positions=position_full, data=B_field_total*10**(-4), 
+                                    optimized=False, observed=True, 
+                                    full_output=False)
+        er_final_velocities[d][s] = v 
+        print("er_final_velocities: ", er_final_velocities)
 
 
-# print("er_final_velocities: ", er_final_velocities)
-# er_file_name = ("er_final_velocities_hc=" + str(h_current) + "A_lc=" + str(l_current) \
-#                + "A.pickle")
-# save_data(er_final_velocities, os.path.join(file_location, er_file_name))
+print("er_final_velocities: ", er_final_velocities)
+er_file_name = ("er_final_velocities_hc=" + str(h_current) + "A_lc=" + str(l_current) \
+                + "A.pickle")
+save_data(er_final_velocities, os.path.join(file_location, er_file_name))
 
 
 ##############################################################################

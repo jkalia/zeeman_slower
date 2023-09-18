@@ -13,52 +13,52 @@ matplotlib.rcParams['font.family'] = 'STIXGeneral'
 ##############################################################################
 # Analyzing detuning versus saturation
 
-# Unpickle heatmap data
-# Li
-folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
-                                "zeeman_slower") 
+# # Unpickle heatmap data
+# # Li
+# folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
+#                                 "zeeman_slower") 
 
-li_file_name = "li_final_velocities_hc=68A_lc=35A.pickle"
-li_file = os.path.join(folder_location, li_file_name)
-li_final_velocities = pickle.load(open(li_file, "rb"))
+# li_file_name = "li_final_velocities_hc=68A_lc=35A.pickle"
+# li_file = os.path.join(folder_location, li_file_name)
+# li_final_velocities = pickle.load(open(li_file, "rb"))
 
-plt.figure(figsize=(40, 40))
+# plt.figure(figsize=(40, 40))
 
-# Li
-saturations = np.arange(1, 5.2, 0.2)
-shift = 50 * 10**6
-li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
-                            ideal.laser_detuning_li + shift, 51)
+# # Li
+# saturations = np.arange(1, 5.2, 0.2)
+# shift = 50 * 10**6
+# li_detunings = np.linspace(ideal.laser_detuning_li - shift, 
+#                             ideal.laser_detuning_li + shift, 51)
 
-cutoff = 100
-for i, vfinal in np.ndenumerate(li_final_velocities):
-    if vfinal < 0:
-        li_final_velocities[i[0]][i[1]] = -1000
-    if vfinal < cutoff and vfinal > 0:
-        li_final_velocities[i[0]][i[1]] = 0
-    if vfinal > cutoff:
-        li_final_velocities[i[0]][i[1]] = 1000
+# cutoff = 100
+# for i, vfinal in np.ndenumerate(li_final_velocities):
+#     if vfinal < 0:
+#         li_final_velocities[i[0]][i[1]] = -1000
+#     if vfinal < cutoff and vfinal > 0:
+#         li_final_velocities[i[0]][i[1]] = 0
+#     if vfinal > cutoff:
+#         li_final_velocities[i[0]][i[1]] = 1000
 
-fig_li, ax_li = plt.subplots()
-im_li = ax_li.imshow(li_final_velocities, vmin=-1000, vmax=1000)
+# fig_li, ax_li = plt.subplots()
+# im_li = ax_li.imshow(li_final_velocities, vmin=-1000, vmax=1000)
 
-ax_li.set_xticks(np.arange(len(saturations)))
-ax_li.set_yticks(np.arange(len(li_detunings)))
-ax_li.set_xticklabels(list(map(str, np.round(saturations, 2))), fontsize=6)
-ax_li.set_yticklabels(list(map(str, np.round(li_detunings*10**(-6), 0))), fontsize=6)
+# ax_li.set_xticks(np.arange(len(saturations)))
+# ax_li.set_yticks(np.arange(len(li_detunings)))
+# ax_li.set_xticklabels(list(map(str, np.round(saturations, 2))), fontsize=6)
+# ax_li.set_yticklabels(list(map(str, np.round(li_detunings*10**(-6), 0))), fontsize=6)
 
-# Rotate the tick labels and set their alignment.
-plt.setp(ax_li.get_xticklabels(), rotation=45, ha="right",
-          rotation_mode="anchor")
+# # Rotate the tick labels and set their alignment.
+# plt.setp(ax_li.get_xticklabels(), rotation=45, ha="right",
+#           rotation_mode="anchor")
 
-ax_li.set_title("Motion of Li atoms in ZS + comp coils (cutoff = 100 m/s, lc = 35 A, hc = 68 A)")
-ax_li.set_ylabel("detuning (MHz)")
-ax_li.set_xlabel("saturation")
+# ax_li.set_title("Motion of Li atoms in ZS + comp coils (cutoff = 100 m/s, lc = 35 A, hc = 68 A)")
+# ax_li.set_ylabel("detuning (MHz)")
+# ax_li.set_xlabel("saturation")
 
-fig_li.tight_layout()
-fig_li.savefig(os.path.join(folder_location, 
-                            "li_final_velocities_lc=35A_hc=68A.pdf"), 
-                bbox_inches="tight")
+# fig_li.tight_layout()
+# fig_li.savefig(os.path.join(folder_location, 
+#                             "li_final_velocities_lc=35A_hc=68A.pdf"), 
+#                 bbox_inches="tight")
 
 
 # Unpickle heatmap data
@@ -66,17 +66,17 @@ fig_li.savefig(os.path.join(folder_location,
 folder_location = os.path.join("C:\\", "Users","Lithium", "Documents", 
                                 "zeeman_slower") 
 
-er_file_name = "er_final_velocities_hc=68A_lc=35A.pickle"
+er_file_name = "er_final_velocities_hc=65.5A_lc=35A.pickle"
 er_file = os.path.join(folder_location, er_file_name)
 er_final_velocities_high_isat = pickle.load(open(er_file, "rb"))
 
 plt.figure(figsize=(40, 40))
 
 # Er
+shift = 100 * 10**6
 saturations = np.arange(1, 5.2, 0.2)
-shift = 80 * 10**6
-er_detunings = np.linspace(ideal.laser_detuning_er - shift, 
-                          ideal.laser_detuning_er + shift, 81)
+er_detunings = np.linspace(ideal.laser_detuning_er - .1*shift, 
+                          ideal.laser_detuning_er + .9*shift, 101)
 
 cutoff = 10
 for i, vfinal in np.ndenumerate(er_final_velocities_high_isat):
@@ -100,13 +100,13 @@ ax_er.set_yticklabels(list(map(str, np.round(er_detunings*10**(-6), 0))), fontsi
 plt.setp(ax_er.get_xticklabels(), rotation=45, ha="right",
           rotation_mode="anchor")
 
-ax_er.set_title("Motion of Er atoms in ZS + comp coils (cutoff = 10 m/s, lc = 35 A, hc = 68 A)")
+ax_er.set_title("Motion of Er atoms in ZS + comp coils (cutoff = 10 m/s, lc = 35 A, hc = 65.5 A)")
 ax_er.set_ylabel("detuning (MHz)")
 ax_er.set_xlabel("saturation")
 
 fig_er.tight_layout()
 fig_er.savefig(os.path.join(folder_location, 
-                            "er_final_velocities_lc=35A_hc=68A.pdf"), 
+                            "er_final_velocities_lc=35A_hc=65.5A.pdf"), 
                 bbox_inches="tight")
 
 
