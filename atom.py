@@ -2,7 +2,7 @@
 # July 9th, 2021
 # atom.py
 # Creates an Atom class which stores the variables for an erbium atom or for a 
-# lithium atom 
+# lithium atom.
 
 
 import ideal_field as ideal
