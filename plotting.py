@@ -4,8 +4,6 @@
 # Module for zeeman_slower_configuration
 # Contains all functions and variables relevant to creating figures.
 
-# I think what I am supposed to do is to init the figures and axes in the main 
-# file and then only write the functions which act on the axes here
 
 import numpy as np 
 import matplotlib

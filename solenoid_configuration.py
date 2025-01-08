@@ -12,6 +12,7 @@ import parameters
 
 
 # B field of solenoid as a function of z
+# coil_density is the number of turns per unit length
 def B_z_solenoid(z, coil_density, current, radius, z1, z2):
     return ((scipy.constants.mu_0 * coil_density * current / 2) 
             * ((z - z1) / (np.sqrt((z - z1)**2 + radius**2)) 

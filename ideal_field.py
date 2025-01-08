@@ -47,7 +47,6 @@ final_velocity_er = 5
 eta_er = 0.486
 mu0_er = 1.13719 * uB
 laser_detuning_er = round(get_laser_detuning(initial_velocity_er, k_er), -6)
-print(laser_detuning_er)
 
 
 # Li parameters for ZS
@@ -56,7 +55,6 @@ final_velocity_li = 0
 eta_li = 0.38
 mu0_li = 1 * uB
 laser_detuning_li = round(get_laser_detuning(initial_velocity_li, k_li), -6)
-print(laser_detuning_li)
 
 
 # Determine ideal B field for slower
@@ -86,12 +84,6 @@ def get_slower_parameters(k, linewidth, m, eta, capture_velocity, final_velocity
     slower_length_val = slower_length(capture_velocity, final_velocity, slower_acceleration_val)
     B0_val = B0(capture_velocity, k, mu0)
     Bbias_val = Bbias(mu0, laser_detuning)
-
-    # print("max acceleration: ", max_acceleration_val)
-    # print("slower_acceleration_val:", slower_acceleration_val)
-    # print("slower_length_val: ", slower_length_val)
-    # print("B0_val: ", B0_val)
-    # print("Bbias_val: ", Bbias_val)
 
     return slower_length_val, B_field(B0_val, Bbias_val, slower_length_val)
 
