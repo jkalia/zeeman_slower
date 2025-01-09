@@ -1,8 +1,7 @@
-This code optimizes the positions and lengths of various solenoids to the ideal magnetic field for the Zeeman slower. 
+This code optimizes the positions and lengths of a given set of solenoids to 
+match the ideal magnetic field for an increasing-field Zeeman slower (ZS). 
 
-# paragraph about how ideal field for ZS is generated
-
-# paragraph about physicality constraints (square wire, winding patterns)
-
-# paragraph about how the optimization works
-
+We first generate the ideal field for the ZS analytically. Then, our optimizer 
+is given a user-chosen solenoid configuration and is asked to find the best 
+current and lengths of the solenoid sections to match the ideal magnetic field 
+profile.
