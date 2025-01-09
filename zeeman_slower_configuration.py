@@ -75,7 +75,7 @@ def calculate_RMSE(ideal, calculated):
     return np.sqrt(((ideal - calculated)**2).mean())
 
 
-# A one Li linewidth deivation is equivalent to approximately 4 G
+# One Li linewidth deivation is equivalent to approximately 4 G
 def max_deviation(total_field_final, ideal_field, B_field_range):
     return np.amax(np.abs(
         ((total_field_final[0:B_field_range] - ideal_field[0:B_field_range]) 
@@ -351,6 +351,7 @@ def run_optimization_current(fixed_densities, densities, fixed_lengths,
 
 ##############################################################################
 # Wrapper for plotting and generating values post-optimization
+
 def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap, 
                       z, y, guess, final, flag, folder_location):
     
@@ -423,34 +424,33 @@ def post_optimization(fixed_densities, densities, fixed_lengths, fixed_overlap,
 ################################################################################
 # Run optimizer
 
+folder_location = os.path.join("/Users", "jkalia", "Documents", "research", 
+                               "fletcher_lab", "zeeman_slower_cleaned", 
+                               "zeeman_slower", "optimization_plots")
+iterations = 100000
+counter = 0
 
-# folder_location = os.path.join("C:\\", "Users", "Lithium", "Documents", 
-#                                "zeeman_slower", "3.5mm", 
-#                                "optimization_plots")
-# iterations = 100000
-# counter = 0
+# Arrays which define the solenoid configuration for the low current section. 
+densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
+             0.5, 0.25, 0]
 
-# # Arrays which define the solenoid configuration for the low current section. 
-# densities = [7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1.25, 1, 0.5, 1, 
-#              0.5, 0.25, 0]
+# Arrays which define the solenoid configuration for the high current section.
+fixed_densities = [2]
+fixed_lengths = [6]
+fixed_overlap = 0
 
-# # Arrays which define the solenoid configuration for the high current section.
-# fixed_densities = [2]
-# fixed_lengths = [6]
-# fixed_overlap = 0
-
-# z = np.linspace(0, ideal.slower_length_val, 10000)
-# y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
+z = np.linspace(0, ideal.slower_length_val, 10000)
+y_data = ideal.get_ideal_B_field(ideal.ideal_B_field, z)
 
 
-# guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
-#           7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
-#           9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
-#          -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
-#          -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
-#           130.84645074]
-# coils = guess[0:-2]
-# current_guess = guess[-2::]
+guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
+          7.01947561e-07,  6.91609592e+00,  8.16322065e+00,  7.57713685e+00,
+          9.52046922e+00,  1.04963877e+01, -1.19580619e+01, -1.04047639e+01,
+         -5.36808583e+00, -8.86173341e+00,  2.46843583e+00,  2.52389398e+00,
+         -9.16285867e+00,  7.20514955e+00,  1.10000000e+02,  30.8086634 , 
+          130.84645074]
+coils = guess[0:-2]
+current_guess = guess[-2::]
 
     
 # rmse, li_deviation, av_li_deviation, flag, final = \
