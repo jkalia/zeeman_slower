@@ -2,8 +2,11 @@
 # January 8th, 2025
 # Simulation code
 # After making the Zeeman slower, I verified in multiple ways that the 
-# Zeeman slower would work properly. 1) I simulated the motion of an atom
-# through the slower.  
+# Zeeman slower would work properly. This involved simulating the motion of an 
+# atom through the slower. I made heatmaps of detuning vs. saturation to get 
+# the final velocity of the atom.
+# To use this code, copy the relevant section marked by the headers to
+# zeeman_slower_configuration.py and run it in that file. 
 
 
 
