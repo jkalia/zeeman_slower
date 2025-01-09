@@ -452,90 +452,169 @@ guess = [-7.12653878e+00, -3.73971016e-07, -6.34518412e-07, -8.82164728e-07,
 coils = guess[0:-2]
 current_guess = guess[-2::]
 
-    
-# rmse, li_deviation, av_li_deviation, flag, final = \
-#         run_optimization_current(fixed_densities, densities, fixed_lengths, 
-#                                  fixed_overlap, coils, z, y_data, 
-#                                  current_guess, iterations, ideal.eta_er, 
-#                                  folder_location, counter)
+# Run optimizer for coils and currents
+rmse, li_deviation, av_li_deviation, flag, final = \
+    run_optimization(fixed_densities, densities, fixed_lengths, 
+                      fixed_overlap, z, y_data, guess, iterations, ideal.eta_er, 
+                      folder_location, counter)
 
 
-
-# rmse, li_deviation, av_li_deviation, flag, final = \
-#     run_optimization(fixed_densities, densities, fixed_lengths, 
-#                       fixed_overlap, z, y_data, guess, iterations, ideal.eta_er, 
-#                       folder_location, counter)
+# Run optimizer for currents only
+rmse, li_deviation, av_li_deviation, flag, final = \
+        run_optimization_current(fixed_densities, densities, fixed_lengths, 
+                                 fixed_overlap, coils, z, y_data, 
+                                 current_guess, iterations, ideal.eta_er, 
+                                 folder_location, counter)
 
 
 ###############################################################################
-# # Iterate fixed_lengths to find best solution
+# Unpickle run data
 
-# min_length = 4
-# max_length = 10
+# file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
+#                     "3.5mm", "optimization_plots",
+#                     "19sections_6hclength_2hcmaxdensity_0overlap", 
+#                     "data.pickle")
 
-# # Initialize array for storing data
-# rmse_array = np.zeros(((max_length - min_length + 1), 
-#                       np.ceil(max_length / 2).astype(int) + 1))
-# deviation_array = np.zeros(((max_length - min_length + 1), 
-#                             np.ceil(max_length / 2).astype(int) + 1))
-# average_array = np.zeros(((max_length - min_length + 1), 
-#                             np.ceil(max_length / 2).astype(int) + 1))
-
-# # Iterate over fixed lengths
-# for i in range(min_length, (max_length + 1), 1):
-#     fixed_lengths[0] = i
-    
-#     # Set max overlap
-#     max_overlap = np.ceil(fixed_lengths[0] / 2).astype(int)
-#     if max_overlap > 1:
-#         max_overlap = 1
-
-#     # Iterate over fixed_overlap
-#     for j in range(max_overlap + 1):
-
-#         flag = 0
-#         flag_2 = 0
-#         counter = 0
-#         fixed_overlap = j
-
-#         while (flag != 1) and (flag != 3):
-
-#             print("fixed_lengths: ", fixed_lengths)
-#             print("fixed_overlap: ", fixed_overlap)
-#             print("counter: ", counter)
-
-#             # Run optimization and collect data
-#             rmse, li_deviation, av_li_deviation, flag, final = \
-#                 run_optimization(fixed_densities, densities, fixed_lengths, 
-#                                   fixed_overlap, z, y_data, guess, iterations, eta,
-#                                   folder_location, counter)
-
-#             print("rmse: ", rmse)   
-#             print("li_deviation: ", li_deviation)
-#             print("average li_deviation: ", av_li_deviation)
-#             guess = final
-#             counter += 1
-
-#             if flag == 2:
-#                 flag_2 += 1
-#             if flag_2 > 200:
-#                 break
-
-#         rmse_array[(fixed_lengths[0] - min_length)][fixed_overlap] = rmse 
-#         deviation_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
-#             li_deviation
-#         average_array[(fixed_lengths[0] - min_length)][fixed_overlap] = \
-#             av_li_deviation
-
-#         print("rmse_array: ", rmse_array)
-#         print("deviation_array: ", deviation_array)
-#         print("average_array: ", average_array)
+# file = os.path.join("C:\\", "Users", "Lithium", "Documents", "zeeman_slower", 
+#                     "3.5mm", "optimization_plots",
+#                     "19sections_6hclength_2hcmaxdensity_0overlap", 
+#                     "data.pickle")
+# (fixed_densities, densities, fixed_lengths, fixed_overlap, guess,
+#             final, flag) = retrieve_run_data(file)
+# print("fixed_densities: ", fixed_densities)
+# print("densities: ", densities)
+# print("fixed_lengths: ", fixed_lengths)
+# print("fixed_overlap: ", fixed_overlap)
+# print("guess: ", guess)
+# print("final: ", final)
+# print("flag: ", flag)
 
 
-# print("rmse_array: ", rmse_array)
-# print("deviation_array: ", deviation_array)
-# print("average_array: ", average_array)
+##############################################################################
+# Final coil winding! We have entered in half gaps to reflect accuracy of
+# how the physical winding occurs and then done manual post-processing to 
+# get rid of slight deviations in B field caused by said gaps. See winding.py
+# for this. 
+# eta = 0.486 if wire_width = wire_height = 0.0036
 
-# data = (rmse_array, deviation_array, average_array)
-# save_data(data, os.path.join(folder_location, "heatmap.pickle"))
+# coil_winding_edited = \
+#        [0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.25, 0.25, 0.25, 0.25, 0.25,
+#         0.25, 0.25, 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 , 0.5 ,
+#         1.  , 1.  , 1.  , 0.5 , 0.5 , 1.  , 1.  , 1.  , 1.  , 1.  , 1.  ,
+#         1.  , 1.  , 1.  , 1.25, 1.25, 1.25, 1.25, 1.25, 1.5 , 1.5 , 1.5 ,
+#         1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 1.5 , 2.  , 2.  , 2.  , 2.  ,
+#         2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  , 3   , 3   , 2.5 ,
+#         2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 2.5 , 3.  , 3.  , 3.  , 3.  ,
+#         3.  , 3.  , 3.  , 3.  , 3.  , 3.  , 3.5 , 3.5 , 3.5 , 3.5 , 3.5 ,
+#         3.5 , 3.5 , 3.5 , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  , 4.  ,
+#         6 , 6 , 6 , 4.5 , 4.5 , 4.5 , 4.5 , 7.  , 7.  , 7.  , 7.  ,
+#         7.  , 7.  , 7.  , 2.  , 2.  , 2.  , 2.  , 2.  , 2.  ]
 
+# current_for_coils_edited = \
+#       [ 30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 ,  30.8086634 ,  30.8086634 ,  30.8086634 ,
+#         30.8086634 , 160, 160, 160, 160, 160, 160]
+
+################################################################################
+# # Plot motion of single atom through optimized slower winding
+
+# # For lithium
+# li_atom = atom.Atom("Li")
+# s = 2
+# v_i_li = ideal.initial_velocity_li
+# laser_detuning_li = ideal.laser_detuning_li
+
+# t_i, z_i, v_i, a_i = simulate.simulate_atom(li_atom, s, v_i_li, 
+#                                             laser_detuning_li, 
+#                                             optimized=False)
+# t, z, v, a = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li,
+#                                     coil_winding=coil_winding,
+#                                     current_for_coils=current_for_coils)
+
+# v_ideal = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li, 
+#                                   optimized=False, full_output=False)
+# v_final = simulate.simulate_atom(li_atom, s, v_i_li, laser_detuning_li,
+#                                   coil_winding=coil_winding,
+#                                   current_for_coils=current_for_coils, 
+#                                   full_output=False)
+# print("v_ideal: ", v_ideal)
+# print("v_final: ", v_final)
+
+# fig_li, ax_li = plt.subplots()
+
+# ax_li.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
+#             v_i_li))
+# ax_li.plot(z, v, label="v_initial = {:.0f}".format(v_i_li))
+            
+# ax_li.set_xlabel("Position [m]")
+# ax_li.set_ylabel("Velocity [m/s]")
+# ax_li.set_title("Motion of Li atom in the Slower")
+# ax_li.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                           "zeeman_slower", "figs", "debugging_li.pdf")
+# fig_li.savefig(file_path, bbox_inches="tight")
+
+
+# # For erbium
+# er_atom = atom.Atom("Er")
+# s = 2
+# v_i_er = ideal.initial_velocity_er
+# laser_detuning_er = ideal.laser_detuning_er
+
+# t_i, z_i, v_i, a_i = simulate.simulate_atom(er_atom, s, v_i_er, 
+#                                             laser_detuning_er, 
+#                                             optimized=False)
+# t, z, v, a = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
+#                                     coil_winding=coil_winding,
+#                                     current_for_coils=current_for_coils)
+
+# v_ideal = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er, 
+#                                   optimized=False, full_output=False)
+# v_final = simulate.simulate_atom(er_atom, s, v_i_er, laser_detuning_er,
+#                                   coil_winding=coil_winding,
+#                                   current_for_coils=current_for_coils, 
+#                                   full_output=False)
+# print("v_ideal: ", v_ideal)
+# print("v_final: ", v_final)
+
+# fig_er, ax_er = plt.subplots()
+
+# ax_er.plot(z_i, v_i, "k--", label="ideal B field (v_initial = {:.0f})".format(
+#             v_i_er))
+# ax_er.plot(z, v, label="v_initial = {:.0f}".format(v_i_er))
+            
+# ax_er.set_xlabel("Position [m]")
+# ax_er.set_ylabel("Velocity [m/s]")
+# ax_er.set_title("Motion of Er atom in the Slower")
+# ax_er.legend()
+
+# file_path = os.path.join("C:\\", "Users","Erbium", "Documents", 
+#                           "zeeman_slower", "figs", "debugging_er.pdf")
+# fig_er.savefig(file_path, bbox_inches="tight")
